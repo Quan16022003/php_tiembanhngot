@@ -1,0 +1,18 @@
+{% extends 'layout.twig' %}
+
+{% block title %}404 - Không tìm thấy trang!{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="css/404.css">
+{% endblock %}
+
+{% block content %}
+    <div class="error-container">
+        <div class="error-content">
+            <img src="images/error404.png" alt="error 404 pic">
+            <h2 class="fw-bold">Không tìm thấy trang!</h2>
+            <p class="lead">Xin lỗi! Địa chỉ bạn truy cập không tồn tại.<br>Có thể đường dẫn bị sai hoặc trang đã bị xóa bỏ</p>
+            <a href="/" class="btn btn-primary">Quay về trang chủ</a>
+        </div>
+    </div>
+{% endblock %}

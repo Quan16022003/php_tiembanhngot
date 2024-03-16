@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <link rel="shortcut icon" href="images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/layout.css">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<header>
+    {% include 'Includes/header.twig' %}
+</header>
+<main>
+    {% block content %}{% endblock %}
+</main>
+<footer>
+    {% include 'Includes/footer.twig' %}
+</footer>
+<script src="js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

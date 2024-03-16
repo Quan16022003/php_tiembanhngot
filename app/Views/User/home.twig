@@ -1,0 +1,62 @@
+{% set page = '' %}
+{% extends 'layout.twig' %}
+
+{% block title %}Home - My Website{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="css/home.css">
+{% endblock %}
+
+{% block content %}
+    <div id="carousel" class="carousel slide carousel-fade m-0 mb-lg-4" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            {% for i in 0..sliders|length-1 %}
+            <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ i }}" {% if i == 0 %}class="active" aria-current="true" {% endif %} aria-label="Slide {{ i+1 }}"></button>
+            {% endfor %}
+        </div>
+
+        <div class="carousel-inner">
+            {% for key, value in sliders %}
+            <div class="carousel-item {{ key == 0 ? 'active' : '' }}">
+                <img src="{{ value }}" class="d-block w-100" alt="banner">
+            </div>
+            {% endfor %}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+{#    CAROUSEL END#}
+
+{#    PRODUCT START#}
+    <div class="row row-cols-1 row-cols-md-3 g-4 mb-5 ms-lg-5 me-lg-5 m-auto">
+        {% for category in categories %}
+            <div class="col">
+                <div class="card h-100">
+                    <div class="card-body product-item">
+                        <h1 class="card-title text-center product-title">{{ category.name }}</h1>
+                        <p class="card-text">{{ category.des }}</p>
+                        <div class="m-auto p-4">
+                            <img src="{{ category.img }}" class="card-img-bottom" alt="{{ category.name }}">
+                        </div>
+                    </div>
+                    <div class="card-footer m-auto bg-body border-0">
+                        <a class="btn food-detail-btn">Xem {{ category.name }}</a>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{#    PRODUCT END#}
+
+{#    SOLOGAN START#}
+
+
+
+    {#    SOLOGAN END#}
+{% endblock %}

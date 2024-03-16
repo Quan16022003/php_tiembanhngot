@@ -1,0 +1,20 @@
+/* Custom Styles */
+body {
+    background-color: #f8f9fa;
+    font-family: Arial, sans-serif;
+}
+
+.error-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.error-content {
+    text-align: center;
+}
+.error-content>img {
+    width: 100vw;
+    max-width: 500px;
+}

@@ -28,6 +28,10 @@ class ComposerStaticInitd751713988987e9331980363e24189ce
         array (
             'FastRoute\\' => 10,
         ),
+        'C' => 
+        array (
+            'Core\\' => 5,
+        ),
         'A' => 
         array (
             'App\\' => 4,
@@ -54,6 +58,10 @@ class ComposerStaticInitd751713988987e9331980363e24189ce
         'FastRoute\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/fast-route/src',
+        ),
+        'Core\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/core',
         ),
         'App\\' => 
         array (
