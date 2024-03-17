@@ -12,9 +12,9 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 //    ADMIN ROUTES START
     $r->addRoute('GET', '/admin/login', ['App\Controllers\Admin\AdminController', 'index']);
 //    ADMIN ROUTES END
-    $r->addRoute('GET', '/', ['App\Controllers\User\HomeController', 'index']);
-    $r->addRoute('GET', '/about-us', ['App\Controllers\User\AboutUsController', 'index']);
-    $r->addRoute('GET', '/contact', ['App\Controllers\User\ContactController', 'index']);
+    $r->addRoute('GET', '/', ['App\Controllers\Client\HomeController', 'index']);
+    $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
+    $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
 });
 
 //session_start();
@@ -31,7 +31,7 @@ $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 // Handle the response
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-//        $loader = new FilesystemLoader('../app/Views/User');
+//        $loader = new FilesystemLoader('../app/Views/Client');
 //        $twig = new Environment($loader);
 //        echo $twig->render('404.twig');
         echo '404 - Page Not Found';

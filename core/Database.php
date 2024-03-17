@@ -2,33 +2,43 @@
 
 namespace Core;
 
+use mysqli;
 use PDO;
 use PDOException;
 
-class Database {
-    private $host = 'your_host';
-    private $username = 'your_username';
-    private $password = 'your_password';
-    private $database = 'your_database';
-    private $connection;
+class Database
+{
+    private static ?Database $instance = null;
+    public ?mysqli $conn = NULL;
+    private string $server = 'localhost';
+    private string $dbName = 'eco';
+    private string $user = 'root';
+    private string $password = '123';
 
-    public function __construct()
+    // Hàm kết nối CSDL
+    private function __construct()
     {
-        try {
-            $this->connection = new PDO("mysql:host={$this->host};dbname={$this->database}", $this->username, $this->password);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch(PDOException $e) {
-            die("Failed to connect to database: " . $e->getMessage());
+        $this->conn = new mysqli($this->server, $this->user, $this->password, $this->dbName);
+
+        if ($this->conn->connect_error) {
+            printf($this->conn->connect_error);
+            exit();
         }
+        $this->conn->set_charset("utf8");
     }
 
-    public function query($sql)
+    // Hàm đóng kết nối CSDL
+    public function closeDatabase(): void
     {
-        return $this->connection->query($sql);
+        $this->conn?->close();
     }
 
-    public function prepare($sql)
+    // Phương thức tạo một đối tượng Singleton
+    public static function getInstance(): ?Database
     {
-        return $this->connection->prepare($sql);
+        if (self::$instance === null) {
+            self::$instance = new Database();
+        }
+        return self::$instance;
     }
 }

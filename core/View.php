@@ -11,7 +11,7 @@ use Twig\Loader\FilesystemLoader;
 class View
 {
     protected Environment $twig;
-    public function __construct($role='User')
+    public function __construct($role='Client')
     {
         $loader = new FilesystemLoader('../app/Views/'.$role);
         $this->twig = new Environment($loader);
