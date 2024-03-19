@@ -9,10 +9,10 @@ class Database
 {
     private static ?Database $instance = null;
     public ?mysqli $conn = NULL;
-    private string $host = 'db';
+    private string $host = 'localhost';
     private string $dbName = 'eco';
     private string $user = 'root';
-    private string $password = '123';
+    private string $password = 'namdt2003';
 
     // Hàm kết nối CSDL
     private function __construct()
@@ -49,7 +49,7 @@ class Database
             return false;
     }
 
-    public function insert($table = '', $data=[]): \mysqli_result|bool
+    public function insert($table = '', $data = []): \mysqli_result|bool
     {
         $keys = '';
         $values = '';
@@ -57,19 +57,21 @@ class Database
             $keys .= ',' . $key;
             $values .= ',"' . $this->conn->real_escape_string($value) . '"';
         }
-        $sql = 'INSERT INTO ' . $table . '(' . trim($keys, ',') . ') VALUES (' .trim($values, ',') . ')';
+        $sql = 'INSERT INTO ' . $table . '(' . trim($keys, ',') . ') VALUES (' . trim($values, ',') . ')';
         return $this->conn->query($sql);
     }
-    public function update($table = '', $data=[], $id=''): \mysqli_result|bool
+
+    public function update($table = '', $data = [], $id = ''): \mysqli_result|bool
     {
         $content = '';
         foreach ($data as $key => $value) {
-            $content .= ',' . $key . '="'. $this->conn->real_escape_string($value) . '"';
+            $content .= ',' . $key . '="' . $this->conn->real_escape_string($value) . '"';
         }
-        $sql = 'UPDATE ' . $table . ' SET ' . trim($content, ',') . ' WHERE id = '.$id;
+        $sql = 'UPDATE ' . $table . ' SET ' . trim($content, ',') . ' WHERE id = ' . $id;
         return $this->conn->query($sql);
     }
-    public function delete($table = '', $id=''): \mysqli_result|bool
+
+    public function delete($table = '', $id = ''): \mysqli_result|bool
     {
         $sql = 'DELETE FROM ' . $table . ' WHERE id = ' . $id;
         return $this->conn->query($sql);

@@ -15,6 +15,7 @@ class Controller
     {
         $loader = new FilesystemLoader('../app/Views/'.$r);
         $this->twig = new Environment($loader);
+
     }
     public function render($page, $data=[]): void
     {

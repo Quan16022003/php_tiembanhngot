@@ -3,21 +3,26 @@
 require_once '../vendor/autoload.php';
 
 use FastRoute\RouteCollector;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
 use function FastRoute\simpleDispatcher;
 
 // Define routes
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
-//    ADMIN ROUTES START
+    // ADMIN ROUTES START
+    // LOGIN/LOGOUT
     $r->addRoute('GET', '/admin/login', ['App\Controllers\Admin\AuthController', 'index']);
     $r->addRoute('POST', '/admin/login', ['App\Controllers\Admin\AuthController', 'login']);
     $r->addRoute('GET', '/admin/logout', ['App\Controllers\Admin\AuthController', 'logout']);
+    // DASHBOARD
     $r->addRoute('GET', '/admin/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
-//    ADMIN ROUTES END
+    // PRODUCTS
+    $r->addRoute('GET', '/admin/products', ['App\Controllers\Admin\ProductsController', 'index']);
+    // ADMIN ROUTES END
+
+    // CLIENT ROUTES START
     $r->addRoute('GET', '/', ['App\Controllers\Client\HomeController', 'index']);
     $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
     $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
+    // CLIENT ROUTES END
 });
 
 // Dispatch the request

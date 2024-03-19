@@ -17,7 +17,7 @@ class DashboardController extends Controller
             header('Location: /admin/login');
             exit;
         }
-        parent::render('index', ['name' => $_SESSION['admin_name']]);
+        parent::render('dashboard', ['name' => $_SESSION['admin_name']]);
     }
     public function isLoggedIn(): bool
     {

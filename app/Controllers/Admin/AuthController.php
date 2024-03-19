@@ -5,11 +5,6 @@ namespace App\Controllers\Admin;
 use App\Models\AdminAuthModel;
 use Core\Controller;
 use JetBrains\PhpStorm\NoReturn;
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
-use Twig\Loader\FilesystemLoader;
 
 class AuthController extends Controller
 {
