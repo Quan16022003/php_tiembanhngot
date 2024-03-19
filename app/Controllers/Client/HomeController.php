@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Client;
 
-class HomeController extends UserController
+class HomeController extends Controller
 {
     public function index(): void
     {

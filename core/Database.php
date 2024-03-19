@@ -2,15 +2,14 @@
 
 namespace Core;
 
+
 use mysqli;
-use PDO;
-use PDOException;
 
 class Database
 {
     private static ?Database $instance = null;
     public ?mysqli $conn = NULL;
-    private string $server = 'localhost';
+    private string $host = 'db';
     private string $dbName = 'eco';
     private string $user = 'root';
     private string $password = '123';
@@ -18,11 +17,11 @@ class Database
     // Hàm kết nối CSDL
     private function __construct()
     {
-        $this->conn = new mysqli($this->server, $this->user, $this->password, $this->dbName);
+        $this->conn = new mysqli($this->host, $this->user, $this->password, $this->dbName);
 
         if ($this->conn->connect_error) {
-            printf($this->conn->connect_error);
-            exit();
+            echo 'Failed: ' . $this->conn->connect_error;
+            die();
         }
         $this->conn->set_charset("utf8");
     }
@@ -40,5 +39,39 @@ class Database
             self::$instance = new Database();
         }
         return self::$instance;
+    }
+
+    public function error(): bool
+    {
+        if ($this->conn)
+            return $this->conn->error;
+        else
+            return false;
+    }
+
+    public function insert($table = '', $data=[]): \mysqli_result|bool
+    {
+        $keys = '';
+        $values = '';
+        foreach ($data as $key => $value) {
+            $keys .= ',' . $key;
+            $values .= ',"' . $this->conn->real_escape_string($value) . '"';
+        }
+        $sql = 'INSERT INTO ' . $table . '(' . trim($keys, ',') . ') VALUES (' .trim($values, ',') . ')';
+        return $this->conn->query($sql);
+    }
+    public function update($table = '', $data=[], $id=''): \mysqli_result|bool
+    {
+        $content = '';
+        foreach ($data as $key => $value) {
+            $content .= ',' . $key . '="'. $this->conn->real_escape_string($value) . '"';
+        }
+        $sql = 'UPDATE ' . $table . ' SET ' . trim($content, ',') . ' WHERE id = '.$id;
+        return $this->conn->query($sql);
+    }
+    public function delete($table = '', $id=''): \mysqli_result|bool
+    {
+        $sql = 'DELETE FROM ' . $table . ' WHERE id = ' . $id;
+        return $this->conn->query($sql);
     }
 }

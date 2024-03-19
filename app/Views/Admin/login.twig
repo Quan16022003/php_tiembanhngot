@@ -6,19 +6,22 @@
 {% block title %}Login{% endblock %}
 {% block content %}
     <div class="container">
-        <form class="form-login w-100 m-auto mt-5">
+        <form class="form-login w-100 m-auto mt-5" href="/login" method="post">
             <img class="mb-4" src="../images/logo.png" alt="" height="57">
             <h1 class="h3 mb-3 fw-normal">Đăng nhập</h1>
-
+            {% if error is not empty %}
+                <div class="text-danger pb-2">
+                    <span>* {{ error }}</span>
+                </div>
+            {% endif %}
             <div class="form-floating">
-                <input type="text" class="form-control" id="floatingInput" placeholder="Tên đăng nhập">
-                <label for="floatingInput">Tên đăng nhập</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Tên đăng nhập" required autofocus>
+                <label for="floatingInput">Tài khoản</label>
             </div>
             <div class="form-floating">
-                <input type="password" class="form-control" id="floatingPassword" placeholder="Mật khẩu">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Mật khẩu" required>
                 <label for="floatingPassword">Mật khẩu</label>
             </div>
-
             <button class="btn btn-primary w-100 py-2" type="submit">Đăng nhập</button>
         </form>
     </div>

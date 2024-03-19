@@ -10,23 +10,21 @@ use function FastRoute\simpleDispatcher;
 // Define routes
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 //    ADMIN ROUTES START
-    $r->addRoute('GET', '/admin/login', ['App\Controllers\Admin\AdminController', 'index']);
+    $r->addRoute('GET', '/admin/login', ['App\Controllers\Admin\AuthController', 'index']);
+    $r->addRoute('POST', '/admin/login', ['App\Controllers\Admin\AuthController', 'login']);
+    $r->addRoute('GET', '/admin/logout', ['App\Controllers\Admin\AuthController', 'logout']);
+    $r->addRoute('GET', '/admin/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
 //    ADMIN ROUTES END
     $r->addRoute('GET', '/', ['App\Controllers\Client\HomeController', 'index']);
     $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
     $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
 });
 
-//session_start();
-//$isAdminPage = str_starts_with($_SERVER['REQUEST_URI'], '/admin');
-//if ($isAdminPage && !isset($_SESSION['user'])) {
-//    header('Location: /admin/login');
-//}
-
 // Dispatch the request
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
+
 
 // Handle the response
 switch ($routeInfo[0]) {
