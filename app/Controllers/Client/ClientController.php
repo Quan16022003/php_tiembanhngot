@@ -7,7 +7,7 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use Twig\Loader\FilesystemLoader;
 
-abstract class Controller  extends \Core\Controller
+abstract class ClientController  extends \Core\Controller
 {
     public function __construct()
     {

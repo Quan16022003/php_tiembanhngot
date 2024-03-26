@@ -10,12 +10,6 @@ class AdminAuthModel
     public function __construct()
     {
         $this->db = Database::getInstance();
-        $data = [
-            'username' => 'admin_'.time(),
-            'password' => password_hash('123', PASSWORD_DEFAULT)
-        ];
-//        $this->db->insert('user', $data);
-        $this->db->update('user', $data, 2);
     }
     public function verify($username, $password): bool
     {

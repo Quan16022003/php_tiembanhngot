@@ -13,7 +13,7 @@ use Twig\Loader\FilesystemLoader;
 
 class AuthController extends Controller
 {
-    private $admin_login_model;
+    private AdminAuthModel $admin_login_model;
     public function __construct()
     {
         parent::__construct('Admin');
@@ -24,7 +24,7 @@ class AuthController extends Controller
     {
         session_start();
         if (isset($_SESSION['admin_logged_in'])) {
-            header('Location: ./dashboard');
+            header('Location: /admin/home');
             exit;
         }
 
@@ -40,7 +40,7 @@ class AuthController extends Controller
             // Login successful
             $_SESSION['admin_logged_in'] = true;
             $_SESSION['admin_name'] = $username;
-            header('Location: ./dashboard');
+            header('Location: ./home');
         } else {
             // Login failed
             $this->render('login', ['error' => 'Tài khoản hoặc mật khẩu không đúng!']);

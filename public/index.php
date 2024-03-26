@@ -10,28 +10,35 @@ use function FastRoute\simpleDispatcher;
 // Define routes
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 //    ADMIN ROUTES START
+    $r->addRoute('GET', '/admin', ['App\Controllers\Admin\HomeController', 'index']);
     $r->addRoute('GET', '/admin/login', ['App\Controllers\Admin\AuthController', 'index']);
     $r->addRoute('POST', '/admin/login', ['App\Controllers\Admin\AuthController', 'login']);
     $r->addRoute('GET', '/admin/logout', ['App\Controllers\Admin\AuthController', 'logout']);
     $r->addRoute('GET', '/admin/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
+    $r->addRoute('GET', '/admin/home', ['App\Controllers\Admin\HomeController', 'index']);
+    $r->addRoute('GET', '/admin/account', ['App\Controllers\Admin\AccountController', 'index']);
 //    ADMIN ROUTES END
-    $r->addRoute('GET', '/', ['App\Controllers\Client\HomeController', 'index']);
-    $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
-    $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
+    $r->addRoute('GET', '/', ['App\Controllers\Client\HomeClientController', 'index']);
+    $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsClientController', 'index']);
+    $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactClientController', 'index']);
+    $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductClientController', 'index']);
+    $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductClientController', 'index']);
+    $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
 });
 
 // Dispatch the request
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
+
+// Strip query string (?foo=bar) and decode URI
+if (false !== $pos = strpos($uri, '?')) {
+    $uri = substr($uri, 0, $pos);
+}
+
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
-
-
 // Handle the response
 switch ($routeInfo[0]) {
     case FastRoute\Dispatcher::NOT_FOUND:
-//        $loader = new FilesystemLoader('../app/Views/Client');
-//        $twig = new Environment($loader);
-//        echo $twig->render('404.twig');
         echo '404 - Page Not Found';
         break;
     case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
