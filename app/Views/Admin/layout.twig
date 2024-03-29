@@ -1,27 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %} | Admin Panel</title>
-    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="css/dashboard.css">
-    {% block stylesheets %}{% endblock %}
+    <meta charset="UTF-8"/>
+    {% block title %}{% endblock %}
+    <link rel="shortcut icon" href="/public/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/layout.css">
 </head>
 <body>
-<header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    {% include 'includes/header.twig' %}
-</header>
-<div class="container-fluid">
-    <div class="row">
-        {% include 'Includes/nav_sidebar.twig' %}
-        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-            {% block content %}{% endblock %}
-        </main>
+<div id="header">
+    {% include('Includes/header.twig') %}
+</div>
+<div id="container" style="display: flex;">
+    <div id="sidebars">
+        {% include('Includes/sidebars.twig') %}
+    </div>
+    <div id="content">
+        {% block content %}{% endblock %}
     </div>
 </div>
-<script src="../public/js/bootstrap.bundle.min.js"></script>
-{% block scripts %}{% endblock %}
+{% block script %}{% endblock %}
+<div id="footer">
+    {% include('Includes/footer.twig') %}
+</div>
 </body>
 </html>

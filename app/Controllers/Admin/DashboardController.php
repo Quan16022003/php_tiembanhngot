@@ -10,6 +10,7 @@ class DashboardController extends Controller
     {
         parent::__construct('Admin');
     }
+
     public function index(): void
     {
         session_start();
@@ -19,6 +20,7 @@ class DashboardController extends Controller
         }
         parent::render('dashboard', ['name' => $_SESSION['admin_name']]);
     }
+
     public function isLoggedIn(): bool
     {
         return isset($_SESSION['admin_logged_in']);

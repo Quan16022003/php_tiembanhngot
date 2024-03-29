@@ -10,7 +10,7 @@ class Database
     private static ?Database $instance = null;
     public ?mysqli $conn = NULL;
     private string $host = 'localhost';
-    private string $dbName = 'eco';
+    private string $dbName = 'cuahangbanbanh';
     private string $user = 'root';
     private string $password = 'namdt2003';
 
