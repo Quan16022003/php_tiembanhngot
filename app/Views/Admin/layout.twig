@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %} | Admin Panel</title>
-    <link rel="shortcut icon" href="../images/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="../public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="../public/css/admin.sidebars.css">
+    <link rel="shortcut icon" href="/public/images/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/public/css/admin.sidebars.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
     {% block stylesheets %}{% endblock %}
 </head>
 <body class="container-fluid">
@@ -15,14 +16,20 @@
         {% include 'sidebar.twig' %}
     </div>
     <div class="col-9">
-        <nav class="nav"></nav>
-        <div class="container-fluid">
-            {% block content %}{% endblock %}
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ block('title') }}</h2>
+            </div>
+            <div class="card-body">
+                {% block content %}{% endblock %}
+            </div>
         </div>
     </div>
 </div>
 
-<script src="../public/js/bootstrap.bundle.min.js"></script>
+<script src="/public/js/bootstrap.bundle.min.js"></script>
+<script src="/public/js/admin.script.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 {% block scripts %}{% endblock %}
 </body>
 </html>

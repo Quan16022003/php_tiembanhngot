@@ -36,11 +36,11 @@ class AuthController extends Controller
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        if ($this->admin_login_model->verify($username, $password)) {
+        if ($row = $this->admin_login_model->verify($username, $password)) {
             // Login successful
             $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_name'] = $username;
-            header('Location: ./home');
+            $_SESSION['admin_name'] = $row['name'];
+            header('Location: /admin/home');
         } else {
             // Login failed
             $this->render('login', ['error' => 'Tài khoản hoặc mật khẩu không đúng!']);
@@ -53,7 +53,7 @@ class AuthController extends Controller
             session_unset();
             session_destroy();
         }
-        header('Location: ./login');
+        header('Location: /admin/login');
         exit();
     }
 }

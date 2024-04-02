@@ -21,7 +21,7 @@ class ProductModel
             throw new \InvalidArgumentException('Invalid orderBy or direction.');
         }
 
-        $query      = "SELECT * FROM products_sort_by_" . "$orderBy". "_" . "$direction";
+        $query      = "SELECT * FROM products_views ORDER BY" . "$orderBy". " " . "$direction";
         $paginator  = new Paginator($this->db->conn, $query);
         return $paginator->getData($limit, $page);
     }
