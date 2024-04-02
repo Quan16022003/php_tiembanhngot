@@ -1,12 +1,14 @@
 <nav class="navbar sticky-top navbar-expand-lg ps-lg-5 pe-lg-5 shadow-sm bg-light" aria-label="Offcanvas navbar large">
     <div class="container-fluid">
         <a class="navbar-brand align-items-center mb-2 mb-lg-0 text-white text-decoration-none" href="/">
-            <img src="images/logo.png" alt="logo" height="50">
+            <img src="/public/images/logo.png" alt="logo" height="50">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2"
+                aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar2" aria-labelledby="offcanvasNavbar2Label">
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar2"
+             aria-labelledby="offcanvasNavbar2Label">
             <div class="offcanvas-header">
                 <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
@@ -23,7 +25,9 @@
 
                     {% for key, val in navigations %}
                         <li class="nav-item text-center ps-lg-4">
-                            <a class="nav-link {{ page == key ? 'active' : '' }}" aria-current="page" href="/{{ key }}">{{ val }}</a>
+                            <a class="nav-link {{ page == key ? 'active' : '' }}"
+                               aria-current="page"
+                               href="/{{ key }}">{{ val }}</a>
                         </li>
                     {% endfor %}
                 </ul>

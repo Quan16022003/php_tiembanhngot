@@ -20,6 +20,7 @@ class Controller
             return number_format($number, 0, '.', '.');
         }));
     }
+
     public function render($page, $data=[]): void
     {
         try {

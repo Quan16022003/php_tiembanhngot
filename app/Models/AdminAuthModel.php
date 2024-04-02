@@ -7,10 +7,12 @@ use Core\Database;
 class AdminAuthModel
 {
     private ?Database $db;
+
     public function __construct()
     {
         $this->db = Database::getInstance();
     }
+
     public function verify($username, $password): false|array|null
     {
         $sql = "SELECT * FROM admin WHERE username = '$username'";

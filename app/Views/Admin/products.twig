@@ -1,0 +1,114 @@
+{% set page = 'products' %}
+{% extends 'layout.twig' %}
+{% block title %}<title>Products</title>{% endblock %}
+{% block content %}
+    <link rel="stylesheet" href="/public/css/admin_products.css">
+    <div class="container">
+
+        <div class="tool">
+            <h1 class="page-title">Danh sách sản phẩm</h1>
+            <div class="action-buttons">
+                <button class="btn add-button" onclick="showAddProductForm()">Mở phiếu nhập</button>
+                <button class="btn add-button" onclick="showAddProductForm()">Mở phiếu xuất</button>
+            </div>
+        </div>
+
+        <!-- Form thêm sản phẩm -->
+        <div class="add-product-form" id="add-product-form">
+            <h2>Phiếu nhập</h2>
+            <form method="post" action="/admin/products/add">
+                <label for="productID">Mã sản phẩm:</label>
+                <input type="text" id="productID" name="productID">
+
+                <label for="productCategoryID">Mã thể loại:</label>
+                <select type="text" id="productCategoryID" name="productCategoryID">
+                    <option value="1">Bánh mì</option>
+                    <option value="2">Bánh ngọt</option>
+                    <option value="3">Bánh kem nhỏ</option>
+                </select>
+
+                <label for="productName">Tên sản phẩm:</label>
+                <input type="text" id="productName" name="productName">
+
+                <label for="productQuantity">Số lượng:</label>
+                <input type="text" id="productQuantity" name="productQuantity">
+
+                <label for="productPrice">Giá:</label>
+                <input type="text" id="productPrice" name="productPrice">
+
+                <button type="submit" class="btn submit-button">Thêm</button>
+                <button type="button" class="btn cancel-button" onclick="hideAddProductForm()">Hủy</button>
+            </form>
+        </div>
+
+        <!-- Form sửa sản phẩm -->
+        <div class="edit-product-form" id="edit-product-form">
+            <h2>Thông tin sản phẩm</h2>
+            <form method="post" action="/admin/products/edit">
+                <label for="productID">Mã sản phẩm:</label>
+                <input type="text" id="productID" name="productID">
+
+                <label for="productCategoryID">Mã thể loại:</label>
+                <select type="text" id="productCategoryID" name="productCategoryID">
+                    <option value="1">Bánh mì</option>
+                    <option value="2">Bánh ngọt</option>
+                    <option value="3">Bánh kem nhỏ</option>
+                </select>
+
+                <label for="productName">Tên sản phẩm:</label>
+                <input type="text" id="productName" name="productName">
+
+                <label for="productQuantity">Số lượng:</label>
+                <input type="text" id="productQuantity" name="productQuantity">
+
+                <label for="productImage">Hình ảnh:</label>
+                <input type="file" id="productImage" name="productImage">
+
+                <label for="productPrice">Giá:</label>
+                <input type="text" id="productPrice" name="productPrice">
+
+                <button type="submit" class="btn submit-button">Thêm</button>
+                <button type="button" class="btn cancel-button" onclick="hideEditProductForm()">Hủy</button>
+            </form>
+        </div>
+
+        <table class="product-table">
+            <thead>
+            <tr>
+                <th onclick="sortTable(0)">ID</th>
+                <th onclick="sortTable(1)">Tên sản phẩm</th>
+                <th onclick="sortTable(2)">Giá</th>
+                <th onclick="sortTable(3)">Giảm giá</th>
+                <th onclick="sortTable(4)">Link hình ảnh</th>
+                <th onclick="sortTable(5)">Số lượng tồn kho</th>
+                <th onclick="sortTable(6)">Ngày tạo</th>
+                <th onclick="sortTable(7)">Lượt xem</th>
+                <th>Thao tác</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for product in products %}
+                <tr>
+                    <td>{{ product.id }}</td>
+                    <td>{{ product.name }}</td>
+                    <td>{{ product.price }}</td>
+                    <td>{{ product.discount }}</td>
+                    <td>{{ product.image_link }}</td>
+                    <td>{{ product.stock }}</td>
+                    <td>{{ product.created_at }}</td>
+                    <td>{{ product.view }}</td>
+                    <td class="operation-button">
+                        <!-- Thêm nút sửa -->
+                        <button class="btn edit-button" onclick="showEditProductForm('{{ product.id }}')">Sửa</button>
+                        <!-- Thêm nút xóa -->
+                        <button class="btn delete-button" onclick="deleteProduct('{{ product.id }}')">Xóa</button>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+{% block script %}
+    <script src="/public/js/products.js"></script>
+{% endblock %}
