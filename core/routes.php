@@ -32,4 +32,4 @@ return function (RouteCollector $r) {
     $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductClientController', 'index']);
     $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
 // CLIENT ROUTES END
-}
+};
