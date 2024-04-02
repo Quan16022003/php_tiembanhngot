@@ -8,7 +8,7 @@ use JetBrains\PhpStorm\NoReturn;
 
 class AuthController extends Controller
 {
-    private $admin_login_model;
+    private AdminAuthModel $admin_login_model;
     public function __construct()
     {
         parent::__construct('Admin');
@@ -19,7 +19,7 @@ class AuthController extends Controller
     {
         session_start();
         if (isset($_SESSION['admin_logged_in'])) {
-            header('Location: ./dashboard');
+            header('Location: /admin/home');
             exit;
         }
 
@@ -31,11 +31,11 @@ class AuthController extends Controller
         $username = $_POST['username'];
         $password = $_POST['password'];
 
-        if ($this->admin_login_model->verify($username, $password)) {
+        if ($row = $this->admin_login_model->verify($username, $password)) {
             // Login successful
             $_SESSION['admin_logged_in'] = true;
-            $_SESSION['admin_name'] = $username;
-            header('Location: ./dashboard');
+            $_SESSION['admin_name'] = $row['name'];
+            header('Location: /admin/home');
         } else {
             // Login failed
             $this->render('login', ['error' => 'Tài khoản hoặc mật khẩu không đúng!']);
@@ -48,7 +48,7 @@ class AuthController extends Controller
             session_unset();
             session_destroy();
         }
-        header('Location: ./login');
+        header('Location: /admin/login');
         exit();
     }
 }

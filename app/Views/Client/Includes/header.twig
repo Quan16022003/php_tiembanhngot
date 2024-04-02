@@ -10,11 +10,11 @@
         <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar2"
              aria-labelledby="offcanvasNavbar2Label">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Offcanvas</h5>
+                <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-end flex-grow-1 pe-lg-3">
+                <ul class="navbar-nav justify-content-start flex-grow-1 pe-lg-3">
                     {% set navigations = {
                         ''         : "Trang chủ",
                         'about-us' : "Về chúng tôi",
@@ -31,6 +31,11 @@
                         </li>
                     {% endfor %}
                 </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Tìm kiếm">
+                    <button class="btn btn-outline-success" type="submit">Tìm</button>
+                </form>
+                <a href="/login" class="btn btn-primary ms-3">Đăng nhập</a>
             </div>
         </div>
     </div>

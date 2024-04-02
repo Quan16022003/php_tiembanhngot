@@ -13,9 +13,9 @@ class AdminAuthModel
         $this->db = Database::getInstance();
     }
 
-    public function verify($username, $password): bool
+    public function verify($username, $password): false|array|null
     {
-        $sql = "SELECT password FROM user WHERE username = '$username'";
+        $sql = "SELECT * FROM admin WHERE username = '$username'";
         $result = $this->db->conn->query($sql);
         if (!$result) {
             echo "Lỗi: " . $this->db->conn->error;
@@ -24,7 +24,11 @@ class AdminAuthModel
         if ($result->num_rows == 1) {
             $row = $result->fetch_assoc();
             $pw_from_db = $row['password'];
-            return password_verify($password, $pw_from_db);
+            if (password_verify($password, $pw_from_db)) {
+                return $row;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }

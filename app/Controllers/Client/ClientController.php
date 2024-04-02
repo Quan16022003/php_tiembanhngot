@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Client;
 
-abstract class Controller  extends \Core\Controller
+abstract class ClientController  extends \Core\Controller
 {
     public function __construct()
     {
