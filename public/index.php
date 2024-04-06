@@ -24,7 +24,13 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/user', ['App\Controllers\Admin\UserController', 'index']);
     $r->addRoute('GET', '/admin/user/add', ['App\Controllers\Admin\UserController', 'showAddUserPage']);
     $r->addRoute('POST', '/admin/user/add', ['App\Controllers\Admin\UserController', 'addUser']);
+    $r->addRoute('GET', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'showEditUserPage']);
+    $r->addRoute('POST', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'editUser']);
     $r->addRoute('POST', '/admin/user/search', ['App\Controllers\Admin\UserController', 'searchUser']);
+    // ROLES
+    $r->addRoute('GET', '/admin/roles', ['App\Controllers\Admin\UserController', 'showRolesPage']);
+    $r->addRoute('GET', '/admin/roles/add', ['App\Controllers\Admin\UserController', 'showAddRolesPage']);
+    $r->addRoute('POST', '/admin/roles/add', ['App\Controllers\Admin\UserController', 'addRole']);
 
 // ADMIN ROUTES END
 
@@ -32,8 +38,8 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/', ['App\Controllers\Client\HomeController', 'index']);
     $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
     $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
-    $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductClientController', 'index']);
-    $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductClientController', 'index']);
+    $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductController', 'index']);
+    $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'index']);
     $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
 // CLIENT ROUTES END
 });

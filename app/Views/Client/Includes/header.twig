@@ -1,42 +1,69 @@
-<nav class="navbar sticky-top navbar-expand-lg ps-lg-5 pe-lg-5 shadow-sm bg-light" aria-label="Offcanvas navbar large">
+<nav class="navbar navbar-expand-lg ps-lg-5 pe-lg-5" aria-label="Main navigation">
     <div class="container-fluid">
+        <div class="navbar-toggler p-0 border-0">
+            <a class="btn btn-sm p-1 border-0" data-bs-toggle="offcanvas" href="#offcanvasMenu" role="button" aria-controls="offcanvasMenu">
+                <span class="material-symbols-outlined">menu</span>
+            </a>
+        </div>
         <a class="navbar-brand align-items-center mb-2 mb-lg-0 text-white text-decoration-none" href="/">
             <img src="/public/images/logo.png" alt="logo" height="50">
         </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar2"
-                aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar2"
-             aria-labelledby="offcanvasNavbar2Label">
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasMenu" aria-labelledby="offcanvasMenuLabel">
             <div class="offcanvas-header">
-                <h5 class="offcanvas-title" id="offcanvasNavbar2Label">Menu</h5>
+                <h5 class="offcanvas-title" id="offcanvasMenuLabel">Menu</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
                 <ul class="navbar-nav justify-content-start flex-grow-1 pe-lg-3">
-                    {% set navigations = {
-                        ''         : "Trang chủ",
-                        'about-us' : "Về chúng tôi",
-                        'products' : 'Sản phẩm',
-                        'contact'  : 'Liên hệ',
-                        'login': "Đăng nhập"
-                    } %}
+                {% set navigations = {
+                    ''         : "Trang chủ",
+                    'about-us' : "Về chúng tôi",
+                    'products' : 'Sản phẩm',
+                    'contact'  : 'Liên hệ'
+                } %}
 
-                    {% for key, val in navigations %}
-                        <li class="nav-item text-center ps-lg-4">
-                            <a class="nav-link {{ page == key ? 'active' : '' }}"
-                               aria-current="page"
-                               href="/{{ key }}">{{ val }}</a>
-                        </li>
-                    {% endfor %}
+                {% for key, val in navigations %}
+                    <li class="nav-item text-center ps-lg-4">
+                        <a class="nav-link {{ page == key ? 'active' : '' }}"
+                           aria-current="page"
+                           href="/{{ key }}">{{ val }}</a>
+                    </li>
+                {% endfor %}
                 </ul>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm" aria-label="Tìm kiếm">
-                    <button class="btn btn-outline-success" type="submit">Tìm</button>
-                </form>
-                <a href="/login" class="btn btn-primary ms-3">Đăng nhập</a>
+                <a class="btn btn-sm d-none d-xl-inline-block border-0" data-bs-toggle="offcanvas" href="#offcanvasSearchBox" role="button" aria-controls="offcanvasSearchBox">
+                    <div class="input-group">
+                        <span class="input-group-text material-symbols-outlined border-0">search</span>
+                        <input type="text" class="form-control bg-light border-0 shadow-none" placeholder="Tìm kiếm" aria-label="Username" aria-describedby="basic-addon1">
+                    </div>
+                </a>
             </div>
+        </div>
+        <div>
+            <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block d-xl-none" data-bs-toggle="offcanvas" href="#offcanvasSearchBox" role="button" aria-controls="offcanvasSearchBox">
+                <span class="material-symbols-outlined">search</span>
+            </a>
+            <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block" href="#"
+               data-bs-toggle="tooltip" data-bs-title="Default tooltip" data-bs-placement="bottom">
+                <span class="material-symbols-outlined d-inline d-xl-block">person</span>
+            </a>
+            <a class="btn btn-sm ps-2 border-0" role="button" href="#">
+                <span class="material-symbols-outlined d-inline d-xl-block">favorite</span>
+            </a>
+            <a class="btn btn-sm ps-2 border-0" role="button" href="#">
+                <span class="material-symbols-outlined d-inline d-xl-block">shopping_bag</span>
+            </a>
         </div>
     </div>
 </nav>
+<div class="offcanvas offcanvas-top" tabindex="-1" id="offcanvasSearchBox" aria-labelledby="offcanvasSearchBoxLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasSearchBoxLabel">Tìm kiếm sản phẩm</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form class="d-flex justify-content-center" style="max-width: 600px; margin: auto">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</div>

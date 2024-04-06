@@ -7,6 +7,7 @@ use App\Models\AdminUserModel;
 class UserController extends AdminController
 {
     private $userModel;
+
     public function __construct()
     {
         parent::__construct();
@@ -48,6 +49,43 @@ class UserController extends AdminController
             }
 
         }
+    }
 
+    public function showEditUserPage(): void
+    {
+        $id = htmlspecialchars($_GET['id']);
+        $data['user'] = $this->userModel->selectByID($id);
+        parent::render('user_edit', $data);
+    }
+
+    public function editUser(): void
+    {
+        $id = htmlspecialchars($_POST['id']);
+        $name = htmlspecialchars($_POST['name']);
+        $data = [
+            'name' => $name
+        ];
+        if ($this->userModel->update($id, $data)) {
+            echo json_encode(array('success' => true, 'message' => 'Cập nhật thành công'));
+        } else {
+            echo json_encode(array('success' => false, 'message' => 'Cập nhật thất bại'));
+        }
+    }
+
+    public function showRolesPage(): void
+    {
+        parent::render('roles');
+    }
+
+    public function showAddRolesPage(): void
+    {
+        $data['functions'] = $this->userModel->selectAllFunctions();
+        parent::render('roles_add', $data);
+    }
+
+    public function addRole(): void
+    {
+
+        echo json_encode(array('status'=> 'success', 'data' => $_POST['permissions']));
     }
 }

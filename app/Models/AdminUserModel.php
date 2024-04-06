@@ -25,10 +25,7 @@ class AdminUserModel
     }
     public function search($option, $text): array
     {
-        $sql = match ($option) {
-            'name' => "SELECT * FROM admin_list_view WHERE `name` LIKE '%$text%'",
-            default => "SELECT * FROM admin_list_view WHERE `username` LIKE '%$text%'",
-        };
+        $sql = "SELECT * FROM admin_list_view WHERE `$option` LIKE '%$text%'";
         $result = $this->db->conn->query($sql);
         $rows = [];
         while ($row = $result->fetch_assoc()) {
@@ -40,5 +37,32 @@ class AdminUserModel
     public function check($username): bool
     {
         return count($this->search('username', $username)) == 1;
+    }
+
+    public function selectByID(string $id)
+    {
+        return $this->search('id', $id)[0];
+    }
+
+    public function update($id, array $data): \mysqli_result|bool
+    {
+        return $this->db->update(
+            table: 'admin',
+            data: [
+                'name' => $data['name'],
+            ],id: $id);
+    }
+
+    public function selectAllFunctions(): array
+    {
+        $rs = $this->db->selectAll('function');
+        $row = [];
+        foreach ($rs as $r) {
+            $row[] = [
+                'id' => $r['id'],
+                'name' => $r['name']
+            ];
+        }
+        return $row;
     }
 }
