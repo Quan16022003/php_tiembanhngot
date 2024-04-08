@@ -1,77 +1,19 @@
 {% set page = 'products' %}
 {% extends 'layout.twig' %}
-{% block title %}<title>Products</title>{% endblock %}
+{% block title %}Products{% endblock %}
 {% block content %}
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
+        <div class="input-group w-50">
+            <form id="search-form">
+                <input type="text" class="form-control" id="search-input" placeholder="Nhập từ khóa tìm kiếm"
+                       style="width: 150px" aria-describedby="button-search">
+                <button class="btn btn-outline-secondary" type="submit" id="button-search">Tìm kiếm</button>
+            </form>
+        </div>
+        <a href="/admin/products/add" class="btn btn-success">Thêm</a>
+    </div>
     <link rel="stylesheet" href="/public/css/admin_products.css">
     <div class="container">
-
-        <div class="tool">
-            <h1 class="page-title">Danh sách sản phẩm</h1>
-            <div class="action-buttons">
-                <button class="btn add-button" onclick="showAddProductForm()">Mở phiếu nhập</button>
-                <button class="btn add-button" onclick="showAddProductForm()">Mở phiếu xuất</button>
-            </div>
-        </div>
-
-        <!-- Form thêm sản phẩm -->
-        <div class="add-product-form" id="add-product-form">
-            <h2>Phiếu nhập</h2>
-            <form method="post" action="/admin/products/add">
-                <label for="productID">Mã sản phẩm:</label>
-                <input type="text" id="productID" name="productID">
-
-                <label for="productCategoryID">Mã thể loại:</label>
-                <select type="text" id="productCategoryID" name="productCategoryID">
-                    <option value="1">Bánh mì</option>
-                    <option value="2">Bánh ngọt</option>
-                    <option value="3">Bánh kem nhỏ</option>
-                </select>
-
-                <label for="productName">Tên sản phẩm:</label>
-                <input type="text" id="productName" name="productName">
-
-                <label for="productQuantity">Số lượng:</label>
-                <input type="text" id="productQuantity" name="productQuantity">
-
-                <label for="productPrice">Giá:</label>
-                <input type="text" id="productPrice" name="productPrice">
-
-                <button type="submit" class="btn submit-button">Thêm</button>
-                <button type="button" class="btn cancel-button" onclick="hideAddProductForm()">Hủy</button>
-            </form>
-        </div>
-
-        <!-- Form sửa sản phẩm -->
-        <div class="edit-product-form" id="edit-product-form">
-            <h2>Thông tin sản phẩm</h2>
-            <form method="post" action="/admin/products/edit">
-                <label for="productID">Mã sản phẩm:</label>
-                <input type="text" id="productID" name="productID">
-
-                <label for="productCategoryID">Mã thể loại:</label>
-                <select type="text" id="productCategoryID" name="productCategoryID">
-                    <option value="1">Bánh mì</option>
-                    <option value="2">Bánh ngọt</option>
-                    <option value="3">Bánh kem nhỏ</option>
-                </select>
-
-                <label for="productName">Tên sản phẩm:</label>
-                <input type="text" id="productName" name="productName">
-
-                <label for="productQuantity">Số lượng:</label>
-                <input type="text" id="productQuantity" name="productQuantity">
-
-                <label for="productImage">Hình ảnh:</label>
-                <input type="file" id="productImage" name="productImage">
-
-                <label for="productPrice">Giá:</label>
-                <input type="text" id="productPrice" name="productPrice">
-
-                <button type="submit" class="btn submit-button">Thêm</button>
-                <button type="button" class="btn cancel-button" onclick="hideEditProductForm()">Hủy</button>
-            </form>
-        </div>
-
         <table class="product-table">
             <thead>
             <tr>
@@ -86,7 +28,7 @@
                 <th>Thao tác</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="results-body">
             {% for product in products %}
                 <tr>
                     <td>{{ product.id }}</td>
@@ -98,9 +40,7 @@
                     <td>{{ product.created_at }}</td>
                     <td>{{ product.view }}</td>
                     <td class="operation-button">
-                        <!-- Thêm nút sửa -->
-                        <button class="btn edit-button" onclick="showEditProductForm('{{ product.id }}')">Sửa</button>
-                        <!-- Thêm nút xóa -->
+                        <button class="btn edit-button" onclick="editProduct('{{ product.id }}')">Sửa</button>
                         <button class="btn delete-button" onclick="deleteProduct('{{ product.id }}')">Xóa</button>
                     </td>
                 </tr>
@@ -109,6 +49,49 @@
         </table>
     </div>
 {% endblock %}
-{% block script %}
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="/public/js/products.js"></script>
+    <script>
+        document.getElementById('search-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn chặn việc gửi yêu cầu tìm kiếm mặc định của form
+
+            const query = document.getElementById('search-input').value;
+
+            // Thực hiện tìm kiếm bằng cách gửi yêu cầu HTTP đến máy chủ và nhận kết quả
+            performSearch(query);
+        });
+
+        function performSearch(query) {
+            fetch('/admin/products/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({searchText: query}),
+            })
+                .then(response => response.json())
+                .then(results => {
+                    // Xóa bảng kết quả tìm kiếm cũ (nếu có)
+                    document.getElementById('results-body').innerHTML = '';
+
+                    // Hiển thị kết quả tìm kiếm mới
+                    results.forEach(result => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${result.id}</td><td>${result.name}</td>
+                                         <td>${result.price}</td><td>${result.discount}</td>
+                                         <td>${result.image_link}</td><td>${result.stock}</td>
+                                         <td>${result.created_at}</td><td>${result.view}</td>
+                                         <td class="operation-button">
+                                            <button class="btn edit-button" onclick="editProduct('${result.id}')">Sửa</button>
+                                            <button class="btn delete-button" onclick="deleteProduct('${result.id}')">Xóa</button>
+                                         </td>`;
+                        document.getElementById('results-body').appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lấy kết quả tìm kiếm:', error);
+                });
+        }
+    </script>
 {% endblock %}

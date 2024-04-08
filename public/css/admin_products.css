@@ -111,59 +111,25 @@ table tr:hover {
     display: flex;
 }
 
-/* Form thêm, sửa sản phẩm */
-.add-product-form,
-.edit-product-form {
-    display: none;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: white;
-    padding: 20px;
-    border: 1px solid #ccc;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 999;
+/* SEARCH FORM */
+#search-form {
+    display: flex;
+    align-items: center;
 }
 
-.add-product-form h2,
-.edit-product-form h2 {
-    margin-top: 0;
+#search-input {
+    width: 200px; /* Điều chỉnh độ rộng của input */
+    margin-right: 10px; /* Khoảng cách giữa input và button */
 }
 
-.add-product-form label,
-.edit-product-form label {
-    display: block;
-    margin-bottom: 5px;
+#button-search {
+    background-color: #007bff; /* Màu nền của nút */
+    border-color: #6c757d; /* Màu viền của nút */
+    color: #ffffff; /* Màu chữ của nút */
 }
 
-.add-product-form input[type="text"],
-.edit-product-form input[type="text"],
-.add-product-form select,
-.edit-product-form select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
+#button-search:hover {
+    background-color: #e9ecef; /* Màu nền khi hover */
 }
 
-.add-product-form .btn,
-.edit-product-form .btn {
-    margin-right: 10px;
-}
-
-/* Mờ phủ nền khi form hiển thị */
-.overlay {
-    display: none;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5); /* Mờ */
-    z-index: 998; /* Mặt nạ nằm dưới form */
-}
-
-.show-overlay {
-    display: block;
-}
+/* END SEARCH FORM */

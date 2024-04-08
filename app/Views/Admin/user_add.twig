@@ -1,5 +1,4 @@
 {% extends 'layout.twig' %}
-
 {% block title %}Thêm user{% endblock %}
 {% block content %}
     <div class="container">
@@ -28,54 +27,54 @@
     </div>
 {% endblock %}
 {% block scripts %}
-<script>
-    $(document).ready(function() {
-        $('#add-user-form').submit(function(e) {
-            e.preventDefault();
-            // Kiểm tra các điều kiện về dữ liệu
-            const username = $('#username').val();
-            const password = $('#password').val();
-            const confirmPassword = $('#confirm-password').val();
+    <script>
+        $(document).ready(function () {
+            $('#add-user-form').submit(function (e) {
+                e.preventDefault();
+                // Kiểm tra các điều kiện về dữ liệu
+                const username = $('#username').val();
+                const password = $('#password').val();
+                const confirmPassword = $('#confirm-password').val();
 
-            var usernameRegex = /^[a-zA-Z0-9]+$/; // Chỉ chứa chữ và số
-            var passwordRegex = /^[a-zA-Z0-9]{6,}$/; // Ít nhất 6 ký tự hoặc số
+                var usernameRegex = /^[a-zA-Z0-9]+$/; // Chỉ chứa chữ và số
+                var passwordRegex = /^[a-zA-Z0-9]{6,}$/; // Ít nhất 6 ký tự hoặc số
 
-            if (!usernameRegex.test(username)) {
-                alert('Username chỉ được chứa chữ và số.');
-                return;
-            }
-
-            if (!passwordRegex.test(password)) {
-                alert('Password có ít nhất 6 chữ số và không chứa các ký tự đặc biệt');
-                return;
-            }
-
-            if (password !== confirmPassword) {
-                alert('Password không khớp.');
-                return;
-            }
-
-            $.ajax({
-                url: '/admin/user/add',
-                type: 'POST',
-                data: $('#add-user-form').serialize(),
-                success: function(data) {
-                    data = JSON.parse(data);
-                    console.log(data);
-                    if (data.success) {
-                        alert(data.message);
-                        window.location.href = '/admin/user';
-                    } else {
-                        alert(data.message);
-                        $('#password').val('');
-                        $('#confirm-password').val('');
-                    }
-                },
-                error: function(err) {
-                    console.log(err);
+                if (!usernameRegex.test(username)) {
+                    alert('Username chỉ được chứa chữ và số.');
+                    return;
                 }
+
+                if (!passwordRegex.test(password)) {
+                    alert('Password có ít nhất 6 chữ số và không chứa các ký tự đặc biệt');
+                    return;
+                }
+
+                if (password !== confirmPassword) {
+                    alert('Password không khớp.');
+                    return;
+                }
+
+                $.ajax({
+                    url: '/admin/user/add',
+                    type: 'POST',
+                    data: $('#add-user-form').serialize(),
+                    success: function (data) {
+                        data = JSON.parse(data);
+                        console.log(data);
+                        if (data.success) {
+                            alert(data.message);
+                            window.location.href = '/admin/user';
+                        } else {
+                            alert(data.message);
+                            $('#password').val('');
+                            $('#confirm-password').val('');
+                        }
+                    },
+                    error: function (err) {
+                        console.log(err);
+                    }
+                });
             });
         });
-    });
-</script>
+    </script>
 {% endblock %}

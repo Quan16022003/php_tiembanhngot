@@ -38,9 +38,8 @@ function sortTable(columnIndex) {
 }
 
 // ADD PRODUCT FORM
-function showAddProductForm() {
-    let form = document.getElementById("add-product-form");
-    form.style.display = "block";
+function openAddProductPage() {
+    window.location.href = "/admin/products/add";
 }
 
 function hideAddProductForm() {
@@ -48,40 +47,9 @@ function hideAddProductForm() {
     form.style.display = "none";
 }
 
-// EDIT PRODUCT FORM
-function showEditProductForm(productID) {
-    // Tạo một đối tượng XMLHttpRequest
-    const xhr = new XMLHttpRequest();
-
-    // Xác định phương thức và URL cho yêu cầu
-    xhr.open("GET", "/admin/products/get/" + productID, true);
-
-    // Xử lý sự kiện khi yêu cầu được gửi đi
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                // Xử lý dữ liệu JSON nhận được
-                let product = JSON.parse(xhr.responseText);
-                // Điền thông tin sản phẩm vào form sửa sản phẩm
-                document.getElementById("productID").value = product.id;
-                document.getElementById("productCategoryID").value = product.category_id;
-                document.getElementById("productName").value = product.name;
-                document.getElementById("productQuantity").value = product.stock;
-                document.getElementById("productPrice").value = product.price;
-                // Hiển thị form sửa sản phẩm
-                document.getElementById("edit-product-form").style.display = "block";
-            } else {
-                console.error("Có lỗi xảy ra khi gửi yêu cầu lấy thông tin sản phẩm.");
-            }
-        }
-    };
-
-    // Gửi yêu cầu
-    xhr.send();
-}
-
-function hideEditProductForm() {
-    document.getElementById("edit-product-form").style.display = "none";
+// Hàm xử lý khi nhấp vào nút sửa
+function editProduct(productID) {
+    window.location.href = "/admin/products/edit/" + productID;
 }
 
 // Hàm xử lý khi nhấp vào nút xóa

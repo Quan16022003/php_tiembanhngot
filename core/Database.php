@@ -76,6 +76,7 @@ class Database
         $sql = 'DELETE FROM ' . $table . ' WHERE id = ' . $id;
         return $this->conn->query($sql);
     }
+
     public function selectAll($table): array
     {
         $sql = "SELECT * FROM $table";

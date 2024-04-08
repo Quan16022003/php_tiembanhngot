@@ -1,0 +1,87 @@
+{% extends 'layout.twig' %}
+{% block title %}Add Products{% endblock %}
+{% block content %}
+    <div class="add-product-form" id="add-product-form">
+        <form method="post" action="/admin/products/add">
+            <div class="left">
+                <h2>Thêm sản phẩm mới</h2>
+                <label for="productID">Mã sản phẩm:</label>
+                <input type="text" id="productID" name="productID">
+
+                <label for="productName">Tên sản phẩm:</label>
+                <input type="text" id="productName" name="productName">
+
+                <label for="productPrice">Giá:</label>
+                <input type="text" id="productPrice" name="productPrice">
+
+                <label for="productContent">Mô tả:</label>
+                <input type="text" id="productContent" name="productContent" value="{{ product.content }}" required>
+
+                <label for="productImage">Hình ảnh:</label>
+                <input type="file" id="productImage" name="productImage" value="{{ product.image_link }}">
+
+                <button type="submit" class="btn submit-button">Thêm</button>
+                <button type="button" class="btn cancel-button" onclick="hideAddProductForm()">Hủy</button>
+            </div>
+            <div class="right">
+                <label for="productCategoryId">Mã thể loại:</label>
+                <select type="text" id="productCategoryId" name="productCategoryId">
+                    <option value="1">Bánh mì</option>
+                    <option value="2">Bánh ngọt</option>
+                    <option value="3">Bánh kem nhỏ</option>
+                </select>
+            </div>
+        </form>
+    </div>
+    <style>
+        .add-product-form {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-product-form .left, .add-product-form .right {
+            width: 50%;
+        }
+
+        .add-product-form h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        .add-product-form label {
+            display: block;
+            margin-top: 20px;
+        }
+
+        .add-product-form input, .add-product-form select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .add-product-form .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            color: #fff;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .add-product-form .submit-button {
+            background-color: #4CAF50;
+        }
+
+        .add-product-form .cancel-button {
+            background-color: #f44336;
+        }
+    </style>
+{% endblock %}
+{% block scripts %}
+    <script src="/public/js/products.js"></script>
+{% endblock %}

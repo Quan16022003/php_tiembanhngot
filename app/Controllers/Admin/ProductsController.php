@@ -12,61 +12,76 @@ class ProductsController extends Controller
         parent::__construct('Admin');
     }
 
-    public function getAll($productID)
+    public function getById($id): void
     {
-        // Gọi phương thức trong Model để lấy thông tin sản phẩm
-        $model = new AdminProductsModel();
-        $product = $model->getProductByID($productID); // Giả sử có phương thức getProductByID trong Model
+        if (is_array($id) && isset($id['productID'])) {
+            $id = $id['productID'];
+        }
 
-        // Chuyển đổi thông tin sản phẩm thành định dạng JSON và trả về
-        echo json_encode($product);
+        $model = new AdminProductsModel();
+        $product = $model->getProductByID($id);
+        if ($product) {
+            parent::render('products_edit', ['product' => $product]);
+        } else {
+            echo "Không tìm thấy sản phẩm!";
+            var_dump(debug_backtrace());
+        }
     }
 
+    public function update(): void
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $productId = $_POST["productId"];
+            $productCategoryId = $_POST["productCategoryId"];
+            $productContent = $_POST["productContent"];
+            $productName = $_POST["productName"];
+            $productPrice = $_POST["productPrice"];
+            $productStock = $_POST["productStock"];
+            $productImage = $_POST["productImage"];
+            $model = new AdminProductsModel();
+            $success = $model->update($productId, $productCategoryId, $productContent, $productName, $productPrice, $productStock, $productImage);
+            if ($success) {
+                header("Location: " . $_SERVER['REQUEST_URI']);
+                exit;
+            } else {
+                echo "Cập nhật sản phẩm thất bại!";
+            }
+        }
+    }
 
     public function index(): void
     {
-        // Tạo một thể hiện của model
         $model = new AdminProductsModel();
-        // Lấy danh sách sản phẩm từ cơ sở dữ liệu
         $products = $model->index();
 
         if ($products === false) {
             echo "Không có sản phẩm nào được tìm thấy!";
             return;
         }
-
-        // Truyền danh sách sản phẩm vào view
         $this->render('products', ['products' => $products]);
+    }
 
-//        echo "<h1>Danh sách sản phẩm:</h1>";
-//        echo "<ul>";
-//        foreach ($products as $product) {
-//            echo "<li>{$product['id']} - {$product['category_id']} - {$product['name']} - {$product['content']} - {$product['price']} - {$product['discount']} - {$product['image_link']} - {$product['stock']} - {$product['created_at']} - {$product['view']}</li>";
-//        }
-//        echo "</ul>";
+    public function openAdd(): void
+    {
+        $this->render('products_add');
     }
 
     public function add(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // Lấy dữ liệu từ form
-            $productID = $_POST["productID"];
-            $productCategoryID = $_POST["productCategoryID"];
+            $productId = $_POST["productId"];
+            $productCategoryId = $_POST["productCategoryId"];
             $productName = $_POST["productName"];
             $productPrice = $_POST["productPrice"];
             $productQuantity = $_POST["productQuantity"];
 
-            // Kiểm tra dữ liệu và thực hiện thêm vào cơ sở dữ liệu
             $model = new AdminProductsModel();
-            $success = $model->insert($productID, $productCategoryID, $productName, $productPrice, $productQuantity);
+            $success = $model->insert($productId, $productCategoryId, $productName, $productPrice, $productQuantity);
 
-            // Kiểm tra kết quả và điều hướng
             if ($success) {
-                // Thêm sản phẩm thành công, bạn có thể điều hướng hoặc hiển thị thông báo thành công ở đây
                 echo "Thêm sản phẩm thành công!";
                 header("Location: /admin/products");
             } else {
-                // Thêm sản phẩm thất bại, bạn có thể điều hướng hoặc hiển thị thông báo lỗi ở đây
                 echo "Thêm sản phẩm thất bại!";
             }
         }
@@ -89,6 +104,27 @@ class ProductsController extends Controller
             echo "Xóa sản phẩm thất bại!";
             // Xử lý lỗi nếu có
         }
+    }
+
+    public function search(): void
+    {
+        // Check if the 'search-text' field is set in the POST data
+        $requestData = json_decode(file_get_contents('php://input'), true);
+
+        if (!isset($requestData['searchText'])) {
+            echo json_encode(['error' => 'Missing search parameters']);
+            return;
+        }
+
+        // Lấy dữ liệu từ yêu cầu
+        $text = $requestData['searchText'];
+        $model = new AdminProductsModel();
+
+        // Gọi model để thực hiện tìm kiếm
+        $products = $model->search($text);
+
+        // Trả về kết quả dưới dạng JSON
+        echo json_encode($products);
     }
 
 
