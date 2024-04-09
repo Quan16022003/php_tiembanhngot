@@ -118,4 +118,22 @@ class AdminProductsModel
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function getProducts($offset, $limit): array
+    {
+        $sql = "SELECT * FROM product LIMIT ?, ?";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("ii", $offset, $limit);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $result;
+    }
+
+    public function getTotalProducts()
+    {
+        $sql = "SELECT COUNT(*) as total FROM product";
+        $result = $this->db->conn->query($sql);
+        $row = $result->fetch_assoc();
+        return $row['total'];
+    }
 }

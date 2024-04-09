@@ -2,57 +2,162 @@
 {% extends 'layout.twig' %}
 {% block title %}Products{% endblock %}
 {% block content %}
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
-        <div class="input-group w-50">
-            <form id="search-form">
-                <input type="text" class="form-control" id="search-input" placeholder="Nhập từ khóa tìm kiếm"
-                       style="width: 150px" aria-describedby="button-search">
-                <button class="btn btn-outline-secondary" type="submit" id="button-search">Tìm kiếm</button>
-            </form>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <div class="container-fluid overflow-auto">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <form id="search-form" class="form-inline">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="search-input" placeholder="Nhập từ khóa tìm kiếm">
+                        <div class="input-group-append">
+                            <button class="btn btn-primary" type="submit" id="button-search">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-md-right">
+                <a href="/admin/products/add" class="btn btn-success">Thêm</a>
+            </div>
         </div>
-        <a href="/admin/products/add" class="btn btn-success">Thêm</a>
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">ID</th>
+                        <th onclick="sortTable(1)">Tên sản phẩm</th>
+                        <th onclick="sortTable(2)">Giá</th>
+                        <th onclick="sortTable(3)">Giảm giá</th>
+                        <th onclick="sortTable(4)">Tồn kho</th>
+                        <th onclick="sortTable(5)">Ngày tạo</th>
+                        <th onclick="sortTable(6)">Lượt xem</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody id="results-body">
+                    {% for product in products %}
+                        <tr>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.discount }}</td>
+                            <td>{{ product.stock }}</td>
+                            <td>{{ product.created_at }}</td>
+                            <td>{{ product.view }}</td>
+                            <td class="operation-button">
+                                <button class="btn btn-info edit-button" onclick="editProduct('{{ product.id }}')">Sửa
+                                </button>
+                                <button class="btn btn-danger delete-button"
+                                        onclick="deleteProduct('{{ product.id }}')">Xóa
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% for i in 1..totalPages %}
+                            <li class="page-item {% if i == currentPage %}active{% endif %}">
+                                <a class="page-link" href="/admin/products?page={{ i }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
     </div>
-    <link rel="stylesheet" href="/public/css/admin_products.css">
-    <div class="container">
-        <table class="product-table">
-            <thead>
-            <tr>
-                <th onclick="sortTable(0)">ID</th>
-                <th onclick="sortTable(1)">Tên sản phẩm</th>
-                <th onclick="sortTable(2)">Giá</th>
-                <th onclick="sortTable(3)">Giảm giá</th>
-                <th onclick="sortTable(4)">Link hình ảnh</th>
-                <th onclick="sortTable(5)">Số lượng tồn kho</th>
-                <th onclick="sortTable(6)">Ngày tạo</th>
-                <th onclick="sortTable(7)">Lượt xem</th>
-                <th>Thao tác</th>
-            </tr>
-            </thead>
-            <tbody id="results-body">
-            {% for product in products %}
-                <tr>
-                    <td>{{ product.id }}</td>
-                    <td>{{ product.name }}</td>
-                    <td>{{ product.price }}</td>
-                    <td>{{ product.discount }}</td>
-                    <td>{{ product.image_link }}</td>
-                    <td>{{ product.stock }}</td>
-                    <td>{{ product.created_at }}</td>
-                    <td>{{ product.view }}</td>
-                    <td class="operation-button">
-                        <button class="btn edit-button" onclick="editProduct('{{ product.id }}')">Sửa</button>
-                        <button class="btn delete-button" onclick="deleteProduct('{{ product.id }}')">Xóa</button>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+    <style>
+        td {
+            white-space: nowrap;
+            word-break: break-word;
+            max-width: fit-content;
+        }
+
+        th {
+            cursor: pointer;
+        }
+    </style>
+
 {% endblock %}
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="/public/js/products.js"></script>
     <script>
+        let sortStates = {}; // Lưu trữ trạng thái sắp xếp cho mỗi cột
+
+        // Hàm sắp xếp bảng theo cột
+        function sortTable(columnIndex) {
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.querySelector(".table");
+            switching = true;
+
+            // Kiểm tra nếu đã có trạng thái sắp xếp cho cột này
+            if (!sortStates[columnIndex]) {
+                sortStates[columnIndex] = "asc"; // Nếu không, mặc định là sắp xếp tăng dần
+            } else {
+                // Đảo ngược trạng thái sắp xếp nếu đã tồn tại
+                sortStates[columnIndex] = sortStates[columnIndex] === "asc" ? "desc" : "asc";
+            }
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+                    let xValue = isNaN(parseFloat(x.innerHTML)) ? x.innerHTML.toLowerCase() : parseFloat(x.innerHTML);
+                    let yValue = isNaN(parseFloat(y.innerHTML)) ? y.innerHTML.toLowerCase() : parseFloat(y.innerHTML);
+
+                    // Sắp xếp tăng dần hoặc giảm dần tùy thuộc vào trạng thái
+                    if ((sortStates[columnIndex] === "asc" && xValue > yValue) || (sortStates[columnIndex] === "desc" && xValue < yValue)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        // ADD PRODUCT FORM
+        function openAddProductPage() {
+            window.location.href = "/admin/products/add";
+        }
+
+        function hideAddProductForm() {
+            let form = document.getElementById("add-product-form");
+            form.style.display = "none";
+        }
+
+        // Hàm xử lý khi nhấp vào nút sửa
+        function editProduct(productID) {
+            window.location.href = "/admin/products/edit/" + productID;
+        }
+
+        // Hàm xử lý khi nhấp vào nút xóa
+        function deleteProduct(productID) {
+            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/admin/products/delete/" + productID, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Xóa sản phẩm thành công, có thể reload trang hoặc làm gì đó khác
+                            location.reload()
+                        } else {
+                            console.error("Có lỗi xảy ra khi gửi yêu cầu xóa sản phẩm.");
+                        }
+                    }
+                };
+                xhr.send("productID=" + productID);
+            }
+        }
+
+
         document.getElementById('search-form').addEventListener('submit', function (event) {
             event.preventDefault(); // Ngăn chặn việc gửi yêu cầu tìm kiếm mặc định của form
 
@@ -78,10 +183,13 @@
                     // Hiển thị kết quả tìm kiếm mới
                     results.forEach(result => {
                         const row = document.createElement('tr');
-                        row.innerHTML = `<td>${result.id}</td><td>${result.name}</td>
-                                         <td>${result.price}</td><td>${result.discount}</td>
-                                         <td>${result.image_link}</td><td>${result.stock}</td>
-                                         <td>${result.created_at}</td><td>${result.view}</td>
+                        row.innerHTML = `<td>${result.id}</td>
+                                         <td>${result.name}</td>
+                                         <td>${result.price}</td>
+                                         <td>${result.discount}</td>
+                                         <td>${result.stock}</td>
+                                         <td>${result.created_at}</td>
+                                         <td>${result.view}</td>
                                          <td class="operation-button">
                                             <button class="btn edit-button" onclick="editProduct('${result.id}')">Sửa</button>
                                             <button class="btn delete-button" onclick="deleteProduct('${result.id}')">Xóa</button>
@@ -93,5 +201,16 @@
                     console.error('Lỗi khi lấy kết quả tìm kiếm:', error);
                 });
         }
+
+        function showData() {
+            $.ajax({
+                url: 'app/Controllers/Admin/ProductsController.php',
+                method: 'post',
+                success: function (result) {
+                    $('#results-body').html(result);
+                }
+            })
+        }
+
     </script>
 {% endblock %}

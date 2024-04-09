@@ -1,106 +1,63 @@
 {% extends 'layout.twig' %}
 {% block title %}Edit Products{% endblock %}
 {% block content %}
-    <link rel="stylesheet" href="/public/css/admin_products.css">
     <div class="container">
         <div class="edit-product-form" id="edit-product-form">
             <h2>Thông tin sản phẩm</h2>
             <form method="post">
-                <div class="left">
-                    <label for="productId">Mã sản phẩm:</label>
-                    <input type="text" id="productId" name="productId" readonly value="{{ product.id }}">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="productId">Mã sản phẩm:</label>
+                            <input type="text" class="form-control" id="productId" name="productId" readonly
+                                   value="{{ product.id }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="productName">Tên sản phẩm:</label>
+                            <input type="text" class="form-control" id="productName" name="productName"
+                                   value="{{ product.name }}" required>
+                        </div>
 
-                    <label for="productName">Tên sản phẩm:</label>
-                    <input type="text" id="productName" name="productName" value="{{ product.name }}" required>
+                        <div class="form-group">
+                            <label for="productContent">Mô tả:</label>
+                            <input type="text" class="form-control" id="productContent" name="productContent"
+                                   value="{{ product.content }}" required>
+                        </div>
 
-                    <label for="productContent">Mô tả:</label>
-                    <input type="text" id="productContent" name="productContent" value="{{ product.content }}" required>
+                        <div class="form-group">
+                            <label for="productImage">Hình ảnh:</label>
+                            <input type="file" class="form-control-file" id="productImage" name="productImage"
+                                   value="{{ product.image_link }}">
+                        </div>
 
-                    <label for="productImage">Hình ảnh:</label>
-                    <input type="file" id="productImage" name="productImage" value="{{ product.image_link }}">
+                        <div class="form-group">
+                            <label for="productPrice">Giá:</label>
+                            <input type="text" class="form-control" id="productPrice" name="productPrice"
+                                   value="{{ product.price }}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="productCategoryId">Mã thể loại:</label>
+                            <select class="form-control" id="productCategoryId" name="productCategoryId">
+                                <option value="1">Bánh mì</option>
+                                <option value="2">Bánh ngọt</option>
+                                <option value="3">Bánh kem nhỏ</option>
+                            </select>
+                        </div>
 
-                    <label for="productPrice">Giá:</label>
-                    <input type="text" id="productPrice" name="productPrice" value="{{ product.price }}" required>
+                        <div class="form-group">
+                            <label for="productStock">Số lượng:</label>
+                            <input type="text" class="form-control" id="productStock" name="productStock"
+                                   value="{{ product.stock }}" required>
+                        </div>
+                    </div>
                 </div>
-                <div class="right">
-                    <label for="productCategoryId">Mã thể loại:</label>
-                    <select type="text" id="productCategoryId" name="productCategoryId">
-                        <option value="1">Bánh mì</option>
-                        <option value="2">Bánh ngọt</option>
-                        <option value="3">Bánh kem nhỏ</option>
-                    </select>
-
-                    <label for="productStock">Số lượng:</label>
-                    <input type="text" id="productStock" name="productStock" value="{{ product.stock }}" required>
-                </div>
-
-                <button type="submit" class="btn submit-button">Lưu</button>
-                <button type="button" class="btn cancel-button">Hủy</button>
+                <button type="submit" class="btn btn-success">Lưu</button>
+                <a href="/admin/products" class="btn btn-secondary">Hủy</a>
             </form>
         </div>
     </div>
-    <style>
-        .edit-product-form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .edit-product-form form {
-            display: flex;
-            flex-wrap: wrap;
-            width: 100%;
-        }
-
-        .edit-product-form .left, .edit-product-form .right {
-            width: calc(50% - 20px);
-            padding: 0 10px;
-        }
-
-        .edit-product-form form label {
-            display: block;
-            margin-bottom: 10px;
-        }
-
-        .edit-product-form form input[type="text"],
-        .edit-product-form form select,
-        .edit-product-form form input[type="file"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-
-        .edit-product-form form select {
-            width: 100%;
-        }
-
-        .edit-product-form form button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            color: #fff;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .edit-product-form form button:first-child {
-            background-color: #4CAF50;
-            color: white;
-        }
-
-        .edit-product-form form button:last-child {
-            background-color: #f44336;
-            color: white;
-        }
-
-        .edit-product-form form button:hover {
-            opacity: 0.8;
-        }
-    </style>
 {% endblock %}
 {% block scripts %}
     <script src="/public/js/products.js"></script>

@@ -7,7 +7,7 @@ use App\Models\AdminProductsModel;
 
 class ProductsController extends Controller
 {
-    public function __construct()
+    public function __construct($page = NULL)
     {
         parent::__construct('Admin');
     }
@@ -59,6 +59,18 @@ class ProductsController extends Controller
             return;
         }
         $this->render('products', ['products' => $products]);
+    }
+
+    public function indexPage(): void
+    {
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $productsPerPage = 10;
+        $offset = ($page - 1) * $productsPerPage;
+        $model = new AdminProductsModel();
+        $products = $model->getProducts($offset, $productsPerPage);
+        $totalProducts = $model->getTotalProducts();
+        $totalPages = ceil($totalProducts / $productsPerPage);
+        $this->render('products', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
 
     public function openAdd(): void
