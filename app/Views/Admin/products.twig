@@ -1,6 +1,6 @@
 {% set page = 'products' %}
 {% extends 'layout.twig' %}
-{% block title %}Products{% endblock %}
+{% block title %}Sản phẩm{% endblock %}
 {% block content %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <div class="container-fluid overflow-auto">
@@ -45,7 +45,8 @@
                             <td>{{ product.created_at }}</td>
                             <td>{{ product.view }}</td>
                             <td class="operation-button">
-                                <button class="btn btn-info edit-button" onclick="editProduct('{{ product.id }}')">Sửa
+                                <button class="btn btn-info edit-button" onclick="editProduct('{{ product.id }}')">
+                                    Sửa
                                 </button>
                                 <button class="btn btn-danger delete-button"
                                         onclick="deleteProduct('{{ product.id }}')">Xóa

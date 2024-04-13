@@ -1,0 +1,138 @@
+<div class="card vh-100 shadow">
+    <div class="card-header">
+        <h2>
+            <a href="/admin/home" class="link-body-emphasis text-decoration-none">
+                Menu
+            </a>
+        </h2>
+    </div>
+    <div class="card-body d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li>
+                <a href="/admin/home" class="nav-link link-body-emphasis" aria-current="page">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#home"/>
+                    </svg>
+                    Trang chủ
+                </a>
+            </li>
+            <hr class="hr m-0">
+            <li>
+                <a href="/admin/dashboard" class="nav-link link-body-emphasis">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#speedometer2"/>
+                    </svg>
+                    Thống kê
+                </a>
+                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mb-1 text-body-secondary text-uppercase">
+                    <span>Lưu báo cáo</span>
+                    <a class="link-secondary" href="#" aria-label="Add a new report">
+                        <svg class="bi">
+                            <use xlink:href="#plus-circle"/>
+                        </svg>
+                    </a>
+                </h6>
+                <ul class="nav flex-column mb-auto">
+                    <li class="nav-item">
+                        <a class="nav-link link-body-emphasis" href="#">
+                            <svg class="bi">
+                                <use xlink:href="#file-earmark-text"/>
+                            </svg>
+                            Tháng hiện tại
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-body-emphasis" href="#">
+                            <svg class="bi">
+                                <use xlink:href="#file-earmark-text"/>
+                            </svg>
+                            Quý trước
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-body-emphasis" href="#">
+                            <svg class="bi">
+                                <use xlink:href="#file-earmark-text"/>
+                            </svg>
+                            Tỷ lệ tương tác
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link link-body-emphasis" href="#">
+                            <svg class="bi">
+                                <use xlink:href="#file-earmark-text"/>
+                            </svg>
+                            Tổng kết cuối năm
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <hr class="hr m-0">
+            <li>
+                <a href="/admin/orders" class="nav-link link-body-emphasis">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#table"/>
+                    </svg>
+                    Đơn hàng
+                </a>
+            </li>
+            <hr class="hr m-0">
+            <li>
+                <a href="/admin/products" class="nav-link link-body-emphasis">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#grid"/>
+                    </svg>
+                    Sản phẩm
+                </a>
+            </li>
+            <hr class="hr m-0">
+            <li>
+                <a href="/admin/customers" class="nav-link link-body-emphasis">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#people-circle"/>
+                    </svg>
+                    Khách hàng
+                </a>
+            </li>
+            <hr class="hr m-0">
+            <li>
+                <a href="/admin/users" class="nav-link link-body-emphasis">
+                    <svg class="bi pe-none me-2" width="16" height="16">
+                        <use xlink:href="#people-circle"/>
+                    </svg>
+                    Danh sách User
+                </a>
+            </li>
+            <hr class="hr m-0">
+            <li class="nav-item">
+                <a class="nav-link link-body-emphasis" href="#">
+                    <svg class="bi">
+                        <use xlink:href="#gear-wide-connected"/>
+                    </svg>
+                    Tuỳ chỉnh
+                </a>
+            </li>
+            <hr class="hr m-0">
+            <li class="nav-item">
+                <a class="nav-link link-body-emphasis" href="#">
+                    <svg class="bi">
+                        <use xlink:href="#door-closed"/>
+                    </svg>
+                    Đăng xuất
+                </a>
+            </li>
+            <hr class="hr m-0">
+
+        </ul>
+    </div>
+    <div class="card-footer dropdown">
+        <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
+           data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="material-symbols-outlined">person</span>
+            <strong>{{ admin.admin_name }}</strong>
+        </a>
+        <ul class="dropdown-menu text-small shadow">
+            <li><a class="dropdown-item" href="/admin/logout">Sign out</a></li>
+        </ul>
+    </div>
+</div>

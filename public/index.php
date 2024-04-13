@@ -13,6 +13,8 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/login', ['App\Controllers\Admin\AuthController', 'index']);
     $r->addRoute('POST', '/admin/login', ['App\Controllers\Admin\AuthController', 'login']);
     $r->addRoute('GET', '/admin/logout', ['App\Controllers\Admin\AuthController', 'logout']);
+    // DASHBOARD
+    $r->addRoute('GET', '/admin/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
     // PRODUCTS
     $r->addRoute('GET', '/admin/products', ['App\Controllers\Admin\ProductsController', 'indexPage']);
     $r->addRoute('GET', '/admin/products/add', ['App\Controllers\Admin\ProductsController', 'openAdd']);
@@ -25,9 +27,9 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/home', ['App\Controllers\Admin\HomeController', 'index']);
     // USERS
     $r->addRoute('GET', '/admin/user', ['App\Controllers\Admin\UserController', 'index']);
-    $r->addRoute('GET', '/admin/user/add', ['App\Controllers\Admin\UserController', 'showAddUserPage']);
-    $r->addRoute('POST', '/admin/user/add', ['App\Controllers\Admin\UserController', 'addUser']);
-    $r->addRoute('POST', '/admin/user/search', ['App\Controllers\Admin\UserController', 'searchUser']);
+    $r->addRoute('GET', '/admin/users/add', ['App\Controllers\Admin\UserController', 'showAddUserPage']);
+    $r->addRoute('POST', '/admin/users/add', ['App\Controllers\Admin\UserController', 'addUser']);
+    $r->addRoute('POST', '/admin/users/search', ['App\Controllers\Admin\UserController', 'searchUser']);
 
 // ADMIN ROUTES END
 
