@@ -12,6 +12,15 @@
                 <label for="name" class="form-label">Họ tên</label>
                 <input type="text" class="form-control" id="name" name="name" required value="{{ user.name }}">
             </div>
+            <div class="mb-3">
+                <label for="permission" class="form-label">Chọn quyền</label>
+                <select class="form-select" aria-label="Default select example" id="permission" name="permission">
+                    {% for permission in permissions %}
+                        <option value="{{ permission.id }}" {% if permission.id == user.id_per %}selected{% endif %}>{{ permission.id }} - {{ permission.name }}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
             <button type="submit" class="btn btn-primary">Sửa</button>
         </form>
     </div>
@@ -27,7 +36,8 @@
                method: 'POST',
                data: {
                    id : {{ user.id }},
-                   name : name
+                   name : name,
+                   id_per : $('#permission').val()
                },
                 success: function(data) {
                     data = JSON.parse(data);

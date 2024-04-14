@@ -30,10 +30,10 @@
             <th scope="row">{{ user.id }}</th>
             <td>{{ user.username }}</td>
             <td>{{ user.name }}</td>
-            <td>Quyền</td>
+            <td>{{ user.permission_name }}</td>
             <td>
                 <a type="button" class="btn btn-primary btn-sm" href="/admin/user/edit?id={{ user.id }}">Sửa</a>
-                <button type="button" class="btn btn-danger btn-sm">Xóa</button>
+                <button type="button" class="btn btn-danger btn-sm" onclick="deleteUser({{ user.id }})">Xóa</button>
             </td>
         </tr>
         {% endfor %}
@@ -43,6 +43,29 @@
 {% endblock %}
 {% block scripts %}
 <script>
+    function deleteUser(userId) {
+        if (confirm("Bạn có muốn xóa không?")) {
+            $.ajax({
+                type: 'POST',
+                url: '/admin/user/delete',
+                data: {
+                    'id': userId
+                },
+                success: function(response) {
+                    response = JSON.parse(response)
+                    if (response.success) {
+                        alert(response.message);
+                        location.reload();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Xử lý khi request thất bại
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    }
+
     $(document).ready(function() {
         $('#button-search').click(function() {
             const searchOption = $('#option').val();

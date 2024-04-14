@@ -26,11 +26,15 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('POST', '/admin/user/add', ['App\Controllers\Admin\UserController', 'addUser']);
     $r->addRoute('GET', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'showEditUserPage']);
     $r->addRoute('POST', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'editUser']);
+    $r->addRoute('POST', '/admin/user/delete', ['App\Controllers\Admin\UserController', 'deleteUser']);
     $r->addRoute('POST', '/admin/user/search', ['App\Controllers\Admin\UserController', 'searchUser']);
-    // ROLES
-    $r->addRoute('GET', '/admin/roles', ['App\Controllers\Admin\UserController', 'showRolesPage']);
-    $r->addRoute('GET', '/admin/roles/add', ['App\Controllers\Admin\UserController', 'showAddRolesPage']);
-    $r->addRoute('POST', '/admin/roles/add', ['App\Controllers\Admin\UserController', 'addRole']);
+    // PERMISSIONS
+    $r->addRoute('GET', '/admin/permissions', ['App\Controllers\Admin\UserController', 'showPermissionPage']);
+    $r->addRoute('GET', '/admin/permissions/add', ['App\Controllers\Admin\UserController', 'showAddPermissionPage']);
+    $r->addRoute('POST', '/admin/permissions/add', ['App\Controllers\Admin\UserController', 'addPermission']);
+    $r->addRoute('GET', '/admin/permissions/edit', ['App\Controllers\Admin\UserController', 'showEditPermissionPage']);
+    $r->addRoute('POST', '/admin/permissions/edit', ['App\Controllers\Admin\UserController', 'editPermission']);
+    $r->addRoute('POST', '/admin/permissions/delete', ['App\Controllers\Admin\UserController', 'deletePermission']);
 
 // ADMIN ROUTES END
 
