@@ -17,6 +17,8 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
     // PRODUCTS
     $r->addRoute('GET', '/admin/products', ['App\Controllers\Admin\ProductsController', 'indexPage']);
+    $r->addRoute('GET', '/admin/products/create', ['App\Controllers\Admin\ProductsController', 'openCreate']);
+    $r->addRoute('POST', '/admin/products/create', ['App\Controllers\Admin\ProductsController', 'create']);
     $r->addRoute('GET', '/admin/products/add', ['App\Controllers\Admin\ProductsController', 'openAdd']);
     $r->addRoute('POST', '/admin/products/add', ['App\Controllers\Admin\ProductsController', 'add']);
     $r->addRoute('POST', '/admin/products/delete/{productID}', ['App\Controllers\Admin\ProductsController', 'delete']);

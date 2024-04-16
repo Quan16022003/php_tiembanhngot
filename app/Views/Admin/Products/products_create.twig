@@ -1,4 +1,4 @@
-{% extends 'layout.twig' %}
+{% extends './layout.twig' %}
 {% block title %}Add Products{% endblock %}
 {% block content %}
     <div class="container">
@@ -6,11 +6,10 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-body">
-                        <h2 class="card-title">Thêm sản phẩm mới</h2>
-                        <form method="post" action="/admin/products/add" enctype="multipart/form-data">
+                        <form method="post" action="/admin/products/create" enctype="multipart/form-data">
                             <div class="form-group">
-                                <label for="productID">Mã sản phẩm:</label>
-                                <input type="text" class="form-control" id="productID" name="productID">
+                                <label for="productId">Mã sản phẩm:</label>
+                                <input type="text" class="form-control" id="productId" name="productId">
                             </div>
 
                             <div class="form-group">

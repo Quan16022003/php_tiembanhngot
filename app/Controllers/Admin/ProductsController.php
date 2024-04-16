@@ -21,7 +21,7 @@ class ProductsController extends Controller
         $model = new AdminProductsModel();
         $product = $model->getProductByID($id);
         if ($product) {
-            parent::render('products_edit', ['product' => $product]);
+            parent::render('Products/products_edit', ['product' => $product]);
         } else {
             echo "Không tìm thấy sản phẩm!";
             var_dump(debug_backtrace());
@@ -30,7 +30,9 @@ class ProductsController extends Controller
 
     public function update(): void
     {
+
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
             $productId = $_POST["productId"];
             $productCategoryId = $_POST["productCategoryId"];
             $productContent = $_POST["productContent"];
@@ -38,8 +40,9 @@ class ProductsController extends Controller
             $productPrice = $_POST["productPrice"];
             $productStock = $_POST["productStock"];
             $productImage = $_POST["productImage"];
+            var_dump($productId, $productCategoryId, $productContent, $productName, $productPrice, $productStock, $productImage);
             $model = new AdminProductsModel();
-            $success = $model->update($productId, $productCategoryId, $productContent, $productName, $productPrice, $productStock, $productImage);
+            $success = $model->update($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock);
             if ($success) {
                 header("Location: " . $_SERVER['REQUEST_URI']);
                 exit;
@@ -58,7 +61,7 @@ class ProductsController extends Controller
             echo "Không có sản phẩm nào được tìm thấy!";
             return;
         }
-        $this->render('products', ['products' => $products]);
+        $this->render('products/products', ['products' => $products]);
     }
 
     public function indexPage(): void
@@ -70,12 +73,66 @@ class ProductsController extends Controller
         $products = $model->getProducts($offset, $productsPerPage);
         $totalProducts = $model->getTotalProducts();
         $totalPages = ceil($totalProducts / $productsPerPage);
-        $this->render('products', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
+        $this->render('Products/products', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
+    }
+
+    public function openCreate(): void
+    {
+        $this->render('Products/products_create');
     }
 
     public function openAdd(): void
     {
-        $this->render('products_add');
+        $this->render('Products/products_add');
+    }
+
+
+    public function create(): void
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $productId = $_POST["productId"];
+            $productCategoryId = $_POST["productCategoryId"];
+            $productName = $_POST["productName"];
+            $productPrice = $_POST["productPrice"];
+            $productContent = $_POST["productContent"];
+
+            $model = new AdminProductsModel();
+            $success = $model->create($productId, $productCategoryId, $productName, $productPrice, $productContent);
+
+            if ($success) {
+                echo "Thêm sản phẩm thành công!";
+                header("Location: /admin/products");
+            } else {
+                echo "Thêm sản phẩm thất bại!";
+            }
+        }
+    }
+
+    public function addExcel(): void
+    {
+        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            $target_dir = "uploads/";
+            $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
+            $uploadOk = 1;
+            $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+            // Kiểm tra xem tệp có phải là tệp Excel không
+            if ($fileType != "xlsx" && $fileType != "xls") {
+                echo "Chỉ cho phép tải lên các tệp Excel (XLSX hoặc XLS).";
+                $uploadOk = 0;
+            }
+
+            // Kiểm tra nếu có lỗi xảy ra khi tải lên
+            if ($uploadOk == 0) {
+                echo "Tệp của bạn không được tải lên.";
+            } else {
+                if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+                    echo "Tệp " . basename($_FILES["fileToUpload"]["name"]) . " đã được tải lên thành công.";
+                } else {
+                    echo "Có lỗi xảy ra khi tải lên tệp của bạn.";
+                }
+            }
+        }
     }
 
     public function add(): void

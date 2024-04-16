@@ -1,0 +1,101 @@
+{% extends './layout.twig' %}
+{% block title %}Add Products{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form method="post" action="/admin/products/add" enctype="multipart/form-data">
+                            <form action="/admin/products/add" method="post" enctype="multipart/form-data">
+                                Chọn tệp Excel: <input type="file" name="fileToUpload" id="fileToUpload">
+                                <input type="submit" value="Tải lên" name="submit">
+                            </form>
+                            <table class="table table-striped table-bordered">
+                                <thead>
+                                <tr>
+                                    <th onclick="sortTable(0)">#</th>
+                                    <th onclick="sortTable(1)">Tên sản phẩm</th>
+                                    <th onclick="sortTable(2)">Số lượng</th>
+                                    <th onclick="sortTable(3)">Đơn giá</th>
+                                    <th>Tổng tiền</th>
+                                </tr>
+                                </thead>
+                                <tbody id="results-body">
+                                <tr>
+                                    <td>
+                                        <input type="text" class="form-control" id="productId" name="productId">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="productName" name="productName">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="productStock" name="productStock">
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="productPrice" name="productPrice"
+                                               readonly>
+                                    </td>
+                                    <td>
+                                        <input type="text" class="form-control" id="productTotal" name="productTotal"
+                                               readonly>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit" class="btn btn-primary">Thêm</button>
+                            <button type="button" class="btn btn-secondary" onclick="hideAddProductForm()">Hủy</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script>
+        document.getElementById('productId').addEventListener('input', function () {
+            const inputId = this.value;
+
+            // Gửi yêu cầu AJAX để lấy danh sách sản phẩm từ server
+            const xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState === 4 && this.status === 200) {
+                    var matchingProducts = JSON.parse(this.responseText);
+                    displayMatchingProducts(matchingProducts);
+                }
+            };
+            xhr.open("GET", "get_products.php?id=" + inputId, true);
+            xhr.send();
+        });
+
+        // Hàm hiển thị danh sách các sản phẩm phù hợp
+        function displayMatchingProducts(products) {
+            const resultsBody = document.getElementById('results-body');
+            resultsBody.innerHTML = '';
+
+            products.forEach(function (product) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                <td>${product.id}</td>
+                <td>${product.name}</td>
+                <td>${product.price}</td>
+                <td>${product.stock}</td>
+                <td>${product.price * product.stock}</td>
+            `;
+                resultsBody.appendChild(tr);
+
+                // Xử lý sự kiện khi người dùng chọn một sản phẩm từ danh sách
+                tr.addEventListener('click', function () {
+                    // Điền các thuộc tính của sản phẩm đã chọn vào các ô input
+                    document.getElementById('productId').value = product.id;
+                    document.getElementById('productName').value = product.name;
+                    document.getElementById('productPrice').value = product.price;
+                    document.getElementById('productStock').value = product.stock;
+                    document.getElementById('productTotal').value = product.price * product.stock;
+                });
+            });
+        }
+    </script>
+{% endblock %}

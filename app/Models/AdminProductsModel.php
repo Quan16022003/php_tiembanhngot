@@ -49,6 +49,23 @@ class AdminProductsModel
         return $success;
     }
 
+    public function create($productId, $productCategoryId, $productName, $productPrice, $productContent): bool
+    {
+        $existingProduct = $this->getProductByID($productId);
+
+        if ($existingProduct) {
+            echo "ID has exist!";
+        } else {
+            // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
+            $sql = "INSERT INTO product (id, category_id, name, price, content) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $this->db->conn->prepare($sql);
+            $stmt->bind_param("sssss", $productId, $productCategoryId, $productName, $productPrice, $productContent);
+            $success = $stmt->execute();
+            $stmt->close();
+        }
+        return $success;
+    }
+
     public function getProductByID($productID): false|array|null
     {
         $sql = "SELECT * FROM product WHERE id = ?";
@@ -85,9 +102,9 @@ class AdminProductsModel
         return true;
     }
 
-    public function update($productId, $productCategoryId, $productContent, $productName, $productPrice, $productStock, $productImage): bool
+    public function update($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock): bool
     {
-        $sql = "UPDATE product SET name = ?,content=?,image_link=?, price = ?, stock = ?, category_id = ? WHERE id = ?";
+        $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
         $stmt = $this->db->conn->prepare($sql);
         $stmt->bind_param("sssiiis", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productId);
         $success = $stmt->execute();
@@ -95,10 +112,10 @@ class AdminProductsModel
             error_log("SQL error: " . $stmt->error);
             return false;
         }
-
         $stmt->close();
         return true;
     }
+
 
     public function search($searchText): array
     {

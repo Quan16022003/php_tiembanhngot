@@ -1,43 +1,43 @@
-{% extends 'layout.twig' %}
+{% extends './layout.twig' %}
 {% block title %}Edit Products{% endblock %}
 {% block content %}
     <div class="container">
         <div class="edit-product-form" id="edit-product-form">
             <h2>Thông tin sản phẩm</h2>
-            <form method="post">
+            <form id="edit-products-form" method="post">
                 <div class="row">
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="productId">Mã sản phẩm:</label>
                             <input type="text" class="form-control" id="productId" name="productId" readonly
                                    value="{{ product.id }}">
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="productName">Tên sản phẩm:</label>
                             <input type="text" class="form-control" id="productName" name="productName"
                                    value="{{ product.name }}" required>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="productContent">Mô tả:</label>
                             <input type="text" class="form-control" id="productContent" name="productContent"
                                    value="{{ product.content }}" required>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="productImage">Hình ảnh:</label>
                             <input type="file" class="form-control-file" id="productImage" name="productImage"
                                    value="{{ product.image_link }}">
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="productPrice">Giá:</label>
                             <input type="text" class="form-control" id="productPrice" name="productPrice"
                                    value="{{ product.price }}" required>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="productCategoryId">Mã thể loại:</label>
                             <select class="form-control" id="productCategoryId" name="productCategoryId">
                                 <option value="1">Bánh mì</option>
@@ -46,7 +46,7 @@
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group mb-3">
                             <label for="productStock">Số lượng:</label>
                             <input type="text" class="form-control" id="productStock" name="productStock"
                                    value="{{ product.stock }}" required>
@@ -60,5 +60,21 @@
     </div>
 {% endblock %}
 {% block scripts %}
-    <script src="/public/js/products.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('edit-products-form').addEventListener('submit', function (event) {
+                // event.preventDefault(); // Ngăn chặn việc gửi form đi
+                const formData = new FormData(this);
+
+                // Hiển thị dữ liệu trên console
+                for (const pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
+
+                // Nếu bạn muốn gửi dữ liệu form đi sau khi đã hiển thị trên console,
+                // bạn có thể sử dụng AJAX hoặc gửi form bằng cách thêm code ở đây.
+            });
+        });
+    </script>
+
 {% endblock %}

@@ -1,5 +1,5 @@
 {% set page = 'products' %}
-{% extends 'layout.twig' %}
+{% extends './layout.twig' %}
 {% block title %}Sản phẩm{% endblock %}
 {% block content %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -16,7 +16,9 @@
                 </form>
             </div>
             <div class="col-md-6 text-md-right">
-                <a href="/admin/products/add" class="btn btn-success">Thêm</a>
+                <a href="/admin/products/create" class="btn btn-success">Thêm sản phẩm mới</a>
+                <a href="/admin/products/add" class="btn btn-success">Mở phiếu nhập</a>
+                <a href="/admin/products/add" class="btn btn-success">Mở phiếu xuất</a>
             </div>
         </div>
         <div class="row">
@@ -26,10 +28,10 @@
                     <tr>
                         <th onclick="sortTable(0)">ID</th>
                         <th onclick="sortTable(1)">Tên sản phẩm</th>
-                        <th onclick="sortTable(2)">Giá</th>
-                        <th onclick="sortTable(3)">Giảm giá</th>
-                        <th onclick="sortTable(4)">Tồn kho</th>
-                        <th onclick="sortTable(5)">Ngày tạo</th>
+                        <th onclick="sortTable(2)">Loại</th>
+                        <th onclick="sortTable(3)">Giá</th>
+                        <th onclick="sortTable(4)">Giảm giá</th>
+                        <th onclick="sortTable(5)">Tồn kho</th>
                         <th onclick="sortTable(6)">Lượt xem</th>
                         <th>Thao tác</th>
                     </tr>
@@ -39,10 +41,10 @@
                         <tr>
                             <td>{{ product.id }}</td>
                             <td>{{ product.name }}</td>
+                            <td id="category_name">{{ product.category_id }}</td>
                             <td>{{ product.price }}</td>
                             <td>{{ product.discount }}</td>
                             <td>{{ product.stock }}</td>
-                            <td>{{ product.created_at }}</td>
                             <td>{{ product.view }}</td>
                             <td class="operation-button">
                                 <button class="btn btn-info edit-button" onclick="editProduct('{{ product.id }}')">
@@ -158,7 +160,6 @@
             }
         }
 
-
         document.getElementById('search-form').addEventListener('submit', function (event) {
             event.preventDefault(); // Ngăn chặn việc gửi yêu cầu tìm kiếm mặc định của form
 
@@ -168,6 +169,22 @@
             performSearch(query);
         });
 
+        // Hàm chuyển từ cateId sang text
+        const categoryMap = {
+            1: "Bánh mì",
+            2: "Bánh kem nhỏ",
+            3: "Bánh ngọt"
+        };
+        document.querySelectorAll('table td#category_name').forEach(td => {
+            const categoryId = parseInt(td.innerText);
+            if (categoryMap.hasOwnProperty(categoryId)) {
+                td.innerText = categoryMap[categoryId];
+            } else {
+                td.innerText = "Không xác định";
+            }
+        });
+
+        // Hàm tìm kiếm
         function performSearch(query) {
             fetch('/admin/products/search', {
                 method: 'POST',
@@ -212,6 +229,5 @@
                 }
             })
         }
-
     </script>
 {% endblock %}
