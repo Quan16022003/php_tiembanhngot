@@ -120,7 +120,7 @@ class AdminInvoicesModel
 
     public function getInvoices($offset, $limit): array
     {
-        $sql = "SELECT * FROM invoices LIMIT ?, ?";
+        $sql = "SELECT * FROM invoice LIMIT ?, ?";
         $stmt = $this->db->conn->prepare($sql);
         $stmt->bind_param("ii", $offset, $limit);
         $stmt->execute();
@@ -131,7 +131,7 @@ class AdminInvoicesModel
 
     public function getTotalInvoices()
     {
-        $sql = "SELECT COUNT(*) as total FROM invoices";
+        $sql = "SELECT COUNT(*) as total FROM invoice";
         $result = $this->db->conn->query($sql);
         $row = $result->fetch_assoc();
         return $row['total'];

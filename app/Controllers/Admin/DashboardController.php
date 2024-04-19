@@ -23,6 +23,6 @@ class DashboardController extends Controller
             $totalStock += $product['stock'];
             $totalPrice += $product['price'];
         }
-        parent::render('dashboard', ['totalProducts' => $totalProducts, 'totalStock' => $totalStock, 'totalPrice' => $totalPrice]);
+        parent::render('dashboard/dashboard', ['totalProducts' => $totalProducts, 'totalStock' => $totalStock, 'totalPrice' => $totalPrice]);
     }
 }

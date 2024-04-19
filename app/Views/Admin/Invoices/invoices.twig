@@ -1,15 +1,16 @@
-{% set page = 'products' %}
+{% set page = 'invoices' %}
 {% extends './layout.twig' %}
 {% block content %}
     <head>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <title>
-            {% block title %}Sản phẩm{% endblock %}
+            {% block title %}Hoá đơn{% endblock %}
         </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <link rel="stylesheet" href="/public/css/global.css">
     </head>
+
     <div class="container-fluid overflow-auto">
-        <div class="row mb-3 slide-right">
+        <div class="row mb-3">
             <div class="col-md-6">
                 <form id="search-form" class="form-inline">
                     <div class="input-group">
@@ -23,45 +24,43 @@
                 </form>
             </div>
             <div class="col-md-6 text-md-right">
-                <a href="/admin/products/create" class="btn btn-success">Thêm sản phẩm mới</a>
-                <a href="/admin/products/add" class="btn btn-success">Mở phiếu nhập</a>
-                <a href="/admin/products/add" class="btn btn-success">Mở phiếu xuất</a>
+                <a href="/admin/invoices/create" class="btn btn-success">Thêm hoá đơn mới</a>
             </div>
         </div>
-        <div class="row rounded">
-            <div class="col ">
-                <table class=" fade-bottom datatables-products table border-top dataTable no-footer dtr-column collapsed">
+        <div class="row">
+            <div class="col">
+                <table class="animated-text datatables-products table border-top dataTable no-footer dtr-column collapsed">
                     <thead>
                     <tr>
-                        <th onclick="sortTable(0)">ID</th>
-                        <th onclick="sortTable(1)">Tên sản phẩm</th>
-                        <th onclick="sortTable(2)">Loại</th>
-                        <th onclick="sortTable(3)">Giá</th>
-                        <th onclick="sortTable(4)">Giảm giá</th>
-                        <th onclick="sortTable(5)">Tồn kho</th>
+                        <th class="number" onclick="sortTable(0)">ID</th>
+                        <th onclick="sortTable(1)">Ngày xuất</th>
+                        <th onclick="sortTable(2)">Thu ngân</th>
+                        <th onclick="sortTable(3)">Tổng hàng</th>
+                        <th onclick="sortTable(4)">Phương thức thanh toán</th>
                         <th>Trạng thái</th>
-                        <th onclick="sortTable(7)">Lượt xem</th>
+                        <th onclick="sortTable(5)">Tiền mặt</th>
+                        <th onclick="sortTable(6)">Tiền thừa</th>
                         <th>Thao tác</th>
                     </tr>
                     </thead>
                     <tbody id="results-body">
-                    {% for product in products %}
+                    {% for invoice in invoices %}
                         <tr>
-                            <td>{{ product.id }}</td>
-                            <td>{{ product.name }}</td>
-                            <td id="category_name">{{ product.category_id }}</td>
-                            <td>{{ product.price }}</td>
-                            <td>{{ product.discount }}</td>
-                            <td>{{ product.stock }}</td>
+                            <td>{{ invoice.id }}</td>
+                            <td>{{ invoice.date }}</td>
+                            <td id="cashier_name">{{ invoice.cashier_id }}</td>
+                            <td>{{ invoice.items_count }}</td>
+                            <td>{{ invoice.payment_method }}</td>
                             <td>
                                 <div class="progress">
                                     <div class="progress-bar progress-bar-animated progress-bar-striped bg-success"
                                          role="progressbar"
-                                         style="width: {{ product.stock }}%">
+                                         style="width: {{ invoice.payment_method }}%">
                                     </div>
                                 </div>
                             </td>
-                            <td>{{ product.view }}</td>
+                            <td>{{ invoice.cash }}</td>
+                            <td>{{ invoice.change }}</td>
                             <td class="operation-button">
                                 <button class="btn btn-info edit-button btn-warning"
                                         onclick="editProduct('{{ product.id }}')">
@@ -111,11 +110,9 @@
             table = document.querySelector(".table");
             switching = true;
 
-            // Kiểm tra nếu đã có trạng thái sắp xếp cho cột này
             if (!sortStates[columnIndex]) {
-                sortStates[columnIndex] = "asc"; // Nếu không, mặc định là sắp xếp tăng dần
+                sortStates[columnIndex] = "asc";
             } else {
-                // Đảo ngược trạng thái sắp xếp nếu đã tồn tại
                 sortStates[columnIndex] = sortStates[columnIndex] === "asc" ? "desc" : "asc";
             }
 
