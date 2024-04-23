@@ -23,9 +23,6 @@
                     </div>
                 </form>
             </div>
-            <div class="col-md-6 text-md-right">
-                <a href="/admin/invoices/create" class="btn btn-success">Thêm hoá đơn mới</a>
-            </div>
         </div>
         <div class="row">
             <div class="col">
@@ -34,40 +31,28 @@
                     <tr>
                         <th class="number" onclick="sortTable(0)">ID</th>
                         <th onclick="sortTable(1)">Ngày xuất</th>
-                        <th onclick="sortTable(2)">Thu ngân</th>
-                        <th onclick="sortTable(3)">Tổng hàng</th>
-                        <th onclick="sortTable(4)">Phương thức thanh toán</th>
-                        <th>Trạng thái</th>
-                        <th onclick="sortTable(5)">Tiền mặt</th>
-                        <th onclick="sortTable(6)">Tiền thừa</th>
+                        <th onclick="sortTable(2)">Phương thức thanh toán</th>
+                        <th onclick="sortTable(3)">SĐT KH</th>
                         <th>Thao tác</th>
                     </tr>
                     </thead>
                     <tbody id="results-body">
                     {% for invoice in invoices %}
+                        {% set totalQuantity = 0 %}
+                        {% set totalPrice = 0 %}
+                        {% for detail in invoice.invoice_detail %}
+                            {% set totalQuantity = totalQuantity + detail.quantity %}
+                            {% set totalPrice = totalPrice + (detail.price * detail.quantity) %}
+                        {% endfor %}
                         <tr>
                             <td>{{ invoice.id }}</td>
                             <td>{{ invoice.date }}</td>
-                            <td id="cashier_name">{{ invoice.cashier_id }}</td>
-                            <td>{{ invoice.items_count }}</td>
                             <td>{{ invoice.payment_method }}</td>
-                            <td>
-                                <div class="progress">
-                                    <div class="progress-bar progress-bar-animated progress-bar-striped bg-success"
-                                         role="progressbar"
-                                         style="width: {{ invoice.payment_method }}%">
-                                    </div>
-                                </div>
-                            </td>
-                            <td>{{ invoice.cash }}</td>
-                            <td>{{ invoice.change }}</td>
+                            <td>{{ invoice.customer_phone }}</td>
                             <td class="operation-button">
                                 <button class="btn btn-info edit-button btn-warning"
-                                        onclick="editProduct('{{ product.id }}')">
-                                    Sửa
-                                </button>
-                                <button class="btn btn-danger delete-button"
-                                        onclick="deleteProduct('{{ product.id }}')">Xóa
+                                        onclick="viewInvoice('{{ invoice.id }}')">
+                                    Xem
                                 </button>
                             </td>
                         </tr>
@@ -78,7 +63,7 @@
                     <ul class="pagination justify-content-center">
                         {% for i in 1..totalPages %}
                             <li class="page-item {% if i == currentPage %}active{% endif %}">
-                                <a class="page-link" href="/admin/products?page={{ i }}">{{ i }}</a>
+                                <a class="page-link" href="/admin/invoices?page={{ i }}">{{ i }}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -139,39 +124,9 @@
             }
         }
 
-        // ADD PRODUCT FORM
-        function openAddProductPage() {
-            window.location.href = "/admin/products/add";
-        }
-
-        function hideAddProductForm() {
-            let form = document.getElementById("add-product-form");
-            form.style.display = "none";
-        }
-
-        // Hàm xử lý khi nhấp vào nút sửa
-        function editProduct(productID) {
-            window.location.href = "/admin/products/edit/" + productID;
-        }
-
-        // Hàm xử lý khi nhấp vào nút xóa
-        function deleteProduct(productID) {
-            if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
-                const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/admin/products/delete/" + productID, true);
-                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState === XMLHttpRequest.DONE) {
-                        if (xhr.status === 200) {
-                            // Xóa sản phẩm thành công, có thể reload trang hoặc làm gì đó khác
-                            location.reload()
-                        } else {
-                            console.error("Có lỗi xảy ra khi gửi yêu cầu xóa sản phẩm.");
-                        }
-                    }
-                };
-                xhr.send("productID=" + productID);
-            }
+        // Hàm xử lý khi nhấp vào nút xem
+        function viewInvoice(InvoiceId) {
+            window.location.href = "/admin/invoices/view/" + InvoiceId;
         }
 
         document.getElementById('search-form').addEventListener('submit', function (event) {
@@ -236,7 +191,7 @@
 
         function showData() {
             $.ajax({
-                url: 'app/Controllers/Admin/ProductsController.php',
+                url: 'app/Controllers/Admin/InvoicesController.php',
                 method: 'post',
                 warning: function (result) {
                     $('#results-body').html(result);

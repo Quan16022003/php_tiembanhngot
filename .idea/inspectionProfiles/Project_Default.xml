@@ -49,6 +49,10 @@
     <inspection_tool class="CheckValidXmlInScriptTagBody" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="CheckXmlFileWithXercesValidator" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="CommaExpressionJS" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ComposeMissingKeys" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="ComposeUnknownKeys" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="ComposeUnknownValues" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="ComposeUnquotedPorts" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="ComposerJsonFileReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ConditionalExpressionJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ConditionalExpressionWithIdenticalBranchesJS" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -359,6 +363,14 @@
     <inspection_tool class="LossyEncoding" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MagicNumberJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MandatoryParamsAbsent" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="MarkdownIncorrectTableFormatting" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownIncorrectlyNumberedListItem" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownLinkDestinationWithSpaces" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownNoTableBorders" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownOutdatedTableOfContents" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownUnresolvedFileReference" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownUnresolvedHeaderReference" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MarkdownUnresolvedLinkLabel" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MessDetectorValidationInspection" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="MongoJSDeprecationInspection" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MongoJSExtDeprecationInspection" enabled="true" level="WARNING" enabled_by_default="true" />

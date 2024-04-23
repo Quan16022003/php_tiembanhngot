@@ -137,7 +137,7 @@ class AdminProductsModel
 
     public function getProducts($offset, $limit): array
     {
-        $sql = "SELECT * FROM product LIMIT ?, ?";
+        $sql = "SELECT product.*, invoice_detail.* FROM product INNER JOIN invoice_detail ON product.id = invoice_detail.product_id LIMIT ?, ?";
         $stmt = $this->db->conn->prepare($sql);
         $stmt->bind_param("ii", $offset, $limit);
         $stmt->execute();

@@ -14,17 +14,16 @@ class InvoicesController extends Controller
 
     public function getById($id): void
     {
-        if (is_array($id) && isset($id['productID'])) {
-            $id = $id['productID'];
+        if (is_array($id) && isset($id['invoiceId'])) {
+            $id = $id['invoiceId'];
         }
 
-        $model = new AdmininvoicesModel();
-        $product = $model->getInvoicesByID($id);
-        if ($product) {
-            parent::render('invoices/invoices_edit', ['product' => $product]);
+        $model = new AdminInvoicesModel();
+        $invoice_detail = $model->getInvoiceDetailsByID($id);
+        if ($invoice_detail) {
+            parent::render('invoices/invoices_detail', ['invoice_detail' => $invoice_detail]);
         } else {
-            echo "Không tìm thấy sản phẩm!";
-            var_dump(debug_backtrace());
+            echo "Không tìm thấy thông tin chi tiết hóa đơn!";
         }
     }
 
@@ -69,23 +68,12 @@ class InvoicesController extends Controller
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $invoicesPerPage = 10;
         $offset = ($page - 1) * $invoicesPerPage;
-        $model = new AdmininvoicesModel();
+        $model = new AdminInvoicesModel();
         $invoices = $model->getInvoices($offset, $invoicesPerPage);
         $totalInvoices = $model->getTotalInvoices();
         $totalPages = ceil($totalInvoices / $invoicesPerPage);
         $this->render('invoices/invoices', ['invoices' => $invoices, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
-
-    public function openCreate(): void
-    {
-        $this->render('invoices/invoices_create');
-    }
-
-    public function openAdd(): void
-    {
-        $this->render('invoices/invoices_add');
-    }
-
 
     public function create(): void
     {

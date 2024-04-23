@@ -1,0 +1,46 @@
+{% extends './layout.twig' %}
+{% block title %}Invoice Details{% endblock %}
+{% block content %}
+    <div class="container">
+        <h2>Thông tin hoá đơn số {{ invoice_detail[0].invoice_id }}</h2>
+        <form id="invoice-details-form" method="post">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">ID sản phẩm</th>
+                    <th scope="col">Tên sản phẩm</th>
+                    <th scope="col">Số lượng</th>
+                    <th scope="col">Đơn giá</th>
+                    <th scope="col">Tổng cộng</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set total = 0 %}
+                {% for detail in invoice_detail %}
+                    <tr>
+                        <td><input type="text" class="form-control" id="productId" name="productId"
+                                   value="{{ detail.product_id }}" readonly></td>
+                        <td><input type="text" class="form-control" id="productName" name="productName"
+                                   value="{{ detail.product_name }}" readonly></td>
+                        <td><input type="text" class="form-control" id="invoiceContent" name="invoiceContent"
+                                   value="{{ detail.quantity }}" readonly></td>
+                        <td><input type="text" class="form-control" id="invoiceUnitPrice" name="invoiceUnitPrice"
+                                   value="{{ detail.price }}"></td>
+                        <td><input type="text" class="form-control" id="invoicePrice" name="invoicePrice"
+                                   value="{{ detail.price * detail.quantity }}" readonly></td>
+                    </tr>
+                    {% set total = total + (detail.price * detail.quantity) %}
+                {% endfor %}
+                <tr>
+                    <td colspan="4"><strong>Tổng</strong></td>
+                    <td><input type="text" class="form-control" value="{{ total }}" readonly></td>
+                </tr>
+                </tbody>
+            </table>
+            <a href="/admin/invoices" class="btn btn-secondary">Hủy</a>
+        </form>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+{% endblock %}

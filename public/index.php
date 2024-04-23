@@ -27,6 +27,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('POST', '/admin/products/search', ['App\Controllers\Admin\ProductsController', 'search']);
     // INVOICES
     $r->addRoute('GET', '/admin/invoices', ['App\Controllers\Admin\InvoicesController', 'indexPage']);
+    $r->addRoute('GET', '/admin/invoices/view/{invoiceId}', ['App\Controllers\Admin\InvoicesController', 'getById']);
     // HOMES
     $r->addRoute('GET', '/admin/home', ['App\Controllers\Admin\HomeController', 'index']);
     // USERS

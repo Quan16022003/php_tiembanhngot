@@ -24,50 +24,29 @@ class AdminInvoicesModel
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function insert($InvoiceId, $InvoiceCategoryId, $InvoiceName, $InvoicePrice, $InvoiceQuantity): bool
+    public function getInvoiceDetailsByID($invoiceId): ?array
     {
-        // Kiểm tra xem sản phẩm có tồn tại không
-        $existingInvoice = $this->getInvoiceByID($InvoiceId);
-
-        if ($existingInvoice) {
-            // Nếu sản phẩm đã tồn tại, cập nhật số lượng
-            $newQuantity = $existingInvoice['stock'] + $InvoiceQuantity;
-            $sql = "UPDATE invoices SET stock = ? WHERE id = ?";
-            $stmt = $this->db->conn->prepare($sql);
-            $stmt->bind_param("is", $newQuantity, $InvoiceId);
-            $success = $stmt->execute();
-            $stmt->close();
-        } else {
-            // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
-            $sql = "INSERT INTO invoices (id, category_id, name, price, stock) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $this->db->conn->prepare($sql);
-            $stmt->bind_param("sssss", $InvoiceId, $InvoiceCategoryId, $InvoiceName, $InvoicePrice, $InvoiceQuantity);
-            $success = $stmt->execute();
-            $stmt->close();
-        }
-
-        return $success;
-    }
-
-    public function getInvoiceByID($InvoiceID): false|array|null
-    {
-        $sql = "SELECT * FROM Invoice WHERE id = ?";
+        $sql = "SELECT invoice_detail.id, invoice_detail.invoice_id, invoice_detail.product_id, invoice_detail.quantity, product.name AS product_name, product.price
+                FROM invoice_detail
+                JOIN product ON invoice_detail.product_id = product.id
+                WHERE invoice_detail.invoice_id = ?";
         if ($stmt = $this->db->conn->prepare($sql)) {
-            $stmt->bind_param("s", $InvoiceID);
+            $stmt->bind_param("s", $invoiceId);
             if ($stmt->execute()) {
-                $result = $stmt->get_result()->fetch_assoc();
+                $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
                 $stmt->close();
                 return $result;
             } else {
                 error_log("Failed to execute SQL statement: " . $stmt->error);
                 $stmt->close();
-                return false;
+                return null;
             }
         } else {
             error_log("Failed to prepare SQL statement: " . $this->db->conn->error);
-            return false;
+            return null;
         }
     }
+
 
     public function delete($InvoiceID): bool
     {
@@ -76,21 +55,6 @@ class AdminInvoicesModel
         $stmt->bind_param("s", $InvoiceID);
         $success = $stmt->execute();
 
-        if (!$success) {
-            error_log("SQL error: " . $stmt->error);
-            return false;
-        }
-
-        $stmt->close();
-        return true;
-    }
-
-    public function update($InvoiceId, $InvoiceCategoryId, $InvoiceContent, $InvoiceName, $InvoicePrice, $InvoiceStock, $InvoiceImage): bool
-    {
-        $sql = "UPDATE Invoice SET name = ?,content=?,image_link=?, price = ?, stock = ?, category_id = ? WHERE id = ?";
-        $stmt = $this->db->conn->prepare($sql);
-        $stmt->bind_param("sssiiis", $InvoiceName, $InvoiceContent, $InvoiceImage, $InvoicePrice, $InvoiceStock, $InvoiceCategoryId, $InvoiceId);
-        $success = $stmt->execute();
         if (!$success) {
             error_log("SQL error: " . $stmt->error);
             return false;
