@@ -1,0 +1,111 @@
+{% extends './layout.twig' %}
+{% block title %}Add Products{% endblock %}
+{% block stylesheets %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <form method="post" action="/admin/products/create" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header mb-0">
+                                <h5 class="card-tile mb-0">Product information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label" for="productId">Mã sản phẩm:</label>
+                                    <input type="text" class="form-control" id="productId" name="productId" required>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label" for="productName">Tên sản phẩm:</label>
+                                        <input type="text" class="form-control" id="productName" name="productName"
+                                               required>
+                                    </div>
+                                    <div class="col">
+                                        <label class="form-label" for="productPrice">Giá:</label>
+                                        <input type="text" class="form-control" id="productPrice" name="productPrice"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label" for="productContent">Mô tả (Tuỳ chọn)</label>
+                                        <input type="text" class="form-control" id="productContent"
+                                               name="productContent">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card mb-4">
+                            <div class="card-header mb-0">
+                                <h5 class="card-title mb-0">Media</h5>
+                            </div>
+                            <div class="card-body ">
+                                <div id="dropzoneContainer" class="dropzone">
+                                    <div class="dz-message" data-dz-message>
+                                        Drop files here or click to upload
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Organize</h5>
+                            </div>
+                            <div class="card-body">
+                                <label for="productCategoryId">Mã thể loại:</label>
+                                <select class="form-control" id="productCategoryId" name="productCategoryId"
+                                        required>
+                                    <option value="1">Bánh mì</option>
+                                    <option value="2">Bánh ngọt</option>
+                                    <option value="3">Bánh kem nhỏ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success">Thêm sản phẩm</button>
+                        <button type="button" class="btn btn-outline-warning" onclick="cancel()">Hủy</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="reset()">Reset
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+                                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script>
+        function cancel() {
+            window.location.href = '/admin/products';
+        }
+
+        function reset() {
+            document.getElementById("productId").value = "";
+            document.getElementById("productName").value = "";
+            document.getElementById("productPrice").value = "";
+            document.getElementById("productContent").value = "";
+        }
+
+        Dropzone.autoDiscover = false; // Ngăn Dropzone tự động khởi tạo các phần tử có lớp "dropzone"
+        const myDropzone = new Dropzone("#dropzoneContainer", {
+            url: "/upload",
+            maxFilesize: 5, // Giới hạn dung lượng tệp (đơn vị: MB)
+            acceptedFiles: ".jpg, .jpeg, .png, .gif",
+            dictDefaultMessage: "Kéo và thả tệp vào đây hoặc nhấn vào để chọn tệp"
+        });
+
+    </script>
+{% endblock %}

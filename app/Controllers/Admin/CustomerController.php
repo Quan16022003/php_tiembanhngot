@@ -19,9 +19,9 @@ class CustomerController extends Controller
         }
 
         $model = new AdminCustomerModel();
-        $customer = $model->getcustomerById($Id);
+        $customer = $model->getById($Id);
         if ($customer) {
-            parent::render('customer/customer_edit', ['customer' => $customer]);
+            parent::render('customers/customer_view', ['customer' => $customer]);
         } else {
             echo "Không tìm thấy khách hàng!";
         }
@@ -33,58 +33,46 @@ class CustomerController extends Controller
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $customerId = $_POST["customerId"];
-            $customerCategoryId = $_POST["customerCategoryId"];
-            $customerContent = $_POST["customerContent"];
             $customerName = $_POST["customerName"];
-            $customerPrice = $_POST["customerPrice"];
-            $Customertock = $_POST["Customertock"];
-            $customerImage = $_POST["customerImage"];
-            var_dump($customerId, $customerCategoryId, $customerContent, $customerName, $customerPrice, $Customertock, $customerImage);
+            $customerEmail = $_POST["customerEmail"];
+            $customerPhone = $_POST["CustomerPhone"];
+            $customerAddress = $_POST["customerAddress"];
+            $customerPassword = $_POST["customerPassword"];
+            $customerCreateAt = $_POST["customerCreateAt"];
             $model = new AdminCustomerModel();
-            $success = $model->update($customerId, $customerCategoryId, $customerName, $customerContent, $customerImage, $customerPrice, $Customertock);
+            $success = $model->update($customerId, $customerName, $customerEmail, $customerPhone, $customerAddress, $customerPassword, $customerCreateAt);
             if ($success) {
                 header("Location: " . $_SERVER['REQUEST_URI']);
                 exit;
             } else {
-                echo "Cập nhật sản phẩm thất bại!";
+                echo "Cập nhật khách hàng thất bại!";
             }
         }
     }
 
+//    public function index(): void
+//    {
+//        $model = new AdminCustomerModel();
+//        $customer = $model->index();
+//
+//        if ($customer === false) {
+//            echo "Không có sản phẩm nào được tìm thấy!";
+//            return;
+//        }
+//        $this->render('customers/customers', ['customer' => $customer]);
+//    }
+
     public function index(): void
     {
-        $model = new AdminCustomerModel();
-        $Customer = $model->index();
-
-        if ($Customer === false) {
-            echo "Không có sản phẩm nào được tìm thấy!";
-            return;
-        }
-        $this->render('Customer/Customer', ['Customer' => $Customer]);
-    }
-
-    public function indexPage(): void
-    {
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $CustomerPerPage = 10;
-        $offset = ($page - 1) * $CustomerPerPage;
+        $customerPerPage = 10;
+        $offset = ($page - 1) * $customerPerPage;
         $model = new AdminCustomerModel();
-        $Customer = $model->getCustomer($offset, $CustomerPerPage);
+        $customers = $model->getCustomer($offset, $customerPerPage);
         $totalCustomer = $model->getTotalCustomer();
-        $totalPages = ceil($totalCustomer / $CustomerPerPage);
-        $this->render('Customer/Customer', ['Customer' => $Customer, 'totalPages' => $totalPages, 'currentPage' => $page]);
+        $totalPages = ceil($totalCustomer / $customerPerPage);
+        $this->render('customers/customers', ['customers' => $customers, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
-
-    public function openCreate(): void
-    {
-        $this->render('Customer/Customer_create');
-    }
-
-    public function openAdd(): void
-    {
-        $this->render('Customer/Customer_add');
-    }
-
 
     public function create(): void
     {
