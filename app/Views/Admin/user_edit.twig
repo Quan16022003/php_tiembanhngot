@@ -1,0 +1,58 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Sửa user{% endblock %}
+{% block content %}
+    <div class="container">
+        <form id="edit-user-form">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required disabled value="{{ user.username }}">
+            </div>
+            <div class="mb-3">
+                <label for="name" class="form-label">Họ tên</label>
+                <input type="text" class="form-control" id="name" name="name" required value="{{ user.name }}">
+            </div>
+            <div class="mb-3">
+                <label for="permission" class="form-label">Chọn quyền</label>
+                <select class="form-select" aria-label="Default select example" id="permission" name="permission">
+                    {% for permission in permissions %}
+                        <option value="{{ permission.id }}" {% if permission.id == user.id_per %}selected{% endif %}>{{ permission.id }} - {{ permission.name }}</option>
+                    {% endfor %}
+                </select>
+
+            </div>
+            <button type="submit" class="btn btn-primary">Sửa</button>
+        </form>
+    </div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    $(document).ready(function() {
+       $('#edit-user-form').submit(function(e){
+            e.preventDefault();
+            const name = $('#name').val();
+            $.ajax({
+               url: '/admin/user/edit',
+               method: 'POST',
+               data: {
+                   id : {{ user.id }},
+                   name : name,
+                   id_per : $('#permission').val()
+               },
+                success: function(data) {
+                    data = JSON.parse(data);
+                    console.log(data);
+                    if (data.success) {
+                        alert(data.message);
+                        window.location.href = '/admin/user';
+                    } else {
+                        alert(data.message);
+                        $('#name').val('');
+                    }
+                }
+            });
+       })
+    });
+
+</script>
+{% endblock %}

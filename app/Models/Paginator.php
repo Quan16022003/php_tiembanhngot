@@ -28,6 +28,7 @@ class Paginator
             $query      = $this->query . " LIMIT " . ( ( $this->page - 1 ) * $this->limit ) . ", $this->limit";
         }
         $rs             = $this->conn->query( $query );
+        $results = array();
         while ( $row = $rs->fetch_assoc() ) {
             $results[]  = $row;
         }

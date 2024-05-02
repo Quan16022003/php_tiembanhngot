@@ -2,7 +2,7 @@
 
 namespace App\Controllers\Client;
 
-class AboutUsClientController extends ClientController
+class AboutUsController extends ClientController
 {
     public function index(): void
     {

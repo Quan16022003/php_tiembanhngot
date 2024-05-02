@@ -10,7 +10,7 @@ abstract class AdminController extends Controller
     {
         parent::__construct('Admin');
         session_start();
-        if (!isset($_SESSION['admin_logged_in'])) {
+        if (!isset($_SESSION['admin_id'])) {
             header('Location: /admin/login');
             exit;
         }

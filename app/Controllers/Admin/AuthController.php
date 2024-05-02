@@ -18,7 +18,7 @@ class AuthController extends Controller
     public function index(): void
     {
         session_start();
-        if (isset($_SESSION['admin_logged_in'])) {
+        if (isset($_SESSION['admin_id'])) {
             header('Location: /admin/home');
             exit;
         }
@@ -33,15 +33,14 @@ class AuthController extends Controller
 
         if ($row = $this->admin_login_model->verify($username, $password)) {
             // Login successful
-            $_SESSION['admin_logged_in'] = true;
+            $_SESSION['admin_id'] = $row['id'];
             $_SESSION['admin_name'] = $row['name'];
-            header('Location: /admin/home');
+            echo "success";
         } else {
-            // Login failed
-            $this->render('login', ['error' => 'Tài khoản hoặc mật khẩu không đúng!']);
+            echo "Tài khoản hoặc mật khẩu không đúng";
         }
     }
-    #[NoReturn] public function logout():void
+    public function logout():void
     {
         session_start();
         if (isset($_SESSION)) {

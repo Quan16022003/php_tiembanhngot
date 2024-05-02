@@ -37,9 +37,19 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/customers/view/{customerId}', ['App\Controllers\Admin\CustomerController', 'getById']);
     // USERS
     $r->addRoute('GET', '/admin/user', ['App\Controllers\Admin\UserController', 'index']);
-    $r->addRoute('GET', '/admin/users/add', ['App\Controllers\Admin\UserController', 'showAddUserPage']);
-    $r->addRoute('POST', '/admin/users/add', ['App\Controllers\Admin\UserController', 'addUser']);
-    $r->addRoute('POST', '/admin/users/search', ['App\Controllers\Admin\UserController', 'searchUser']);
+    $r->addRoute('GET', '/admin/user/add', ['App\Controllers\Admin\UserController', 'showAddUserPage']);
+    $r->addRoute('POST', '/admin/user/add', ['App\Controllers\Admin\UserController', 'addUser']);
+    $r->addRoute('GET', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'showEditUserPage']);
+    $r->addRoute('POST', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'editUser']);
+    $r->addRoute('POST', '/admin/user/delete', ['App\Controllers\Admin\UserController', 'deleteUser']);
+    $r->addRoute('POST', '/admin/user/search', ['App\Controllers\Admin\UserController', 'searchUser']);
+    // PERMISSIONS
+    $r->addRoute('GET', '/admin/permissions', ['App\Controllers\Admin\UserController', 'showPermissionPage']);
+    $r->addRoute('GET', '/admin/permissions/add', ['App\Controllers\Admin\UserController', 'showAddPermissionPage']);
+    $r->addRoute('POST', '/admin/permissions/add', ['App\Controllers\Admin\UserController', 'addPermission']);
+    $r->addRoute('GET', '/admin/permissions/edit', ['App\Controllers\Admin\UserController', 'showEditPermissionPage']);
+    $r->addRoute('POST', '/admin/permissions/edit', ['App\Controllers\Admin\UserController', 'editPermission']);
+    $r->addRoute('POST', '/admin/permissions/delete', ['App\Controllers\Admin\UserController', 'deletePermission']);
 
 // ADMIN ROUTES END
 
@@ -49,6 +59,8 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
     $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductClientController', 'indexPage']);
     $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductClientController', 'index']);
+    $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductController', 'index']);
+    $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'index']);
     $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
 // CLIENT ROUTES END
 });

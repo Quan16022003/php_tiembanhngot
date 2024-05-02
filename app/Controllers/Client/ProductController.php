@@ -7,7 +7,7 @@ use App\Models\AdminProductsModel;
 use App\Models\ProductModel;
 use mysql_xdevapi\Result;
 
-class ProductClientController extends ClientController
+class ProductController extends ClientController
 {
     private ProductModel $productModel;
 

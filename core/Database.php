@@ -9,10 +9,10 @@ class Database
 {
     private static ?Database $instance = null;
     public ?mysqli $conn = NULL;
-    private string $host = 'localhost';
-    private string $dbName = 'cuahangbanbanh';
+    private string $host = 'db';
+    private string $dbName = 'eco';
     private string $user = 'root';
-    private string $password = 'namdt2003';
+    private string $password = '123';
 
     // Hàm kết nối CSDL
     private function __construct()
@@ -79,7 +79,7 @@ class Database
 
     public function selectAll($table): array
     {
-        $sql = "SELECT * FROM $table";
+        $sql = "SELECT * FROM `$table`";
         $result = $this->conn->query($sql);
         $rows = [];
         while ($row = $result->fetch_assoc()) {
