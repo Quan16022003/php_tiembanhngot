@@ -1,5 +1,5 @@
 {% set page = 'products' %}
-{% extends 'layout.twig' %}
+{% extends './layout.twig' %}
 
 {% block title %}Products - My Website{% endblock %}
 
@@ -8,7 +8,7 @@
         <div class="row">
             <!-- Bộ lọc -->
             <div class="col-lg-3">
-                {% include 'product_filter.twig' %}
+                {% include './product_filter.twig' %}
             </div>
 
             <!-- Danh sách sản phẩm -->
@@ -37,7 +37,7 @@
                     {% for product in products %}
                     <div class="col">
                         <div class="card h-100">
-                            <img src="../../../public/images/bread.png" class="card-img-top" alt="Bánh mì">
+                            <img src="../../../../public/images/bread.png" class="card-img-top" alt="Bánh mì">
                             <div class="card-body">
                                 <h5 class="card-title">{{ product.title }}</h5>
                                 <p class="card-subtitle">{{ product.category_name }}</p>

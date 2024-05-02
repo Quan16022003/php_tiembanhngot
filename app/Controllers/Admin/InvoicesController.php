@@ -3,28 +3,27 @@
 namespace App\Controllers\Admin;
 
 use Core\Controller;
-use App\Models\AdminProductsModel;
+use App\Models\AdminInvoicesModel;
 
-class ProductsController extends Controller
+class InvoicesController extends Controller
 {
-    public function __construct($page = NULL)
+    public function __construct()
     {
         parent::__construct('Admin');
     }
 
     public function getById($id): void
     {
-        if (is_array($id) && isset($id['productID'])) {
-            $id = $id['productID'];
+        if (is_array($id) && isset($id['invoiceId'])) {
+            $id = $id['invoiceId'];
         }
 
-        $model = new AdminProductsModel();
-        $product = $model->getProductByID($id);
-        if ($product) {
-            parent::render('Products/products_edit', ['product' => $product]);
+        $model = new AdminInvoicesModel();
+        $invoice_detail = $model->getInvoiceDetailsByID($id);
+        if ($invoice_detail) {
+            parent::render('invoices/invoices_detail', ['invoice_detail' => $invoice_detail]);
         } else {
-            echo "Không tìm thấy sản phẩm!";
-            var_dump(debug_backtrace());
+            echo "Không tìm thấy thông tin chi tiết hóa đơn!";
         }
     }
 
@@ -38,11 +37,11 @@ class ProductsController extends Controller
             $productContent = $_POST["productContent"];
             $productName = $_POST["productName"];
             $productPrice = $_POST["productPrice"];
-            $productStock = $_POST["productStock"];
+            $invoicestock = $_POST["invoicestock"];
             $productImage = $_POST["productImage"];
-            var_dump($productId, $productCategoryId, $productContent, $productName, $productPrice, $productStock, $productImage);
-            $model = new AdminProductsModel();
-            $success = $model->update($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock);
+            var_dump($productId, $productCategoryId, $productContent, $productName, $productPrice, $invoicestock, $productImage);
+            $model = new AdmininvoicesModel();
+            $success = $model->update($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $invoicestock);
             if ($success) {
                 header("Location: " . $_SERVER['REQUEST_URI']);
                 exit;
@@ -54,38 +53,27 @@ class ProductsController extends Controller
 
     public function index(): void
     {
-        $model = new AdminProductsModel();
-        $products = $model->index();
+        $model = new AdmininvoicesModel();
+        $invoices = $model->index();
 
-        if ($products === false) {
+        if ($invoices === false) {
             echo "Không có sản phẩm nào được tìm thấy!";
             return;
         }
-        $this->render('products/products', ['products' => $products]);
+        $this->render('invoices/invoices', ['invoices' => $invoices]);
     }
 
     public function indexPage(): void
     {
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $productsPerPage = 10;
-        $offset = ($page - 1) * $productsPerPage;
-        $model = new AdminProductsModel();
-        $products = $model->getProducts($offset, $productsPerPage);
-        $totalProducts = $model->getTotalProducts();
-        $totalPages = ceil($totalProducts / $productsPerPage);
-        $this->render('Products/products', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
+        $invoicesPerPage = 10;
+        $offset = ($page - 1) * $invoicesPerPage;
+        $model = new AdminInvoicesModel();
+        $invoices = $model->getInvoices($offset, $invoicesPerPage);
+        $totalInvoices = $model->getTotalInvoices();
+        $totalPages = ceil($totalInvoices / $invoicesPerPage);
+        $this->render('invoices/invoices', ['invoices' => $invoices, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
-
-    public function openCreate(): void
-    {
-        $this->render('Products/products_create');
-    }
-
-    public function openAdd(): void
-    {
-        $this->render('Products/products_add');
-    }
-
 
     public function create(): void
     {
@@ -96,12 +84,12 @@ class ProductsController extends Controller
             $productPrice = $_POST["productPrice"];
             $productContent = $_POST["productContent"];
 
-            $model = new AdminProductsModel();
+            $model = new AdmininvoicesModel();
             $success = $model->create($productId, $productCategoryId, $productName, $productPrice, $productContent);
 
             if ($success) {
                 echo "Thêm sản phẩm thành công!";
-                header("Location: /admin/products");
+                header("Location: /admin/invoices");
             } else {
                 echo "Thêm sản phẩm thất bại!";
             }
@@ -144,12 +132,12 @@ class ProductsController extends Controller
             $productPrice = $_POST["productPrice"];
             $productQuantity = $_POST["productQuantity"];
 
-            $model = new AdminProductsModel();
+            $model = new AdmininvoicesModel();
             $success = $model->insert($productId, $productCategoryId, $productName, $productPrice, $productQuantity);
 
             if ($success) {
                 echo "Thêm sản phẩm thành công!";
-                header("Location: /admin/products");
+                header("Location: /admin/invoices");
             } else {
                 echo "Thêm sản phẩm thất bại!";
             }
@@ -162,13 +150,13 @@ class ProductsController extends Controller
         $productID = $_POST['productID'];
 
         // Tiếp tục xử lý xóa sản phẩm với productID nhận được
-        $model = new AdminProductsModel();
+        $model = new AdmininvoicesModel();
         $success = $model->delete($productID);
 
         if ($success) {
             echo "Xóa sản phẩm thành công!";
             // Cập nhật lại giao diện hoặc thực hiện hành động cần thiết sau khi xóa thành công
-            header("Location: /admin/products");
+            header("Location: /admin/invoices");
         } else {
             echo "Xóa sản phẩm thất bại!";
             // Xử lý lỗi nếu có
@@ -187,13 +175,13 @@ class ProductsController extends Controller
 
         // Lấy dữ liệu từ yêu cầu
         $text = $requestData['searchText'];
-        $model = new AdminProductsModel();
+        $model = new AdmininvoicesModel();
 
         // Gọi model để thực hiện tìm kiếm
-        $products = $model->search($text);
+        $invoices = $model->search($text);
 
         // Trả về kết quả dưới dạng JSON
-        echo json_encode($products);
+        echo json_encode($invoices);
     }
 
 

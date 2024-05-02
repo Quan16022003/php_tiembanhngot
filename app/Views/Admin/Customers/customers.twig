@@ -1,0 +1,217 @@
+{% set page = 'customers' %}
+{% extends './layout.twig' %}
+{% block content %}
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <title>
+            {% block title %}Khách hàng{% endblock %}
+        </title>
+        <link rel="stylesheet" href="/public/css/global.css">
+    </head>
+    <div class="container-fluid overflow-auto">
+        <div class="row mb-3 slide-right">
+            <div class="col-md-6">
+                <form id="search-form" class="form-inline">
+                    <div class="input-group">
+                        <label for="search-input"></label>
+                        <input type="text" class="form-control" id="search-input"
+                               placeholder="Nhập từ khóa tìm kiếm">
+                        <div class="input-group-append">
+                            <button class="btn btn-secondary" type="submit" id="button-search">Tìm kiếm</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-6 text-md-right">
+                <a href="/admin/customers/exportExcel" class="btn btn-success">Export Excel</a>
+            </div>
+        </div>
+        <div class="row rounded">
+            <div class="col ">
+                <table class=" fade-bottom datatables-customers table border-top dataTable no-footer dtr-column collapsed">
+                    <thead>
+                    <tr>
+                        <th onclick="sortTable(0)">ID</th>
+                        <th onclick="sortTable(1)">Phone</th>
+                        <th onclick="sortTable(2)">Email</th>
+                        <th onclick="sortTable(3)">Name</th>
+                        <th onclick="sortTable(4)">Address</th>
+                        <th onclick="sortTable(5)">Password</th>
+                        <th onclick="sortTable(7)">Created at</th>
+                        <th>Thao tác</th>
+                    </tr>
+                    </thead>
+                    <tbody id="results-body">
+                    {% for customer in customers %}
+                        <tr>
+                            <td>{{ customer.id }}</td>
+                            <td>{{ customer.phone }}</td>
+                            <td>{{ customer.name }}</td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.address }}</td>
+                            <td>{{ customer.password }}</td>
+                            <td>{{ customer.created_at }}</td>
+                            <td class="operation-button">
+                                <button class="btn btn-info edit-button btn-warning"
+                                        onclick="viewDetails('{{ customer.id }}')">
+                                    Xem
+                                </button>
+
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% for i in 1..totalPages %}
+                            <li class="page-item {% if i == currentPage %}active{% endif %}">
+                                <a class="page-link" href="/admin/customers?page={{ i }}">{{ i }}</a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <style>
+        td {
+            white-space: nowrap;
+            word-break: break-word;
+            max-width: fit-content;
+        }
+
+        th {
+            cursor: pointer;
+        }
+    </style>
+
+{% endblock %}
+{% block scripts %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        let sortStates = {}; // Lưu trữ trạng thái sắp xếp cho mỗi cột
+
+        // Hàm sắp xếp bảng theo cột
+        function sortTable(columnIndex) {
+            let table, rows, switching, i, x, y, shouldSwitch;
+            table = document.querySelector(".table");
+            switching = true;
+
+            // Kiểm tra nếu đã có trạng thái sắp xếp cho cột này
+            if (!sortStates[columnIndex]) {
+                sortStates[columnIndex] = "asc"; // Nếu không, mặc định là sắp xếp tăng dần
+            } else {
+                // Đảo ngược trạng thái sắp xếp nếu đã tồn tại
+                sortStates[columnIndex] = sortStates[columnIndex] === "asc" ? "desc" : "asc";
+            }
+
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                    shouldSwitch = false;
+                    x = rows[i].getElementsByTagName("td")[columnIndex];
+                    y = rows[i + 1].getElementsByTagName("td")[columnIndex];
+                    let xValue = isNaN(parseFloat(x.innerHTML)) ? x.innerHTML.toLowerCase() : parseFloat(x.innerHTML);
+                    let yValue = isNaN(parseFloat(y.innerHTML)) ? y.innerHTML.toLowerCase() : parseFloat(y.innerHTML);
+
+                    // Sắp xếp tăng dần hoặc giảm dần tùy thuộc vào trạng thái
+                    if ((sortStates[columnIndex] === "asc" && xValue > yValue) || (sortStates[columnIndex] === "desc" && xValue < yValue)) {
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+                if (shouldSwitch) {
+                    rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                    switching = true;
+                }
+            }
+        }
+
+        // ADD PRODUCT FORM
+        function openAddCustomerPage() {
+            window.location.href = "/admin/customers/create";
+        }
+
+        // Hàm xử lý khi nhấp vào nút sửa
+        function viewDetails(customerId) {
+            window.location.href = "/admin/customers/view/" + customerId;
+        }
+
+        // Hàm xử lý khi nhấp vào nút xóa
+        function deleteProduct(customerId) {
+            if (confirm("Bạn có chắc chắn muốn xóa khách hàng này không?")) {
+                const xhr = new XMLHttpRequest();
+                xhr.open("POST", "/admin/customers/delete/" + customerId, true);
+                xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            // Xóa khách hàng thành công, có thể reload trang hoặc làm gì đó khác
+                            location.reload()
+                        } else {
+                            console.error("Có lỗi xảy ra khi gửi yêu cầu xóa khách hàng.");
+                        }
+                    }
+                };
+                xhr.send("customerId=" + customerId);
+            }
+        }
+
+        document.getElementById('search-form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Ngăn chặn việc gửi yêu cầu tìm kiếm mặc định của form
+
+            const query = document.getElementById('search-input').value;
+
+            // Thực hiện tìm kiếm bằng cách gửi yêu cầu HTTP đến máy chủ và nhận kết quả
+            performSearch(query);
+        });
+
+        // Hàm tìm kiếm
+        function performSearch(query) {
+            fetch('/admin/customers/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({searchText: query}),
+            })
+                .then(response => response.json())
+                .then(results => {
+                    // Xóa bảng kết quả tìm kiếm cũ (nếu có)
+                    document.getElementById('results-body').innerHTML = '';
+
+                    // Hiển thị kết quả tìm kiếm mới
+                    results.forEach(result => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `<td>${result.id}</td>
+                                         <td>${result.name}</td>
+                                         <td>${result.price}</td>
+                                         <td>${result.discount}</td>
+                                         <td>${result.stock}</td>
+                                         <td>${result.created_at}</td>
+                                         <td>${result.view}</td>
+                                         <td class="operation-button">
+                                            <button class="btn edit-button" onclick="editProduct('${result.id}')">Sửa</button>
+                                            <button class="btn delete-button" onclick="deleteProduct('${result.id}')">Xóa</button>
+                                         </td>`;
+                        document.getElementById('results-body').appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Lỗi khi lấy kết quả tìm kiếm:', error);
+                });
+        }
+
+        function showData() {
+            $.ajax({
+                url: 'app/Controllers/Admin/CustomerController.php',
+                method: 'post',
+                warning: function (result) {
+                    $('#results-body').html(result);
+                }
+            })
+        }
+    </script>
+{% endblock %}
