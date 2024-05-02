@@ -22,7 +22,14 @@ class AdminUserModel
     }
     public function selectAll(): array
     {
-        return $this->db->selectAll('admin_list_view');
+        $sql = "SELECT a.id, a.username, a.name, p.name as 'permission_name' FROM admin a LEFT JOIN permission p on p.id = a.id;";
+        $result = $this->db->conn->query($sql);
+        $rows = [];
+        while ($row = $result->fetch_assoc()) {
+            $rows[] = $row;
+        }
+        return $rows;
+//        return $this->db->selectAll('admin_list_view');
     }
     public function search($option, $text): array
     {
