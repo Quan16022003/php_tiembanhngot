@@ -54,11 +54,9 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 // ADMIN ROUTES END
 
 // CLIENT ROUTES START
-    $r->addRoute('GET', '/', ['App\Controllers\Client\HomeClientController', 'index']);
+    $r->addRoute('GET', '/', ['App\Controllers\Client\HomeController', 'index']);
     $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
     $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
-    $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductClientController', 'indexPage']);
-    $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductClientController', 'index']);
     $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductController', 'index']);
     $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'index']);
     $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
