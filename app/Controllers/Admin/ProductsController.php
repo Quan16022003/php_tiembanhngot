@@ -30,27 +30,34 @@ class ProductsController extends Controller
 
     public function update(): void
     {
-
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
             $productId = $_POST["productId"];
             $productCategoryId = $_POST["productCategoryId"];
             $productContent = $_POST["productContent"];
             $productName = $_POST["productName"];
             $productPrice = $_POST["productPrice"];
             $productStock = $_POST["productStock"];
-            $productImage = $_POST["productImage"];
-            var_dump($productId, $productCategoryId, $productContent, $productName, $productPrice, $productStock, $productImage);
+            $productImage = $_FILES["productImage"] ?? null;
+
+            // Gọi phương thức update trong Model và chuyển các tham số cần thiết
             $model = new AdminProductsModel();
-            $success = $model->update($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock);
+            $success = $model->updateProduct($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock);
+
             if ($success) {
-                header("Location: " . $_SERVER['REQUEST_URI']);
-                exit;
+                // Set biến cờ thành true nếu truy vấn thành công
+                $reloadPage = true;
             } else {
                 echo "Cập nhật sản phẩm thất bại!";
             }
         }
+
+        // Nếu biến cờ được set thành true, thực hiện reload trang
+        if (isset($reloadPage) && $reloadPage) {
+            header("Location: " . $_SERVER['REQUEST_URI']);
+            exit;
+        }
     }
+
 
     public function index(): void
     {
@@ -196,5 +203,27 @@ class ProductsController extends Controller
         echo json_encode($products);
     }
 
+    public function deleteImage(): void
+    {
+        // Kiểm tra xem yêu cầu có phải là POST không
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Lấy productId từ dữ liệu POST
+            $productId = $_POST['productId'];
+
+            // Gọi phương thức xóa hình ảnh từ model
+            $model = new AdminProductsModel();
+            $success = $model->deleteImageByProductId($productId);
+
+            // Trả về phản hồi JSON
+            if ($success) {
+                echo json_encode(['success' => true]);
+            } else {
+                echo json_encode(['success' => false, 'error' => 'Failed to delete image']);
+            }
+        } else {
+            // Trả về lỗi nếu yêu cầu không phải là POST
+            echo json_encode(['success' => false, 'error' => 'Invalid request method']);
+        }
+    }
 
 }

@@ -87,6 +87,7 @@
 {% endblock %}
 {% block scripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script src="/public/js/global.js"></script>
     <script>
         function cancel() {
             window.location.href = '/admin/products';
@@ -102,10 +103,12 @@
         Dropzone.autoDiscover = false; // Ngăn Dropzone tự động khởi tạo các phần tử có lớp "dropzone"
         const myDropzone = new Dropzone("#dropzoneContainer", {
             url: "/upload",
+            maxFiles: 1,
             maxFilesize: 5, // Giới hạn dung lượng tệp (đơn vị: MB)
             acceptedFiles: ".jpg, .jpeg, .png, .gif",
-            dictDefaultMessage: "Kéo và thả tệp vào đây hoặc nhấn vào để chọn tệp"
+            dictDefaultMessage: "Kéo và thả tệp vào đây hoặc nhấn vào để chọn tệp",
+            addRemoveLinks: true, // Thêm liên kết xóa
+            dictRemoveFile: 'Xóa hình ảnh', // Text cho liên kết xóa
         });
-
     </script>
 {% endblock %}

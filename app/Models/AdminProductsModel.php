@@ -102,15 +102,85 @@ class AdminProductsModel
         return true;
     }
 
-    public function update($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock): bool
+    public function updateProduct($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock): bool
     {
+        $previousProduct = $this->getProductById($productId);
+        $oldImagePath = $previousProduct['image_link'];
+
+        // Kiểm tra xem người dùng đã tải lên hình ảnh mới chưa
+        if ($productImage && $productImage['error'] == 0) {
+            $img_name = $productImage['name'];
+            $img_size = $productImage['size'];
+            $tmp_name = $productImage['tmp_name'];
+
+            // Kiểm tra kích thước tệp
+            if ($img_size > 125000000) {
+                echo "Sorry, your file is too large.";
+                return false;
+            }
+
+            // Lấy phần mở rộng của tệp
+            $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
+            $img_ex_lc = strtolower($img_ex);
+
+            // Mảng các phần mở rộng hợp lệ
+            $allowed_exs = array("jpg", "jpeg", "png");
+
+            // Kiểm tra định dạng tệp
+            if (!in_array($img_ex_lc, $allowed_exs)) {
+                echo "You can't upload files of this type";
+                return false;
+            }
+
+            // Tạo tên mới cho tệp
+            $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
+
+            // Đường dẫn lưu trữ
+            $img_upload_path = '../public/images/' . $new_img_name;
+
+            // Di chuyển tệp tải lên đến thư mục lưu trữ
+            if (!move_uploaded_file($tmp_name, $img_upload_path)) {
+                echo "Error occurred while uploading your file";
+                return false;
+            }
+
+            // Cập nhật đường dẫn hình ảnh mới vào biến $productImage
+            $productImage = $new_img_name;
+            if ($oldImagePath && file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Xoá hình ảnh cũ
+            }
+        }
+
+        // Cập nhật sản phẩm trong cơ sở dữ liệu
         $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
         $stmt = $this->db->conn->prepare($sql);
         $stmt->bind_param("sssiiis", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productId);
+
+        // Ghi log câu lệnh SQL
+        error_log("SQL: " . $sql);
+        $updatedProduct = $this->getProductById($productId);
         $success = $stmt->execute();
-        if (!$success) {
-            error_log("SQL error: " . $stmt->error);
-            return false;
+        if ($success) {
+            // Hiển thị thông tin sản phẩm trước và sau khi cập nhật
+            echo "Dữ liệu sản phẩm trước khi cập nhật:<br>";
+            echo "ID: " . $previousProduct['id'] . "<br>";
+            echo "Tên sản phẩm: " . $previousProduct['name'] . "<br>";
+            echo "Mô tả: " . $previousProduct['content'] . "<br>";
+            echo "Hình ảnh: " . $previousProduct['image_link'] . "<br>";
+            echo "Giá: " . $previousProduct['price'] . "<br>";
+            echo "Số lượng: " . $previousProduct['stock'] . "<br>";
+            echo "ID thể loại: " . $previousProduct['category_id'] . "<br><br>";
+
+            echo "Dữ liệu sản phẩm sau khi cập nhật:<br>";
+            echo "ID: " . $updatedProduct['id'] . "<br>";
+            echo "Tên sản phẩm: " . $updatedProduct['name'] . "<br>";
+            echo "Mô tả: " . $updatedProduct['content'] . "<br>";
+            echo "Hình ảnh: " . $updatedProduct['image_link'] . "<br>";
+            echo "Giá: " . $updatedProduct['price'] . "<br>";
+            echo "Số lượng: " . $updatedProduct['stock'] . "<br>";
+            echo "ID thể loại: " . $updatedProduct['category_id'] . "<br>";
+        } else {
+            echo "Cập nhật sản phẩm thất bại: " . $stmt->error;
         }
         $stmt->close();
         return true;
@@ -153,4 +223,16 @@ class AdminProductsModel
         $row = $result->fetch_assoc();
         return $row['total'];
     }
+
+    public function deleteImageByProductId($productId): bool
+    {
+        // Cập nhật cột image_link thành null cho sản phẩm có productId tương ứng
+        $sql = "UPDATE product SET image_link = NULL WHERE id = ?";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("s", $productId);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
 }

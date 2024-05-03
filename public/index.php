@@ -25,6 +25,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/products/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'getById']);
     $r->addRoute('POST', '/admin/products/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'update']);
     $r->addRoute('POST', '/admin/products/search', ['App\Controllers\Admin\ProductsController', 'search']);
+    $r->addRoute('POST', '/admin/products/edit/{productID}/delete-image', ['App\Controllers\Admin\ProductsController', 'deleteImage']);
     // INVOICES
     $r->addRoute('GET', '/admin/invoices', ['App\Controllers\Admin\InvoicesController', 'indexPage']);
     $r->addRoute('GET', '/admin/invoices/view/{invoiceId}', ['App\Controllers\Admin\InvoicesController', 'getById']);
