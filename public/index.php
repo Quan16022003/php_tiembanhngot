@@ -64,6 +64,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductController', 'index']);
     $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'index']);
     $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
+    $r->addRoute('GET', '/login', ['App\Controllers\Client\AuthController', 'index']);
 // CLIENT ROUTES END
 });
 
