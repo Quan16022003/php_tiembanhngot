@@ -5,11 +5,41 @@
         </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
-            <li class="nav-item"><a class="nav-link {% if page == 'home' %}active{% endif %}" href="/admin"><i class="fas fa-tachometer-alt"></i><span>Trang chủ</span></a></li>
-            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
-            <li class="nav-item"><a class="nav-link {% if page == 'user' %}active{% endif %}" href="/admin/user"><i class="fas fa-table"></i><span>Người dùng</span></a></li>
-            <li class="nav-item"><a class="nav-link {% if page == 'permissions' %}active{% endif %}" href="/admin/permissions"><i class="fas fa-table"></i><span>Quyền</span></a></li>
-            <li class="nav-item"><a class="nav-link {% if page == 'blank' %}active{% endif %}" href="/admin/blank"><i class="fas fa-window-maximize"></i><span>Blank Page</span></a></li>
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'home' %}active{% endif %}" href="/admin">
+                    <i class="fas fa-tachometer-alt"></i> <span>Trang chủ</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'profile' %}active{% endif %}" href="/admin/account/profile">
+                    <i class="fas fa-user"></i> <span>Profile</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'products' %}active{% endif %}" href="/admin/products">
+                    <i class="fa-solid fa-bread-slice"></i> <span>Danh sách sản phẩm</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'user' %}active{% endif %}" href="/admin/user">
+                    <i class="fa-solid fa-user-tie"></i> <span>Người dùng</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'permissions' %}active{% endif %}" href="/admin/permissions">
+                    <i class="fa-solid fa-shield"></i> <span>Quyền</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'blank' %}active{% endif %}" href="/admin/blank">
+                    <i class="fas fa-window-maximize"></i> <span>Blank Page</span>
+                </a>
+            </li>
         </ul>
         <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
     </div>

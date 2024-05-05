@@ -61,7 +61,7 @@ class UserController extends AdminController
         $id = htmlspecialchars($_GET['id']);
         $data['user'] = $this->userModel->selectByID($id);
         $data['permissions'] = $this->userModel->getPermissions();
-        parent::render('user_edit', $data);
+        parent::render('Users/user_edit', $data);
     }
 
     public function editUser(): void

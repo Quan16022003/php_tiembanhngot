@@ -28,7 +28,7 @@ class AdminUserModel
     }
     public function selectAll(): array
     {
-        $sql = "SELECT a.id, a.username, a.name, p.name as 'permission_name', a.status FROM admin a LEFT JOIN permission p on p.id = a.id_per;";
+        $sql = "SELECT a.id, a.username, a.name, a.email, p.name as 'permission_name', a.status FROM admin a LEFT JOIN permission p on p.id = a.id_per;";
         $result = $this->db->conn->query($sql);
         $rows = [];
         while ($row = $result->fetch_assoc()) {

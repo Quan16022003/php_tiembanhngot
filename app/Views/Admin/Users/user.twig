@@ -34,13 +34,10 @@
                         <tr>
                             <td>
                                 <div class="d-flex justify-content-start align-items-center user-name">
-                                    <div class="avatar-wrapper">
-                                        <div class="avatar avatar-sm me-3">
-                                            <span class="avatar-initial rounded-circle bg-label-success">AM</span>
-                                        </div></div><div class="d-flex flex-column">
-                                        <a href="app-user-view-account.html" class="text-body text-truncate">
+                                    <div class="d-flex flex-column">
+                                        <a href="/admin/user/view/{{ user.id }}" class="text-decoration-none text-primary">
                                             <span class="fw-medium">{{ user.name }}</span></a>
-                                        <small class="text-muted">email@tiembanh.com</small>
+                                        <small class="text-muted">{{ user.email }}</small>
                                     </div>
                                 </div>
                             </td>
@@ -68,7 +65,7 @@
                                         <i class="fa-solid fa-ellipsis-vertical pe-1 ps-1"></i>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-end m-0">
-                                        <a href="app-user-view-account.html" class="dropdown-item">View</a>
+                                        <a href="/admin/user/view/{{ user.id }}" class="dropdown-item">View</a>
                                         <a href="javascript:;" class="dropdown-item">Suspend</a>
                                     </div>
                                 </div>

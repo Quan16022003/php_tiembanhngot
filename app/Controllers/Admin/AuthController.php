@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\AdminAuthModel;
+use App\Models\AdminUserModel;
 use Core\Controller;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -49,5 +50,14 @@ class AuthController extends Controller
         }
         header('Location: /admin/login');
         exit();
+    }
+
+    public function showProfilePage()
+    {
+        session_start();
+        $model = new AdminUserModel();
+        $id = $_SESSION['admin_id'];
+        $user = $model->getUserById($id);
+        $this->render('Accounts/profile', ['user' => $user, 'admin' => $_SESSION]);
     }
 }

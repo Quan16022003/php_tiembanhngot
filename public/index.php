@@ -9,10 +9,12 @@ use function FastRoute\simpleDispatcher;
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 // ADMIN ROUTES START
     $r->addRoute('GET', '/admin', ['App\Controllers\Admin\HomeController', 'index']);
-    // LOGIN/LOGOUT
+    // ACCOUNT
     $r->addRoute('GET', '/admin/login', ['App\Controllers\Admin\AuthController', 'index']);
     $r->addRoute('POST', '/admin/login', ['App\Controllers\Admin\AuthController', 'login']);
     $r->addRoute('GET', '/admin/logout', ['App\Controllers\Admin\AuthController', 'logout']);
+    $r->addRoute('GET', '/admin/account/profile', ['App\Controllers\Admin\AuthController', 'showProfilePage']);
+
     // DASHBOARD
     $r->addRoute('GET', '/admin/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
     // PRODUCTS
