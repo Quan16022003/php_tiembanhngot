@@ -1,148 +1,16 @@
-<link rel="stylesheet" href="/public/css/global.css">
-
-<div class="light card vh-100 shadow slide-left">
-    <div class="card-header justify-content-center">
-        <h2>
-            <a href="/admin/dashboard" class="text-uppercase link-body-emphasis text-decoration-none d-flex justify-content-center">
-                Menu
-            </a>
-        </h2>
-    </div>
-
-    <div class="card-body d-flex flex-column flex-shrink-0 p-3 bg-body-tertiary ">
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li>
-                <a href="/admin/dashboard" class="nav-link link-body-emphasis">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#speedometer2"/>
-                    </svg>
-                    Thống kê
-                </a>
-                <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mb-1 text-body-secondary text-uppercase">
-                    <span>Lưu báo cáo</span>
-                    <a class="link-secondary" href="#" aria-label="Add a new report">
-                        <svg class="bi">
-                            <use xlink:href="#plus-circle"/>
-                        </svg>
-                    </a>
-                </h6>
-                <ul class="nav flex-column mb-auto">
-                    <li class="nav-item">
-                        <a class="nav-link link-body-emphasis" href="#">
-                            <svg class="bi">
-                                <use xlink:href="#file-earmark-text"/>
-                            </svg>
-                            Tháng hiện tại
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link link-body-emphasis" href="#">
-                            <svg class="bi">
-                                <use xlink:href="#file-earmark-text"/>
-                            </svg>
-                            Quý trước
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link link-body-emphasis" href="#">
-                            <svg class="bi">
-                                <use xlink:href="#file-earmark-text"/>
-                            </svg>
-                            Tỷ lệ tương tác
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link link-body-emphasis" href="#">
-                            <svg class="bi">
-                                <use xlink:href="#file-earmark-text"/>
-                            </svg>
-                            Tổng kết cuối năm
-                        </a>
-                    </li>
-                </ul>
-            </li>
-            <hr class="hr m-0">
-            <li>
-                <a href="/admin/orders" class="nav-link link-body-emphasis">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#table"/>
-                    </svg>
-                    Đơn hàng
-                </a>
-            </li>
-            <hr class="hr m-0">
-
-            <a href="/admin/products" class="nav-link link-body-emphasis">
-                <svg class="bi pe-none me-2" width="16" height="16">
-                    <use xlink:href="#grid"/>
-                </svg>
-                Sản phẩm
-            </a>
-            <ul>
-                <li><a href="/admin/products/create">Thêm sản phẩm</a></li>
-                <li><a href="/admin/products/category_list">Danh sách thể loại</a></li>
-            </ul>
-
-            <hr class="hr m-0">
-            <li>
-                <a href="/admin/invoices" class="nav-link link-body-emphasis">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                         class="bi bi-receipt-cutoff me-2" viewBox="0 0 16 16">
-                        <path d="M3 4.5a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 1 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5m0 2a.5.5 0 0 1 .5-.5h6a.5.5 0 0 1 0 1h-6a.5.5 0 0 1-.5-.5M11.5 4a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1zm0 2a.5.5 0 0 0 0 1h1a.5.5 0 0 0 0-1z"/>
-                        <path d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z"/>
-                    </svg>
-                    Hóa đơn
-                </a>
-            </li>
-            <hr class="hr m-0">
-            <li>
-                <a href="/admin/customers" class="nav-link link-body-emphasis">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#people-circle"/>
-                    </svg>
-                    Khách hàng
-                </a>
-            </li>
-            <hr class="hr m-0">
-            <li>
-                <a href="/admin/users" class="nav-link link-body-emphasis">
-                    <svg class="bi pe-none me-2" width="16" height="16">
-                        <use xlink:href="#people-circle"/>
-                    </svg>
-                    Danh sách User
-                </a>
-            </li>
-            <hr class="hr m-0">
-            <li class="nav-item">
-                <a class="nav-link link-body-emphasis" href="#">
-                    <svg class="bi">
-                        <use xlink:href="#gear-wide-connected"/>
-                    </svg>
-                    Tuỳ chỉnh
-                </a>
-            </li>
-            <hr class="hr m-0">
-            <li class="nav-item">
-                <a class="nav-link link-body-emphasis" href="#">
-                    <svg class="bi">
-                        <use xlink:href="#door-closed"/>
-                    </svg>
-                    Đăng xuất
-                </a>
-            </li>
-            <hr class="hr m-0">
-
-        </ul>
-    </div>
-    <div class="card-footer dropdown">
-        <a href="#" class="d-flex align-items-center link-body-emphasis text-decoration-none dropdown-toggle"
-           data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="material-symbols-outlined">person</span>
-            <strong>{{ admin.admin_name }}</strong>
+<nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style="position:relative; display:block">
+    <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+            <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+            <div class="sidebar-brand-text mx-3"><span>Tiệm bánh</span></div>
         </a>
-        <ul class="dropdown-menu text-small shadow">
-            <li><a class="dropdown-item" href="/admin/logout">Sign out</a></li>
+        <hr class="sidebar-divider my-0">
+        <ul class="navbar-nav text-light" id="accordionSidebar">
+            <li class="nav-item"><a class="nav-link {% if page == 'home' %}active{% endif %}" href="/admin"><i class="fas fa-tachometer-alt"></i><span>Trang chủ</span></a></li>
+            <li class="nav-item"><a class="nav-link" href="#"><i class="fas fa-user"></i><span>Profile</span></a></li>
+            <li class="nav-item"><a class="nav-link {% if page == 'user' %}active{% endif %}" href="/admin/user"><i class="fas fa-table"></i><span>Người dùng</span></a></li>
+            <li class="nav-item"><a class="nav-link {% if page == 'permissions' %}active{% endif %}" href="/admin/permissions"><i class="fas fa-table"></i><span>Quyền</span></a></li>
+            <li class="nav-item"><a class="nav-link {% if page == 'blank' %}active{% endif %}" href="/admin/blank"><i class="fas fa-window-maximize"></i><span>Blank Page</span></a></li>
         </ul>
+        <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
     </div>
-</div>
-<script></script>
+</nav>

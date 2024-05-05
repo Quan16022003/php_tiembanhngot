@@ -1,0 +1,31 @@
+.btn-icon {
+    /* Thiết lập kích thước và căn chỉnh */
+    width: 40px;
+    height: 40px;
+    padding: 5px;
+    text-align: center;
+    line-height: 30px; /* Đảm bảo văn bản được căn giữa */
+
+    /* Tùy chỉnh màu sắc */
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 50%; /* Làm cho nút tròn */
+
+    /* Hiệu ứng hover */
+    transition: background-color 0.3s ease;
+}
+
+.btn-icon:hover {
+    background-color: #2980b9;
+}
+
+/* Thiết lập màu sắc cho biểu tượng */
+.btn-icon i {
+    color: #fff;
+}
+
+/* Hiệu ứng hover cho biểu tượng */
+.btn-icon:hover i {
+    color: #f0f0f0;
+}

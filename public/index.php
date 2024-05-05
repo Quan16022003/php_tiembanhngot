@@ -30,6 +30,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/invoices/view/{invoiceId}', ['App\Controllers\Admin\InvoicesController', 'getById']);
     // HOMES
     $r->addRoute('GET', '/admin/home', ['App\Controllers\Admin\HomeController', 'index']);
+    $r->addRoute('GET', '/admin/blank', ['App\Controllers\Admin\HomeController', 'showBlankPage']);
     // CUSTOMERS
     $r->addRoute('GET', '/admin/customers', ['App\Controllers\Admin\CustomerController', 'index']);
     $r->addRoute('GET', '/admin/customers/create', ['App\Controllers\Admin\CustomerController', 'openCreate']);
