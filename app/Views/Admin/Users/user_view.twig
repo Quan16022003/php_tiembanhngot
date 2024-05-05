@@ -1,0 +1,78 @@
+{% set page = 'user' %}
+
+{% extends './layout.twig' %}
+
+{% block title %}Xem thông tin user{% endblock %}
+{% block content %}
+    <div class="container">
+        <h3>Xem thông tin người dùng</h3>
+        <div class="row">
+            <div class="col-12 col-md-9">
+                <div class="card shadow">
+                    <div class="card-header py-3">Thông tin cơ bản</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Họ tên</label>
+                            <input type="text" class="form-control" id="name" name="name" value="{{ user.name }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="username" name="username" value="{{ user.username }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dob" class="form-label">Ngày sinh</label>
+                            <input type="date" class="form-control" id="dob" name="dob" value="{{ user.dob }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="gender" class="form-label">Giới tính</label>
+                            <input type="text" class="form-control" id="gender" name="gender" value="{{ user.gender|formatGender }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-2">
+                    <div class="card-header py-3">Thông tin liên lạc</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Địa chỉ email<span class="text-warning">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="sdt" class="form-label">Số điện thoại<span class="text-warning">*</span></label>
+                            <input type="tel" class="form-control" id="sdt" name="sdt" value="{{ user.sdt }}" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="adress" class="form-label">Địa chỉ</label>
+                            <textarea class="form-control" id="adress" name="adress" readonly>{{ user.adress }}</textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-3">
+                <div class="card shadow">
+                    <div class="card-header py-3">Quyền hạn và vai trò</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" value="{{ user.permission_name }}" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mt-2">
+                    <div class="card-header py-3">Trạng thái tài khoản</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h5>
+                                {% if user.status == 0 %}
+                                    <span class="badge bg-secondary">Chưa thay đổi mật khẩu mặc định</span>
+                                {% elseif user.status == 1 %}
+                                    <span class="badge bg-success">Đang hoạt động</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Đã khóa</span>
+                                {% endif %}
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

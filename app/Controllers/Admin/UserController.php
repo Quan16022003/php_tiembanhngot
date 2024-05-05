@@ -17,7 +17,7 @@ class UserController extends AdminController
     #[\Override] function index(): void
     {
         $data['list'] = $this->userModel->selectAll();
-        parent::render('user', $data);
+        parent::render('Users/user', $data);
     }
 
     public function showAddUserPage(): void
@@ -26,23 +26,26 @@ class UserController extends AdminController
         parent::render('user_add', $data);
     }
 
-    public function searchUser(): void
-    {
-        $option = htmlspecialchars($_POST["option"]);
-        $text = htmlspecialchars($_POST["text"]);
-        echo json_encode($this->userModel->search($option, $text));
-    }
-
     public function addUser(): void
     {
-        $name = htmlspecialchars($_POST['name']);
-        $username = htmlspecialchars($_POST['username']);
-        $password = htmlspecialchars($_POST['password']);
+        $name       = htmlspecialchars($_POST['name']);
+        $username   = htmlspecialchars($_POST['username']);
+        $email      = htmlspecialchars($_POST['email']);
+        $sdt        = htmlspecialchars($_POST['sdt']);
+        $adress     = htmlspecialchars($_POST['adress']);
+        $dob        = htmlspecialchars($_POST['dob']);
+        $gender     = htmlspecialchars($_POST['gender']);
         $permission = htmlspecialchars($_POST['permission']);
+
+        // Tạo mật khẩu từ ngày sinh
+        $dob_parts = explode("-", $dob);
+        $password = $dob_parts[2] . $dob_parts[1] . $dob_parts[0];
+
         if ($this->userModel->check($username)) {
             echo json_encode(array('success' => false, 'message' => 'Username đã tồn tại'));
         } else {
-            if ($this->userModel->insert($name, $username, $password, $permission)) {
+            if ($this->userModel->insert($name, $username, $password, $email,
+                            $sdt, $adress, $dob, $gender, $permission)) {
                 // Thêm thành công, trả về thông báo thành công
                 echo json_encode(array('success' => true, 'message' => 'Người dùng đã được thêm thành công'));
             } else {
@@ -85,6 +88,16 @@ class UserController extends AdminController
         } else {
             echo json_encode(array('success' => false, 'message' => 'Xóa thất bại'));
         }
+    }
+
+    public function showViewUserPage($var): void
+    {
+        $id = null;
+        if (is_array($var) && isset($var['userId'])) {
+            $id = $var['userId'];
+        }
+        $data['user'] = $this->userModel->getUserById($id);
+        $this->render('Users/user_view', $data);
     }
 
     public function showPermissionPage(): void
@@ -150,4 +163,5 @@ class UserController extends AdminController
             echo json_encode(array('success' => false, 'message' => 'Xóa thất bại'));
         }
     }
+
 }

@@ -43,7 +43,8 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
     $r->addRoute('GET', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'showEditUserPage']);
     $r->addRoute('POST', '/admin/user/edit', ['App\Controllers\Admin\UserController', 'editUser']);
     $r->addRoute('POST', '/admin/user/delete', ['App\Controllers\Admin\UserController', 'deleteUser']);
-    $r->addRoute('POST', '/admin/user/search', ['App\Controllers\Admin\UserController', 'searchUser']);
+    $r->addRoute('GET', '/admin/user/view/{userId}', ['App\Controllers\Admin\UserController', 'showViewUserPage']);
+
     // PERMISSIONS
     $r->addRoute('GET', '/admin/permissions', ['App\Controllers\Admin\UserController', 'showPermissionPage']);
     $r->addRoute('GET', '/admin/permissions/add', ['App\Controllers\Admin\UserController', 'showAddPermissionPage']);

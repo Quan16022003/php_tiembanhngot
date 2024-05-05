@@ -2,68 +2,108 @@
 
 {% extends 'layout.twig' %}
 
+{% block stylesheets %}
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/datatables.min.css" rel="stylesheet">
+{% endblock %}
+
 {% block title %}Danh sách quyền{% endblock %}
 {% block content %}
-    <div class="d-flex justify-content-end flex-wrap flex-md-nowrap align-items-center mb-1">
-        <a href="/admin/permissions/add" class="btn btn-success">Thêm</a>
+    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-dark mb-0">Danh sách quyền</h3>
+        <a class="btn btn-primary d-none d-sm-inline-block" role="button" href="/admin/permissions/add"><i class="fas fa-download fa-sm text-white-50"></i>Thêm quyền mới</a>
     </div>
-    <div class="table-responsive small">
-        <table class="table table-striped table-sm">
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Tên quyền</th>
-                <th scope="col">Mô tả</th>
-                <th scope="col">Action</th>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table id="example" class="table table-striped" style="width:100%">
+                    <thead>
+                    <tr>
+                        <th scope="col">Tên quyền</th>
+                        <th scope="col">Mô tả</th>
+                        <th scope="col">Action</th>
 
-            </tr>
-            </thead>
-            <tbody>
-            {% for per in permissions %}
-                <tr id="permission_row_{{ per.id }}">
-                    <th scope="row">{{ per.id }}</th>
-                    <td>{{ per.name }}</td>
-                    <td>{{ per.describe }}</td>
-                    <td>
-                        <a type="button" class="btn btn-primary btn-sm" href="/admin/permissions/edit?id={{ per.id }}">Sửa</a>
-                        <button type="button" class="btn btn-danger btn-sm" onclick="del({{ per.id }}, {{ per.hasUse }})">Xóa</button>
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for per in permissions %}
+                        <tr id="permission_row_{{ per.id }}">
+                            <td>{{ per.name }}</td>
+                            <td>{{ per.describe }}</td>
+                            <td>
+                                <a type="button" class="btn btn-primary btn-sm" href="/admin/permissions/edit?id={{ per.id }}">Sửa</a>
+                                <button type="button" class="btn btn-danger btn-sm" onclick="del({{ per.id }}, {{ per.hasUse }})">Xóa</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <th scope="col">Tên quyền</th>
+                        <th scope="col">Mô tả</th>
+                        <th scope="col">Action</th>
+
+                    </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
     </div>
+
+
 {% endblock %}
 {% block scripts %}
-<script type="text/javascript">
-    function del(permissionId, hasUse) {
-        if (hasUse) {
-            alert("Quyền này đang được sử dụng không thể xóa!");
-            return;
-        }
-        if (confirm("Bạn có muốn xóa quyền có id là " + permissionId + " không? ")) {
-            $.ajax({
-                url: '/admin/permissions/delete',
-                method: 'POST',
-                data: {
-                    id: permissionId
-                },
-                success: function (response) {
-                    response = JSON.parse(response);
-                    console.log(response);
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/sl-2.0.1/datatables.min.js"></script>
 
-                    alert(response.message);
-                    if (response.success) {
-                        const $row = $('#permission_row_' + permissionId);
-                        $row.remove();
+    <script type="text/javascript">
+        function del(permissionId, hasUse) {
+            if (hasUse) {
+                alert("Quyền này đang được sử dụng không thể xóa!");
+                return;
+            }
+            if (confirm("Bạn có muốn xóa quyền có id là " + permissionId + " không? ")) {
+                $.ajax({
+                    url: '/admin/permissions/delete',
+                    method: 'POST',
+                    data: {
+                        id: permissionId
+                    },
+                    success: function (response) {
+                        response = JSON.parse(response);
+                        console.log(response);
+
+                        alert(response.message);
+                        if (response.success) {
+                            var table = $('#example').DataTable();
+                            const $row = $('#permission_row_' + permissionId);
+                            table.row($row).remove().draw();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Đã có lỗi xảy ra. Vui lòng thử lại sau.');
                     }
-                },
-                error: function (xhr, status, error) {
-                    alert('Đã có lỗi xảy ra. Vui lòng thử lại sau.');
+                });
+            }
+        }
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "language": {
+                    "decimal"       : "",
+                    "emptyTable"    : "Không có dữ liệu trong bảng",
+                    "info"          : "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "infoEmpty"     : "Hiển thị 0 đến 0 trong tổng số 0 mục",
+                    "infoFiltered"  : "(được lọc từ tổng số _MAX_ mục)",
+                    "infoPostFix"   : "",
+                    "thousands"     : ",",
+                    "lengthMenu"    : "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "processing"    : "",
+                    "search"        : "Tìm kiếm:",
+                    "zeroRecords"   : "Không tìm thấy bản ghi phù hợp",
                 }
             });
-        }
-    }
+        });
 
-</script>
+    </script>
 {% endblock %}

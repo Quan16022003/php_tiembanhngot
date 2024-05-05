@@ -5,45 +5,51 @@
 {% block title %}Thêm quyền{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <form id="add-role-form">
-            <div class="mb-3">
-                <label for="name" class="form-label">Tên quyền</label>
-                <input type="text" class="form-control" id="name" name="name" required>
-            </div>
-            <div class="mb-3">
-                <label for="describe" class="form-label">Mô tả quyền</label>
-                <textarea class="form-control" id="describe" name="describe" rows="3" required></textarea>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-striped table-sm">
-                    <thead>
-                    <tr>
-                        <th scope="col">Chức năng</th>
-                        <th scope="col">Xem</th>
-                        <th scope="col">Thêm</th>
-                        <th scope="col">Sửa</th>
-                        <th scope="col">Xóa</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for action in actions %}
+    <h3 class="text-dark mb-4">Thêm quyền mới</h3>
+    <div class="card shadow">
+        <div class="card-header py-3">
+            <p class="text-primary m-0 fw-bold">Thông tin quyền</p>
+        </div>
+        <div class="card-body">
+            <form id="add-role-form">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Tên quyền</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="mb-3">
+                    <label for="describe" class="form-label">Mô tả quyền</label>
+                    <textarea class="form-control" id="describe" name="describe" rows="3" required></textarea>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped table-sm">
+                        <thead>
                         <tr>
-                            <td id="{{ action.id }}">{{ action.name }}</td>
-                            <!-- Thêm thuộc tính name cho các checkbox -->
-                            <td><input type="checkbox" name="{{ action.id }}[]" value="view"></td>
-                            <td><input type="checkbox" name="{{ action.id }}[]" value="create"></td>
-                            <td><input type="checkbox" name="{{ action.id }}[]" value="edit"></td>
-                            <td><input type="checkbox" name="{{ action.id }}[]" value="delete"></td>
+                            <th scope="col">Chức năng</th>
+                            <th scope="col">Xem</th>
+                            <th scope="col">Thêm</th>
+                            <th scope="col">Sửa</th>
+                            <th scope="col">Xóa</th>
                         </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            <div class="d-flex justify-content-end flex-wrap flex-md-nowrap align-items-center mb-1">
-                <button type="submit" class="btn btn-success">Thêm</button>
-            </div>
-        </form>
+                        </thead>
+                        <tbody>
+                        {% for action in actions %}
+                            <tr>
+                                <td id="{{ action.id }}">{{ action.name }}</td>
+                                <!-- Thêm thuộc tính name cho các checkbox -->
+                                <td><input type="checkbox" name="{{ action.id }}[]" value="view"></td>
+                                <td><input type="checkbox" name="{{ action.id }}[]" value="create"></td>
+                                <td><input type="checkbox" name="{{ action.id }}[]" value="edit"></td>
+                                <td><input type="checkbox" name="{{ action.id }}[]" value="delete"></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="d-flex justify-content-end flex-wrap flex-md-nowrap align-items-center mb-1">
+                    <button type="submit" class="btn btn-success">Thêm</button>
+                </div>
+            </form>
+        </div>
     </div>
 {% endblock %}
 

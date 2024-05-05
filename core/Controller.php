@@ -19,6 +19,16 @@ class Controller
         $this->twig->addFilter(new TwigFilter('formatCurrency', function ($number) {
             return number_format($number, 0, '.', '.');
         }));
+        $this->twig->addFilter(new TwigFilter('formatGender', function ($gender) {
+            switch ($gender) {
+                case 'male':
+                    return 'Nam';
+                case 'female':
+                    return 'Nữ';
+                default:
+                    return 'Khác';
+            }
+        }));
     }
 
     public function render($page, $data=[]): void
