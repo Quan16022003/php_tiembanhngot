@@ -44,7 +44,7 @@ class ProductController extends ClientController
             ],
             'current_sort' => $sort_by
         ];
-        $this->render('product', $data);
+        $this->render('Products/product', $data);
     }
 
     public function indexPage(): void

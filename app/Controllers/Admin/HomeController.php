@@ -9,4 +9,8 @@ class HomeController extends AdminController
     {
         parent::render('home');
     }
+
+    function showBlankPage() {
+        parent::render('blank-page');
+    }
 }

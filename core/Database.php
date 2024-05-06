@@ -9,10 +9,10 @@ class Database
 {
     private static ?Database $instance = null;
     public ?mysqli $conn = NULL;
-    private string $host = 'db';
+    private string $host = 'localhost';
     private string $dbName = 'eco';
     private string $user = 'root';
-    private string $password = '123';
+    private string $password = '';
 
     // Hàm kết nối CSDL
     private function __construct()
