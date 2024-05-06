@@ -37,7 +37,7 @@ $(document).ready(function(){
             e.preventDefault();
             $("#loader").show();
             $.ajax({
-                url: 'action.php',
+                url: '/api/account/register',
                 method: 'post',
                 data: $("#register-frm").serialize() + '&action=register',
                 success:function(response) {
@@ -55,7 +55,7 @@ $(document).ready(function(){
             e.preventDefault();
             $("#loader").show();
             $.ajax({
-                url: 'action.php',
+                url: '/api/account/login',
                 method: 'post',
                 data: $("#login-frm").serialize() + '&action=login',
                 success: function(response) {
@@ -77,7 +77,7 @@ $(document).ready(function(){
             e.preventDefault();
             $("#loader").show();
             $.ajax({
-                url: 'action.php',
+                url: '/api/account/forgot',
                 method: 'post',
                 data: $("#forgot-frm").serialize() + '&action=forgot',
                 success:function(response) {

@@ -8,4 +8,13 @@ abstract class ClientController  extends \Core\Controller
     {
         parent::__construct('Client');
     }
+
+    public function render($page, $data = []): void
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        $data['session'] = $_SESSION;
+        parent::render($page, $data);
+    }
 }
