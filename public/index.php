@@ -4,12 +4,13 @@ require_once '../vendor/autoload.php';
 
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
+define('INC_ROOT', __DIR__);
 
 // Define routes
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
     $r->addGroup('/admin', function (RouteCollector $r) {
-        $r->addRoute('GET', '/', ['App\Controllers\Admin\HomeController', 'index']);
+        $r->addRoute('GET', '', ['App\Controllers\Admin\HomeController', 'index']);
 
         // ACCOUNT
         $r->addRoute('GET', '/login', ['App\Controllers\Admin\AuthController', 'index']);
@@ -22,7 +23,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         // PRODUCTS
         $r->addGroup('/products', function (RouteCollector $r) {
-            $r->addRoute('GET', '/', ['App\Controllers\Admin\ProductsController', 'indexPage']);
+            $r->addRoute('GET', '', ['App\Controllers\Admin\ProductsController', 'indexPage']);
             $r->addRoute('GET', '/create', ['App\Controllers\Admin\ProductsController', 'openCreate']);
             $r->addRoute('POST', '/create', ['App\Controllers\Admin\ProductsController', 'create']);
             $r->addRoute('GET', '/add', ['App\Controllers\Admin\ProductsController', 'openAdd']);
@@ -35,7 +36,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         // INVOICES
         $r->addGroup('/invoices', function (RouteCollector $r) {
-            $r->addRoute('GET', '/', ['App\Controllers\Admin\InvoicesController', 'indexPage']);
+            $r->addRoute('GET', '', ['App\Controllers\Admin\InvoicesController', 'indexPage']);
             $r->addRoute('GET', '/view/{invoiceId}', ['App\Controllers\Admin\InvoicesController', 'getById']);
         });
 
@@ -45,7 +46,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         // CUSTOMERS
         $r->addGroup('/customers', function (RouteCollector $r) {
-            $r->addRoute('GET', '/', ['App\Controllers\Admin\CustomerController', 'index']);
+            $r->addRoute('GET', '', ['App\Controllers\Admin\CustomerController', 'index']);
             $r->addRoute('GET', '/create', ['App\Controllers\Admin\CustomerController', 'openCreate']);
             $r->addRoute('POST', '/create', ['App\Controllers\Admin\CustomerController', 'create']);
             $r->addRoute('GET', '/view/{customerId}', ['App\Controllers\Admin\CustomerController', 'getById']);
@@ -53,7 +54,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         // USERS
         $r->addGroup('/user', function (RouteCollector $r) {
-            $r->addRoute('GET', '/', ['App\Controllers\Admin\UserController', 'index']);
+            $r->addRoute('GET', '', ['App\Controllers\Admin\UserController', 'index']);
             $r->addRoute('GET', '/add', ['App\Controllers\Admin\UserController', 'showAddUserPage']);
             $r->addRoute('POST', '/add', ['App\Controllers\Admin\UserController', 'addUser']);
             $r->addRoute('GET', '/edit', ['App\Controllers\Admin\UserController', 'showEditUserPage']);
@@ -64,7 +65,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         // PERMISSIONS
         $r->addGroup('/permissions', function (RouteCollector $r) {
-            $r->addRoute('GET', '/', ['App\Controllers\Admin\UserController', 'showPermissionPage']);
+            $r->addRoute('GET', '', ['App\Controllers\Admin\UserController', 'showPermissionPage']);
             $r->addRoute('GET', '/add', ['App\Controllers\Admin\UserController', 'showAddPermissionPage']);
             $r->addRoute('POST', '/add', ['App\Controllers\Admin\UserController', 'addPermission']);
             $r->addRoute('GET', '/edit', ['App\Controllers\Admin\UserController', 'showEditPermissionPage']);
@@ -102,7 +103,6 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 // Dispatch the request
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
-
 // Strip query string (?foo=bar) and decode URI
 if (false !== $pos = strpos($uri, '?')) {
     $uri = substr($uri, 0, $pos);
