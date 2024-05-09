@@ -38,7 +38,9 @@ class SupplierController
         $supplier = new SupplierModel($_POST);
         print_r($supplier);
         $supplier->save();
-        header("Location: /admin/suppliers");
+
+        $supplierID = $supplier->getId();
+        header("Location: /admin/suppliers/$supplierID");
         exit;
     }
     public function show($vars) {
@@ -63,8 +65,7 @@ class SupplierController
         $data['id'] = $id;
         $supplier = new SupplierModel($data);
         $supplier->save();
-        header("Location: /admin/suppliers");
-        exit;
+        header("Location: /admin/suppliers/$id");
     }
 
     public function delete($vars)

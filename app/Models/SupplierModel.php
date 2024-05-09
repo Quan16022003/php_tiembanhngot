@@ -41,6 +41,7 @@ class SupplierModel
         $stmt = $db->prepare($sql);
         $stmt->bind_param("sssssss", $this->companyName, $this->contactName, $this->contactEmail, $this->contactPhone, $this->address, $this->postalCode, $this->country);
         $success = $stmt->execute();
+        $this->id = $stmt->insert_id;
         $stmt->close();
     }
 
@@ -72,5 +73,10 @@ class SupplierModel
         $result = $stmt->get_result();
         $stmt->close();
         return $result->fetch_assoc();
+    }
+
+    public function getId(): mixed
+    {
+        return $this->id;
     }
 }

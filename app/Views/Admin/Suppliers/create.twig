@@ -5,19 +5,12 @@
 {% block title %}Thêm nhà cung cấp{% endblock %}
 
 {% block stylesheets %}
-    <!-- Thêm CSS của jQuery Validate -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.css">
-    <style type="text/css">
-        form .error {
-            color: #ff0000;
-            font-size: 14px;
-            width: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
 {% endblock %}
 
 {% block content %}
-    <div class="">
+<form id="addSupplierForm" action="/admin/suppliers/store" method="POST">
+    <div class="ps-md-5 pe-md-5">
         <div class="mb-4">
             <div class="d-sm-flex justify-content-between align-items-center mb-4">
                 <h3 class="text-dark mb-0">
@@ -26,112 +19,53 @@
                     </a>
                     Thêm nhà cung cấp
                 </h3>
-                <button id="saveSupplierBtn" class="btn btn-outline-success btn-sm d-none d-sm-inline-block" role="button">Lưu</button>
+                <button id="saveSupplierBtn" type="submit" class="btn btn-outline-success btn-sm d-none d-sm-inline-block" role="button">Lưu</button>
             </div>
         </div>
-        <div class="card mb-3">
+        <div class="card mb-3 shadow">
             <div class="card-body">
-                <form id="addSupplierForm" action="/admin/suppliers/store" method="POST">
-                    <div class="mb-3">
-                        <label for="companyName" class="form-label">Tên công ty:</label>
-                        <input type="text" class="form-control" id="companyName" name="companyName">
+                <div class="mb-3">
+                    <label for="companyName" class="form-label">Tên công ty:</label>
+                    <input type="text" class="form-control" id="companyName" name="companyName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ:</label>
+                    <textarea class="form-control" id="address" name="address" required></textarea>
+                </div>
+                <div class="mb-3 row row-cols-1 row-cols-lg-2">
+                    <div class="col">
+                        <label for="country" class="form-label text-dark">Quốc gia:</label>
+                        <input type="text" class="form-control" id="country" name="country">
                     </div>
-                    <div class="mb-3">
-                        <label for="contactName" class="form-label">Tên người liên hệ:</label>
-                        <input type="text" class="form-control" id="contactName" name="contactName">
+                    <div class="col">
+                        <label for="postalCode" class="form-label">Mã bưu chính:</label>
+                        <input type="text" class="form-control" id="postalCode" name="postalCode" required>
                     </div>
-                    <div class="mb-3">
+                </div>
+                <div class="mb-3 mt-5">
+                    <label for="contactName" class="form-label">Tên người liên hệ:</label>
+                    <input type="text" class="form-control" id="contactName" name="contactName" required>
+                </div>
+                <div class="mb-3 row row-cols-1 row-cols-lg-2">
+                    <div class="col">
                         <label for="contactEmail" class="form-label">Email liên hệ:</label>
-                        <input type="email" class="form-control" id="contactEmail" name="contactEmail">
+                        <input type="email" class="form-control" id="contactEmail" name="contactEmail" required>
                     </div>
-                    <div class="mb-3">
+                    <div class="col">
                         <label for="contactPhone" class="form-label">Điện thoại liên hệ:</label>
                         <input type="text" class="form-control" id="contactPhone" name="contactPhone">
                     </div>
-                    <div class="mb-3">
-                        <label for="address" class="form-label">Địa chỉ:</label>
-                        <textarea class="form-control" id="address" name="address"></textarea>
-                    </div>
-                    <div class="mb-3">
-                        <label for="postalCode" class="form-label">Mã bưu chính:</label>
-                        <input type="text" class="form-control" id="postalCode" name="postalCode">
-                    </div>
-                    <div class="mb-3">
-                        <label for="country" class="form-label">Quốc gia:</label>
-                        <input type="text" class="form-control" id="country" name="country">
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>
+</form>
 {% endblock %}
 
 {% block scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.20.0/jquery.validate.min.js" integrity="sha512-WMEKGZ7L5LWgaPeJtw9MBM4i5w5OSBlSjTjCtSnvFJGSVD26gE5+Td12qN5pvWXhuWaWcVwF++F7aqu9cvqP0A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
-        // Bắt đầu xử lý khi tài liệu đã sẵn sàng
         $(document).ready(function() {
-            // Áp dụng quy tắc kiểm tra dữ liệu cho form sử dụng jQuery Validate
-            $('#addSupplierForm').validate({
-                rules: {
-                    companyName: {
-                        required: true
-                    },
-                    contactName: {
-                        required: true
-                    },
-                    contactEmail: {
-                        required: true,
-                        email: true
-                    },
-                    contactPhone: {
-                        required: true,
-                    },
-                    address: {
-                        required: true
-                    },
-                    postalCode: {
-                        required: true
-                    },
-                    country: {
-                        required: true
-                    }
-                },
-                messages: {
-                    companyName: {
-                        required: "Vui lòng nhập tên công ty"
-                    },
-                    contactName: {
-                        required: "Vui lòng nhập tên người liên hệ"
-                    },
-                    contactEmail: {
-                        required: "Vui lòng nhập email",
-                        email: "Vui lòng nhập đúng định dạng email"
-                    },
-                    contactPhone: {
-                        required: "Vui lòng nhập số điện thoại",
-                    },
-                    address: {
-                        required: "Vui lòng nhập địa chỉ"
-                    },
-                    postalCode: {
-                        required: "Vui lòng nhập mã bưu chính"
-                    },
-                    country: {
-                        required: "Vui lòng nhập quốc gia"
-                    }
-                },
-            });
 
-            $('#saveSupplierBtn').click(function(event) {
-                // Ngăn chặn hành động mặc định của nút "Lưu"
-                event.preventDefault();
-                // Validate form
-                if ($('#addSupplierForm').valid()) {
-                    // Nếu form hợp lệ, thực hiện submit form
-                    $('#addSupplierForm').submit();
-                }
-            });
         });
     </script>
 {% endblock %}
