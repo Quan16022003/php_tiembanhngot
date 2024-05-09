@@ -1,0 +1,71 @@
+{% set page = 'suppliers' %}
+
+{% extends './layout.twig' %}
+
+{% block title %}Thêm nhà cung cấp{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+{% endblock %}
+
+{% block content %}
+<form id="addSupplierForm" action="/admin/suppliers/store" method="POST">
+    <div class="ps-md-5 pe-md-5">
+        <div class="mb-4">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-dark mb-0">
+                    <a class="btn btn-light btn-sm d-none d-sm-inline-block" role="button" href="/admin/suppliers">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                    Thêm nhà cung cấp
+                </h3>
+                <button id="saveSupplierBtn" type="submit" class="btn btn-outline-success btn-sm d-none d-sm-inline-block" role="button">Lưu</button>
+            </div>
+        </div>
+        <div class="card mb-3 shadow">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="companyName" class="form-label">Tên công ty:</label>
+                    <input type="text" class="form-control" id="companyName" name="companyName" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Địa chỉ:</label>
+                    <textarea class="form-control" id="address" name="address" required></textarea>
+                </div>
+                <div class="mb-3 row row-cols-1 row-cols-lg-2">
+                    <div class="col">
+                        <label for="country" class="form-label text-dark">Quốc gia:</label>
+                        <input type="text" class="form-control" id="country" name="country">
+                    </div>
+                    <div class="col">
+                        <label for="postalCode" class="form-label">Mã bưu chính:</label>
+                        <input type="text" class="form-control" id="postalCode" name="postalCode" required>
+                    </div>
+                </div>
+                <div class="mb-3 mt-5">
+                    <label for="contactName" class="form-label">Tên người liên hệ:</label>
+                    <input type="text" class="form-control" id="contactName" name="contactName" required>
+                </div>
+                <div class="mb-3 row row-cols-1 row-cols-lg-2">
+                    <div class="col">
+                        <label for="contactEmail" class="form-label">Email liên hệ:</label>
+                        <input type="email" class="form-control" id="contactEmail" name="contactEmail" required>
+                    </div>
+                    <div class="col">
+                        <label for="contactPhone" class="form-label">Điện thoại liên hệ:</label>
+                        <input type="text" class="form-control" id="contactPhone" name="contactPhone">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(function() {
+
+        });
+    </script>
+{% endblock %}

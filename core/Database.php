@@ -41,6 +41,11 @@ class Database
         return self::$instance;
     }
 
+    public static function getConnection(): mysqli|null
+    {
+        return self::getInstance()->conn;
+    }
+
     public function error(): bool
     {
         if ($this->conn)
