@@ -58,4 +58,16 @@ class ProductController extends ClientController
         $totalPages = ceil($totalProducts / $productsPerPage);
         $this->render('Products/product', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
+
+    function productDetail($vars): void
+    {
+        $id = null;
+        // $id = $_GET['id'];
+        if(is_array($vars) && isset($vars['id'])){
+            $id = $vars['id'];
+        }
+        $data['product'] = $this->productModel->selectProductbyID($id);
+        $this->render('productDetail',$data);
+        
+    }
 }

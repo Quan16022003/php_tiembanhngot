@@ -48,4 +48,8 @@ class ProductModel
     {
         return $this->selectAll($limit, $page, 'title', 'desc');
     }
+    public function selectProductbyID($id): ?array
+    {
+        return $this->db->selectById('product', $id);
+    } 
 }

@@ -32,6 +32,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'getById']);
             $r->addRoute('POST', '/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'update']);
             $r->addRoute('POST', '/search', ['App\Controllers\Admin\ProductsController', 'search']);
+
         });
 
         // INVOICES
@@ -105,8 +106,9 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
         $r->addRoute('GET', '/contact', ['App\Controllers\Client\ContactController', 'index']);
         $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductController', 'index']);
-        $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'index']);
+        // $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'index']);
         $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
+        $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'productDetail']);
 
         $r->addGroup('/account', function (RouteCollector $r) {
             $r->addRoute('GET', '/login', ['App\Controllers\Client\AuthController', 'showLoginPage']);
