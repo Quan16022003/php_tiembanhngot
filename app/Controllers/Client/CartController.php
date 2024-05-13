@@ -33,9 +33,7 @@ class CartController extends ClientController
         // $this->render('cart', ['cartData' => $cartModel]);
     }
 
-
     public function addToCart(){
-        session_start();
         $product_id = $_GET['product_id'];
         $quantity = $_GET['quantity_product'];
         $username = isset($_SESSION['username']) ? $_SESSION['username'] : null;
@@ -45,20 +43,5 @@ class CartController extends ClientController
         $cartModel = new CartModel();
         $cartModel->addToCart($user_id, $product_id, $quantity);
         header('Location: /products/'.$product_id);
-    }
-
-
-
-
-    public function indexPage(): void
-    {
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $cartsPerPage = 10;
-        $offset = ($page - 1) * $cartsPerPage;
-        $model = new CartModel();
-        $carts = $model->getCart($offset, $cartsPerPage);
-        $totalCart = $model->getTotalCart();
-        $totalPages = ceil($totalCart / $cartsPerPage);
-        $this->render('Cart/cart', ['carts' => $carts, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
 }

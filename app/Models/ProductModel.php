@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Core\Database;
+use App\Models\Paginator;
 
 class ProductModel
 {
