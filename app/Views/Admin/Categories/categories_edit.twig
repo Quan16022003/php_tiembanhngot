@@ -1,0 +1,41 @@
+{% extends './layout.twig' %}
+{% block title %}Edit Categories{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="edit-category-form" id="edit-category-form">
+            <h2>Categories Information</h2>
+            <form id="edit-categorys-form" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group mb-3">
+                            <label for="categoryId">ID:</label>
+                            <input type="text" class="form-control" id="categoryId" name="categoryId" readonly
+                                   value="{{ category.id }}">
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="categoryName">Name:</label>
+                            <input type="text" class="form-control" id="categoryName" name="categoryName"
+                                   value="{{ category.name }}" required>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-success">Lưu</button>
+                <a href="/admin/categories" class="btn btn-secondary">Hủy</a>
+
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('edit-categorys-form').addEventListener('submit', function (event) {
+                const formData = new FormData(this);
+                for (const pair of formData.entries()) {
+                    console.log(pair[0] + ': ' + pair[1]);
+                }
+            });
+        });
+    </script>
+    <script src="/public/js/global.js"></script>
+{% endblock %}

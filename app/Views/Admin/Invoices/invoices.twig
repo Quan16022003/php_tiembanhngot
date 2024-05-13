@@ -188,15 +188,5 @@
                     console.error('Lỗi khi lấy kết quả tìm kiếm:', error);
                 });
         }
-
-        function showData() {
-            $.ajax({
-                url: 'app/Controllers/Admin/InvoicesController.php',
-                method: 'post',
-                warning: function (result) {
-                    $('#results-body').html(result);
-                }
-            })
-        }
     </script>
 {% endblock %}
