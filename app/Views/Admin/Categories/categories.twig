@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="/public/css/global.css">
     </head>
     <div class="container-fluid overflow-auto">
-        <div class="row mb-3 slide-right">
+        <div class="row mb-3">
             <div class="col-md-6">
                 <form id="search-form" class="form-inline">
                     <div class="input-group">
@@ -155,16 +155,21 @@
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            // Xóa danh mục thành công, có thể reload trang hoặc làm gì đó khác
-                            location.reload()
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.success) {
+                                location.reload();
+                            } else {
+                                console.error("Xóa danh mục thất bại.");
+                            }
                         } else {
                             console.error("Có lỗi xảy ra khi gửi yêu cầu xóa danh mục.");
                         }
                     }
                 };
-                xhr.send("categoryID=" + categoryID);
+                xhr.send("categoryId=" + categoryID);
             }
         }
+
 
         // Xử lý sự kiện submit form tìm kiếm
         document.getElementById('search-form').addEventListener('input', function (event) {

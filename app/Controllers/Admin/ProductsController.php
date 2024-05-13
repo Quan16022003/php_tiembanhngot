@@ -51,6 +51,23 @@ class ProductsController extends Controller
             $productStock = $_POST["productStock"];
             $productImage = $_FILES["productImage"] ?? null;
 
+            // Kiểm tra xem người dùng đã tải lên hình ảnh mới hay không
+            if ($productImage && $productImage['error'] === UPLOAD_ERR_OK) {
+                // Lưu tên gốc của tệp hình ảnh
+                $originalName = $productImage['name'];
+
+                // Di chuyển tệp hình ảnh vào thư mục uploads với tên gốc
+                $uploadDir = '../public/uploads/';
+                $uploadedFilePath = $uploadDir . $originalName;
+                move_uploaded_file($productImage['tmp_name'], $uploadedFilePath);
+
+                // Lưu tên tệp gốc vào cơ sở dữ liệu
+                $productImage = $originalName;
+            } else {
+                // Nếu không có hình ảnh mới được tải lên, giữ nguyên tên tệp hình ảnh cũ
+                $productImage = $_POST["productImageOld"]; // Giả sử biến $_POST["productImageOld"] chứa tên tệp hình ảnh cũ
+            }
+
             // Gọi phương thức update trong Model và chuyển các tham số cần thiết
             $model = new AdminProductsModel();
             $success = $model->updateProduct($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock);

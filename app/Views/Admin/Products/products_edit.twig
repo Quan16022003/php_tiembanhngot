@@ -25,8 +25,8 @@
                         </div>
 
                         <div class="image-container mb-4">
-                            <img id="productImagePreview" src="/public/images/{{ product.image_link }}"
-                                 alt="Hình ảnh sản phẩm" class="img-fluid"
+                            <img id="productImagePreview" src="/public/uploads/{{ product.image_link }}"
+                                 alt="/public/images/no_image.jpg" class="img-fluid"
                                  style="max-width: 200px;">
                             {% if product.image_link is not null or "Array" %}
                                 <button class="btn btn-outline-danger" onclick="deleteImageFromDB()">Xoá hình ảnh

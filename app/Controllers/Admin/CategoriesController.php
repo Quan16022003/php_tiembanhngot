@@ -14,8 +14,11 @@ class CategoriesController extends Controller
 
     public function getById($id): void
     {
+        if (is_array($id) && isset($id['categoryID'])) {
+            $id = $id['categoryID'];
+        }
         $model = new CategoriesModel();
-        $category = $model->getCategoryByID($id);
+        $category = $model->getCategoriesById($id);
 
         if ($category) {
             parent::render('categories/categories_edit', ['category' => $category]);
@@ -76,6 +79,7 @@ class CategoriesController extends Controller
             $success = $model->create($categoryId, $categoryName);
 
             if ($success) {
+                header("Location: /admin/categories");
                 echo "Thêm danh mục thành công!";
                 exit;
             } else {
@@ -92,12 +96,12 @@ class CategoriesController extends Controller
         $success = $model->delete($categoryId);
 
         if ($success) {
-            echo "Xóa danh mục thành công!";
-            header("Location: /admin/categories");
+            echo json_encode(["success" => true]);
         } else {
-            echo "Xóa danh mục thất bại!";
+            echo json_encode(["success" => false]);
         }
     }
+
 
     public function getTotalCategories(): int
     {

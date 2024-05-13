@@ -113,86 +113,53 @@ class AdminProductsModel
 
     public function updateProduct($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock): bool
     {
+        // Lấy thông tin sản phẩm trước đó từ cơ sở dữ liệu
         $previousProduct = $this->getProductById($productId);
-        $oldImagePath = $previousProduct['image_link'];
 
-        // Kiểm tra xem người dùng đã tải lên hình ảnh mới chưa
-        if ($productImage && $productImage['error'] == 0) {
-            $img_name = $productImage['name'];
-            $img_size = $productImage['size'];
-            $tmp_name = $productImage['tmp_name'];
+        // Kiểm tra xem $previousProduct có giá trị không
+        if ($previousProduct !== false && $previousProduct !== null) {
+            // Lấy đường dẫn hình ảnh của sản phẩm trước đó
+            $oldImagePath = $previousProduct['image_link'];
 
-            // Kiểm tra kích thước tệp
-            if ($img_size > 125000000) {
-                echo "Sorry, your file is too large.";
-                return false;
+            // Kiểm tra xem người dùng đã tải lên hình ảnh mới chưa
+            if ($productImage && isset($productImage['error']) && $productImage['error'] == 0) {
+                $img_name = $productImage['name'];
+                $img_size = $productImage['size'];
+                $tmp_name = $productImage['tmp_name'];
+
+                // Tiếp tục xử lý hình ảnh và lưu trữ
+
+                // Chuyển biến $productImage thành chuỗi
+                $productImage = $new_img_name;
+                if ($oldImagePath && file_exists($oldImagePath)) {
+                    unlink($oldImagePath); // Xoá hình ảnh cũ
+                }
+            } else {
+                // Nếu không có hình ảnh mới, giữ nguyên đường dẫn cũ
+                $productImage = $oldImagePath;
             }
 
-            // Lấy phần mở rộng của tệp
-            $img_ex = pathinfo($img_name, PATHINFO_EXTENSION);
-            $img_ex_lc = strtolower($img_ex);
+            // Cập nhật sản phẩm trong cơ sở dữ liệu
+            $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
+            $stmt = $this->db->conn->prepare($sql);
+            $stmt->bind_param("sssiiis", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productId);
 
-            // Mảng các phần mở rộng hợp lệ
-            $allowed_exs = array("jpg", "jpeg", "png");
+            // Thực thi câu lệnh SQL và kiểm tra kết quả
+            $success = $stmt->execute();
+            if ($success) {
+                // Hiển thị thông tin sản phẩm trước và sau khi cập nhật
+                // ...
 
-            // Kiểm tra định dạng tệp
-            if (!in_array($img_ex_lc, $allowed_exs)) {
-                echo "You can't upload files of this type";
-                return false;
+                $stmt->close();
+                return true;
+            } else {
+                echo "Cập nhật sản phẩm thất bại: " . $stmt->error;
             }
-
-            // Tạo tên mới cho tệp
-            $new_img_name = uniqid("IMG-", true) . '.' . $img_ex_lc;
-
-            // Đường dẫn lưu trữ
-            $img_upload_path = '../public/images/' . $new_img_name;
-
-            // Di chuyển tệp tải lên đến thư mục lưu trữ
-            if (!move_uploaded_file($tmp_name, $img_upload_path)) {
-                echo "Error occurred while uploading your file";
-                return false;
-            }
-
-            // Cập nhật đường dẫn hình ảnh mới vào biến $productImage
-            $productImage = $new_img_name;
-            if ($oldImagePath && file_exists($oldImagePath)) {
-                unlink($oldImagePath); // Xoá hình ảnh cũ
-            }
-        }
-
-        // Cập nhật sản phẩm trong cơ sở dữ liệu
-        $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
-        $stmt = $this->db->conn->prepare($sql);
-        $stmt->bind_param("sssiiis", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productId);
-
-        // Ghi log câu lệnh SQL
-        error_log("SQL: " . $sql);
-        $updatedProduct = $this->getProductById($productId);
-        $success = $stmt->execute();
-        if ($success) {
-            // Hiển thị thông tin sản phẩm trước và sau khi cập nhật
-            echo "Dữ liệu sản phẩm trước khi cập nhật:<br>";
-            echo "ID: " . $previousProduct['id'] . "<br>";
-            echo "Tên sản phẩm: " . $previousProduct['name'] . "<br>";
-            echo "Mô tả: " . $previousProduct['content'] . "<br>";
-            echo "Hình ảnh: " . $previousProduct['image_link'] . "<br>";
-            echo "Giá: " . $previousProduct['price'] . "<br>";
-            echo "Số lượng: " . $previousProduct['stock'] . "<br>";
-            echo "ID thể loại: " . $previousProduct['category_id'] . "<br><br>";
-
-            echo "Dữ liệu sản phẩm sau khi cập nhật:<br>";
-            echo "ID: " . $updatedProduct['id'] . "<br>";
-            echo "Tên sản phẩm: " . $updatedProduct['name'] . "<br>";
-            echo "Mô tả: " . $updatedProduct['content'] . "<br>";
-            echo "Hình ảnh: " . $updatedProduct['image_link'] . "<br>";
-            echo "Giá: " . $updatedProduct['price'] . "<br>";
-            echo "Số lượng: " . $updatedProduct['stock'] . "<br>";
-            echo "ID thể loại: " . $updatedProduct['category_id'] . "<br>";
         } else {
-            echo "Cập nhật sản phẩm thất bại: " . $stmt->error;
+            echo "Không tìm thấy sản phẩm có ID là $productId";
         }
-        $stmt->close();
-        return true;
+
+        return false;
     }
 
 
@@ -267,7 +234,7 @@ class AdminProductsModel
 
     public function saveImageLink($productId, $imageLink)
     {
-        $sql = "UPDATE products SET image_link = :image_link WHERE id = :id";
+        $sql = "UPDATE product SET image_link = :image_link WHERE id = :id";
         $stmt = $this->db->prepare($sql);
         $stmt->bindParam(':image_link', $imageLink);
         $stmt->bindParam(':id', $productId);

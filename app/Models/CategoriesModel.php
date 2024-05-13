@@ -52,7 +52,7 @@ class CategoriesModel
         return $categories;
     }
 
-    public function getCategoryById($id)
+    public function getCategoriesById($id)
     {
         $sql = "SELECT * FROM category WHERE id = ?";
         $statement = $this->db->conn->prepare($sql);
@@ -67,11 +67,29 @@ class CategoriesModel
         return $result->fetch_assoc();
     }
 
-    public function createCategory($name)
+    public function generateCategoryId()
     {
-        $sql = "INSERT INTO category (name) VALUES (?)";
+        $sql = "SELECT id FROM category ORDER BY id DESC LIMIT 1";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($result->num_rows > 0) {
+            $lastId = $result->fetch_assoc()['id'];
+            $number = intval($lastId);
+            $number++;
+            return $number;
+        } else {
+            return 1;
+        }
+    }
+
+
+    public function create($id, $name)
+    {
+        $sql = "INSERT INTO category (id, name) VALUES (?, ?)";
         $statement = $this->db->conn->prepare($sql);
-        $statement->bind_param("s", $name);
+        $statement->bind_param("is", $id, $name);
         $statement->execute();
 
         return $this->db->conn->insert_id;
@@ -87,11 +105,11 @@ class CategoriesModel
         return $statement->affected_rows > 0;
     }
 
-    public function deleteCategory($id)
+    public function delete($categoryId)
     {
         $sql = "DELETE FROM category WHERE id = ?";
         $statement = $this->db->conn->prepare($sql);
-        $statement->bind_param("i", $id);
+        $statement->bind_param("i", $categoryId);
         $statement->execute();
 
         return $statement->affected_rows > 0;

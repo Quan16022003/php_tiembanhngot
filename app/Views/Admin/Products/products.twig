@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="/public/css/global.css">
     </head>
     <div class="container-fluid overflow-auto">
-        <div class="row mb-3 slide-right">
+        <div class="row mb-3">
             <div class="col-md-6">
                 <form id="search-form" class="form-inline">
                     <div class="input-group">
@@ -28,9 +28,10 @@
                 <a href="/admin/products/add" class="btn btn-success">Mở phiếu xuất</a>
             </div>
         </div>
-        <div class="row rounded">
-            <div class="col ">
-                <table class="datatables-products table border-top dataTable no-footer dtr-column collapsed">
+        <div class="row">
+            <div class="col table-responsive table" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table id="example"
+                       class="datatables-products table border-top dataTable no-footer dtr-column collapsed">
                     <thead>
                     <tr>
                         <th onclick="sortTable(0)">ID</th>
@@ -106,6 +107,10 @@
 {% endblock %}
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/sl-2.0.1/datatables.min.js"></script>
+
     <script>
         // Sử dụng jQuery để xử lý sự kiện click trên các liên kết phân trang
         $(document).on('click', '.pagination-link', function (event) {
@@ -264,5 +269,23 @@
                 });
         }
 
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu trong bảng",
+                    "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 đến 0 trong tổng số 0 mục",
+                    "infoFiltered": "(được lọc từ tổng số _MAX_ mục)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "processing": "",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "Không tìm thấy bản ghi phù hợp",
+                }
+            });
+        });
     </script>
 {% endblock %}
