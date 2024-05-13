@@ -56,4 +56,12 @@ class UserModel
         $stmt->bind_param("ss", $newpass, $email);
         return $stmt->execute();
     }
+
+    public function getUserIdByUsername($username) {
+        $stmt = $this->conn->prepare("SELECT id FROM users WHERE username=?");
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        return $result->fetch_assoc();
+    }
 }
