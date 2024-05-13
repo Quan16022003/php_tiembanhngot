@@ -200,6 +200,13 @@ class AdminProductsModel
         return $row['total'];
     }
 
+    public function getAllProducts()
+    {
+        $sql = "SELECT * FROM product";
+        $result = $this->db->conn->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  
     public function deleteImageByProductId($productId): bool
     {
         // Cập nhật cột image_link thành null cho sản phẩm có productId tương ứng

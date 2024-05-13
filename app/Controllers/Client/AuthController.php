@@ -15,7 +15,6 @@ class AuthController extends ClientController {
     }
 
     public function showLoginPage(): void {
-        session_start();
         if (isset($_SESSION['username'])) {
             header('Location: /');
             exit;
@@ -47,7 +46,6 @@ class AuthController extends ClientController {
 
     public function login() {
         if (isset($_POST['action']) && $_POST['action'] == 'login') {
-            session_start();
             $username = $this->checkInput($_POST['username']);
             $password = $this->checkInput($_POST['password']);
 
@@ -75,7 +73,6 @@ class AuthController extends ClientController {
     }
 
     public function logout() {
-        session_start();
         session_destroy();
         header('Location: /account/login');
     }

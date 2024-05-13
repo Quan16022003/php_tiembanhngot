@@ -6,6 +6,8 @@ use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
 define('INC_ROOT', __DIR__);
 
+session_start();
+
 // Define routes
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
@@ -66,9 +68,13 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         // PURCHASE ORDERS
         $r->addGroup('/purchase_orders', function (RouteCollector $r) {
-            $r->addRoute('GET', '', ['App\Controllers\Admin\PurchaseOrders', 'index']);
-            $r->addRoute('GET', '/new', ['App\Controllers\Admin\PurchaseOrders', 'showCreatePOPage']);
-
+            $r->addRoute('GET', '', ['App\Controllers\Admin\PurchaseOrdersController', 'index']);
+            $r->addRoute('GET', '/new', ['App\Controllers\Admin\PurchaseOrdersController', 'create']);
+            $r->addRoute('POST', '/store', ['App\Controllers\Admin\PurchaseOrdersController', 'store']);
+            $r->addRoute('GET', '/{id:\d+}', ['App\Controllers\Admin\PurchaseOrdersController', 'show']);
+            $r->addRoute('GET', '/{id:\d+}/edit', ['App\Controllers\Admin\PurchaseOrdersController', 'edit']);
+            $r->addRoute('POST', '/{id:\d+}/update', ['App\Controllers\Admin\PurchaseOrdersController', 'update']);
+            $r->addRoute('GET', '/{id:\d+}/update_status', ['App\Controllers\Admin\PurchaseOrdersController', 'updateStatus']);
         });
 
         // HOMES
@@ -107,7 +113,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addGroup('/api', function (RouteCollector $r) {
             $r->addRoute('GET', '/get_all_suppliers', ['App\Controllers\Admin\SupplierController', 'api_getAllSuppliers']);
             $r->addRoute('GET', '/get_supplier_by_id/{id}', ['App\Controllers\Admin\SupplierController', 'api_getSupplierById']);
-
+            $r->addRoute('GET', '/get_all_products', ['App\Controllers\Admin\ProductsController', 'api_getAllProducts']);
         });
     });
 

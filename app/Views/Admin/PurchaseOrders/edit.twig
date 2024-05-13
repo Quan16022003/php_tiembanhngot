@@ -1,0 +1,197 @@
+{% set page = 'create_order' %}
+{% extends 'layout.twig' %}
+
+{% block title %}Sửa đơn hàng{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+    <div class="ps-md-5 pe-md-5 pb-5">
+        <div class="mb-4">
+            <h3 class="text-dark mb-0">
+                <a class="btn btn-light btn-sm d-none d-sm-inline-block" role="button" href="/admin/purchase_orders/{{ PO.id }}">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </a>
+                #PO{{ PO.id }} edit
+            </h3>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Thông tin đơn hàng</p>
+            </div>
+            <div class="card-body">
+                <form action="/admin/purchase_orders/{{ PO.id }}/update" method="POST">
+                    <h3 class="card-title">Nhập thông tin nhà cung cấp</h3>
+                    <hr>
+                    <div class="container-fluid mb-3">
+                        <div class="row">
+                            <div class="col col-12 col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="companyNameInput" name="" value="{{ PO.supplier_company_name }}" disabled>
+                                    <label for="companyNameInput">Tên công ty</label>
+                                </div>
+                            </div>
+                            <div class="col col-12 col-md-8">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="addressInput" name="supplier_address" placeholder="Địa chỉ" value="{{ PO.supplier_address }}" disabled>
+                                    <label for="addressInput">Địa chỉ</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-12 col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="contactNameInput" name="supplier_contact_name" placeholder="Tên liên hệ" value="{{ PO.supplier_contact_name }}" disabled>
+                                    <label for="contactNameInput">Tên liên hệ</label>
+                                </div>
+                            </div>
+                            <div class="col col-12 col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="email" class="form-control" id="emailInput" name="supplier_email" placeholder="Email" value="{{ PO.supplier_email }}" disabled>
+                                    <label for="emailInput">Email</label>
+                                </div>
+                            </div>
+                            <div class="col col-12 col-md-4">
+                                <div class="form-floating mb-3">
+                                    <input type="tel" class="form-control" id="phoneInput" name="supplier_phone" placeholder="Điện thoại" value="{{ PO.supplier_phone }}" disabled>
+                                    <label for="phoneInput">Điện thoại</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <h3 class="card-title">Thông tin đơn hàng mua</h3>
+                    <hr>
+                    <div class="container-fluid mb-3">
+                        <div class="row">
+                            <div class="col col-12 col-lg-4">
+                                <div class="form-floating mb-3">
+                                    <input type="date" class="form-control" id="deliveryDate" name="delivery_date" min="{{ "now"|date("Y-m-d") }}" placeholder="Ngày giao hàng" value="{{ PO.delivery_date }}" required>
+                                    <label for="deliveryDate">Ngày giao hàng</label>
+                                </div>
+                            </div>
+                            <div class="col col-12 col-lg-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="paymentMethod" name="payment_method" placeholder="Phương thức thanh toán" value="{{ PO.payment_method }}" required>
+                                    <label for="paymentMethod">Phương thức thanh toán</label>
+                                </div>
+                            </div>
+                            <div class="col col-lg-4">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control" id="shippingMethod" name="shipping_method" placeholder="Phương thức vận chuyển" value="{{ PO.shipping_method }}" required>
+                                    <label for="shippingMethod">Phương thức vận chuyển</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-lg-8">
+                                <div class="form-floating">
+                                    <textarea class="form-control" id="shippingTerms" name="shipping_terms" rows="4" style="height: 100%" placeholder="Điều khoản giao hàng"  required>{{ PO.shipping_terms }}</textarea>
+                                    <label for="shippingTerms">Điều khoản giao hàng</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="card-title">Sản phẩm</h3>
+                    <hr>
+                    <div id="products" class="container-fluid mb-3">
+                        {% set i = 0 %}
+                        {% for product in products %}
+                            {% set i=i+1 %}
+                        <div class="row product-row">
+                            <div class="col col-12 col-lg-6">
+                                <div class="form-floating mb-3">
+                                    <select type="text" class="form-control product-name" name="product_id[]" id="productSelect1" required {% if PO.staus != 1 %}disabled{% endif %}>
+                                        {% for prodS in productSelects %}
+                                            <option value="{{ prodS.id }}" {% if prodS.id == product.id %}selected{% endif %}>{{ prodS.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <label for="productSelect1">Tên sản phẩm</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control product-quantity" name="product_quantity[]" placeholder="Số lượng" value="{{ product.quantity }}" {% if PO.staus != 1 %}disabled{% endif %} required>
+                                    <label for="quantity[]">Số lượng</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control product-price" name="product_price[]" placeholder="Giá" value="{{ product.unit_price }}" {% if PO.staus != 1 %}disabled{% endif %} required>
+                                    <label for="price1">Giá</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control border-0 shadow-none product-total" value="{{ product.total_price }}" readonly>
+                                    <label for="total">Tổng</label>
+                                </div>
+                            </div>
+                            <div class="col col-1">
+                                <button type="button" class="btn border-0 btn-lg text-danger {% if  i == 1 or PO.status != 1%}visually-hidden{% else %}removeRowBtn{% endif %}">
+                                    <i class="fa-solid fa-circle-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% if PO.status == 1 %}
+                    <button type="button" id="addRowBtn" class="btn btn-lg text-success">
+                        <i class="fa-solid fa-plus p-1"></i>Thêm
+                    </button>
+                    {% endif %}
+                    <hr>
+                    <div class="row justify-content-lg-end">
+                        <div class="col col-12 col-lg-5">
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control" id="notes" name="notes" placeholder="Ghi chú"></textarea>
+                                <label for="notes">Ghi chú</label>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-lg-4">
+                            <table class="table table-responsive">
+                                <tbody>
+                                <tr>
+                                    <td class="fw-bold">Tạm tính</td>
+                                    <td class="text-end"><span id="subtotal">{{ PO.sub_total }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">
+                                        Thuế
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="tax" name="tax" value="{{ PO.tax }}" {% if PO.staus != 1 %}disabled{% endif %}>
+                                            <span class="input-group-text">%</span>
+                                        </div>
+
+                                    </td>
+                                    <td class="text-end"><span id="tax-fee">{{ PO.tax_price }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Phí vận chuyển</td>
+                                    <td class="text-end"><input type="number" class="form-control" id="shipping-fee" name="shipping_fee" min="0" value="{{ PO.shipping_fee }}" {% if PO.staus != 1 %}disabled{% endif %}></td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Tổng cộng</td>
+                                    <td class="text-end"><span id="totalPrice">{{ PO.total }}</span></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <button type="submit" class="btn btn-success w-100">Submit</button>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+{#    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>#}
+{#    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>#}
+    <script type="text/javascript" src="/public/js/admin_create_po.js"></script>
+{% endblock %}
