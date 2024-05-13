@@ -49,22 +49,31 @@ class AdminProductsModel
         return $success;
     }
 
-    public function create($productId, $productCategoryId, $productName, $productPrice, $productContent): bool
+    public function create($productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage): bool
     {
+        echo "console.log('Data inserted into database:')";
+        echo "console.log('Product ID:', '$productId')";
+        echo "console.log('Product Category ID:', '$productCategoryId')";
+        echo "console.log('Product Name:', '$productName')";
+        echo "console.log('Product Price:', '$productPrice')";
+        echo "console.log('Product Content:', '$productContent')";
+        echo "console.log('Product Image:', '$productImage')";
         $existingProduct = $this->getProductByID($productId);
 
         if ($existingProduct) {
-            echo "ID has exist!";
+            echo "ID đã tồn tại!";
+            return false;
         } else {
             // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
-            $sql = "INSERT INTO product (id, category_id, name, price, content) VALUES (?, ?, ?, ?, ?)";
+            $sql = "INSERT INTO product (id, category_id, name, price, content, image_link) VALUES (?, ?, ?, ?, ?, ?)";
             $stmt = $this->db->conn->prepare($sql);
-            $stmt->bind_param("sssss", $productId, $productCategoryId, $productName, $productPrice, $productContent);
+            $stmt->bind_param("sissss", $productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage);
             $success = $stmt->execute();
             $stmt->close();
+            return $success;
         }
-        return $success;
     }
+
 
     public function getProductByID($productID): false|array|null
     {
@@ -102,18 +111,55 @@ class AdminProductsModel
         return true;
     }
 
-    public function update($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock): bool
+    public function updateProduct($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock): bool
     {
-        $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
-        $stmt = $this->db->conn->prepare($sql);
-        $stmt->bind_param("sssiiis", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productId);
-        $success = $stmt->execute();
-        if (!$success) {
-            error_log("SQL error: " . $stmt->error);
-            return false;
+        // Lấy thông tin sản phẩm trước đó từ cơ sở dữ liệu
+        $previousProduct = $this->getProductById($productId);
+
+        // Kiểm tra xem $previousProduct có giá trị không
+        if ($previousProduct !== false && $previousProduct !== null) {
+            // Lấy đường dẫn hình ảnh của sản phẩm trước đó
+            $oldImagePath = $previousProduct['image_link'];
+
+            // Kiểm tra xem người dùng đã tải lên hình ảnh mới chưa
+            if ($productImage && isset($productImage['error']) && $productImage['error'] == 0) {
+                $img_name = $productImage['name'];
+                $img_size = $productImage['size'];
+                $tmp_name = $productImage['tmp_name'];
+
+                // Tiếp tục xử lý hình ảnh và lưu trữ
+
+                // Chuyển biến $productImage thành chuỗi
+                $productImage = $new_img_name;
+                if ($oldImagePath && file_exists($oldImagePath)) {
+                    unlink($oldImagePath); // Xoá hình ảnh cũ
+                }
+            } else {
+                // Nếu không có hình ảnh mới, giữ nguyên đường dẫn cũ
+                $productImage = $oldImagePath;
+            }
+
+            // Cập nhật sản phẩm trong cơ sở dữ liệu
+            $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
+            $stmt = $this->db->conn->prepare($sql);
+            $stmt->bind_param("sssiiis", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productId);
+
+            // Thực thi câu lệnh SQL và kiểm tra kết quả
+            $success = $stmt->execute();
+            if ($success) {
+                // Hiển thị thông tin sản phẩm trước và sau khi cập nhật
+                // ...
+
+                $stmt->close();
+                return true;
+            } else {
+                echo "Cập nhật sản phẩm thất bại: " . $stmt->error;
+            }
+        } else {
+            echo "Không tìm thấy sản phẩm có ID là $productId";
         }
-        $stmt->close();
-        return true;
+
+        return false;
     }
 
 
@@ -152,5 +198,46 @@ class AdminProductsModel
         $result = $this->db->conn->query($sql);
         $row = $result->fetch_assoc();
         return $row['total'];
+    }
+
+    public function deleteImageByProductId($productId): bool
+    {
+        // Cập nhật cột image_link thành null cho sản phẩm có productId tương ứng
+        $sql = "UPDATE product SET image_link = NULL WHERE id = ?";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("s", $productId);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
+    }
+
+    public function generateProductId()
+    {
+        // Query to get the last product ID
+        $sql = "SELECT id FROM product ORDER BY id DESC LIMIT 1";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $lastId = $result->fetch_assoc()['id'];
+
+        // Extract the numeric part of the ID
+        $number = intval(substr($lastId, 2));
+
+        // Increment the number
+        $number++;
+
+        // Generate the new ID
+        $newId = 'SP' . str_pad($number, 4, '0', STR_PAD_LEFT);
+
+        return $newId;
+    }
+
+    public function saveImageLink($productId, $imageLink)
+    {
+        $sql = "UPDATE product SET image_link = :image_link WHERE id = :id";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindParam(':image_link', $imageLink);
+        $stmt->bindParam(':id', $productId);
+        return $stmt->execute();
     }
 }

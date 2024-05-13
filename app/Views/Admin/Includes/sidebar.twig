@@ -1,13 +1,22 @@
-<nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark" style="position:relative; display:block">
-    <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
+<nav class="navbar align-items-start sidebar sidebar-dark accordion bg-gradient-primary p-0 navbar-dark"
+     style="position:relative; display:block">
+    <div class="container-fluid d-flex flex-column p-0"><a
+                class="navbar-brand d-flex justify-content-center align-items-center sidebar-brand m-0" href="#">
             <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
             <div class="sidebar-brand-text mx-3"><span>Tiệm bánh</span></div>
         </a>
         <hr class="sidebar-divider my-0">
         <ul class="navbar-nav text-light" id="accordionSidebar">
+
             <li class="nav-item">
-                <a class="nav-link {% if page == 'home' %}active{% endif %}" href="/admin">
-                    <i class="fas fa-tachometer-alt"></i> <span>Trang chủ</span>
+                <a class="nav-link {% if page == 'home' %}active{% endif %}" href="/admin/home">
+                    <i class="fas fa-home"></i> <span>Trang chủ</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'dashboard' %}active{% endif %}" href="/admin/dashboard">
+                    <i class="fas fa-tachometer-alt"></i> <span>Thống kê</span>
                 </a>
             </li>
 
@@ -18,11 +27,33 @@
             </li>
 
             <li class="nav-item">
+                <a class="nav-link {% if page == 'delivery' %}active{% endif %}" href="/admin/products/add">
+                    <i class="fa-solid fa-receipt"></i> <span>Phiếu nhập</span>
+            </li>
+            
+            <li class="nav-item">
                 <a class="nav-link {% if page == 'suppliers' %}active{% endif %}" href="/admin/suppliers">
                     <i class="fa-solid fa-bread-slice"></i> <span>Suppliers</span>
                 </a>
             </li>
 
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'categories' %}active{% endif %}" href="/admin/categories">
+                    <i class="fa-solid fa-layer-group"></i> <span>Danh sách thể loại</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'invoices' %}active{% endif %}" href="/admin/invoices">
+                    <i class="fa-solid fa-file-invoice"></i> <span>Hoá đơn</span>
+                </a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link {% if page == 'customers' %}active{% endif %}" href="/admin/customers">
+                    <i class="fa-solid fa-users"></i> <span>Khách hàng</span>
+            </li>
+            
             <li class="nav-item">
                 <a class="nav-link {% if page == 'purchase_orders' %}active{% endif %}" href="/admin/purchase_orders">
                     <i class="fa-solid fa-bread-slice"></i> <span>Purchase orders</span>
@@ -47,6 +78,8 @@
                 </a>
             </li>
         </ul>
-        <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+        <div class="text-center d-none d-md-inline">
+            <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
+        </div>
     </div>
 </nav>

@@ -4,7 +4,7 @@
     <div class="container">
         <div class="edit-product-form" id="edit-product-form">
             <h2>Thông tin sản phẩm</h2>
-            <form id="edit-products-form" method="post">
+            <form id="edit-products-form" method="post" enctype="multipart/form-data">
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group mb-3">
@@ -24,10 +24,27 @@
                                    value="{{ product.content }}" required>
                         </div>
 
+                        <div class="image-container mb-4">
+                            <img id="productImagePreview" src="/public/uploads/{{ product.image_link }}"
+                                 alt="/public/images/no_image.jpg" class="img-fluid"
+                                 style="max-width: 200px;">
+                            {% if product.image_link is not null or "Array" %}
+                                <button class="btn btn-outline-danger" onclick="deleteImageFromDB()">Xoá hình ảnh
+                                </button>
+                            {% endif %}
+                        </div>
+
                         <div class="form-group mb-3">
-                            <label for="productImage">Hình ảnh:</label>
+                            <label for="productImage" class="form-label">Thay/Thêm hình ảnh:</label>
                             <input type="file" class="form-control-file" id="productImage" name="productImage"
-                                   value="{{ product.image_link }}">
+                                   onchange="previewImage(event)">
+                        </div>
+
+                        <div id="imagePreview" class="mb-3" style="display: none;">
+                            <label for="currentImage" class="form-label">Xem trước hình ảnh:</label><br>
+                            <img id="preview" src="#" alt="Xem trước hình ảnh" class="img-fluid rounded"
+                                 style="max-width: 200px;">
+                            <button type="button" class="btn btn-danger mt-2" onclick="deleteImage()">Xóa</button>
                         </div>
 
                         <div class="form-group mb-3">
@@ -40,11 +57,16 @@
                         <div class="form-group mb-3">
                             <label for="productCategoryId">Mã thể loại:</label>
                             <select class="form-control" id="productCategoryId" name="productCategoryId">
-                                <option value="1">Bánh mì</option>
-                                <option value="2">Bánh ngọt</option>
-                                <option value="3">Bánh kem nhỏ</option>
+                                {% for category in categories %}
+                                    {% if category.id == product.category_id %}
+                                        <option value="{{ category.id }}" selected>{{ category.name }}</option>
+                                    {% else %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
                             </select>
                         </div>
+
 
                         <div class="form-group mb-3">
                             <label for="productStock">Số lượng:</label>
@@ -55,6 +77,7 @@
                 </div>
                 <button type="submit" class="btn btn-success">Lưu</button>
                 <a href="/admin/products" class="btn btn-secondary">Hủy</a>
+
             </form>
         </div>
     </div>
@@ -76,5 +99,5 @@
             });
         });
     </script>
-
+    <script src="/public/js/global.js"></script>
 {% endblock %}

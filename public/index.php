@@ -19,7 +19,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/account/profile', ['App\Controllers\Admin\AuthController', 'showProfilePage']);
 
         // DASHBOARD
-        $r->addRoute('GET', '/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
+        $r->addRoute('GET', '/dashboard', ['App\Controllers\Admin\DashboardController', 'TopProductsOfAWeek']);
 
         // PRODUCTS
         $r->addGroup('/products', function (RouteCollector $r) {
@@ -32,6 +32,19 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'getById']);
             $r->addRoute('POST', '/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'update']);
             $r->addRoute('POST', '/search', ['App\Controllers\Admin\ProductsController', 'search']);
+        });
+
+        // CATEGORIES
+        $r->addGroup('/categories', function (RouteCollector $r) {
+            $r->addRoute('GET', '', ['App\Controllers\Admin\CategoriesController', 'index']);
+            $r->addRoute('GET', '/create', ['App\Controllers\Admin\CategoriesController', 'openCreate']);
+            $r->addRoute('POST', '/create', ['App\Controllers\Admin\CategoriesController', 'create']);
+            $r->addRoute('GET', '/add', ['App\Controllers\Admin\CategoriesController', 'openAdd']);
+            $r->addRoute('POST', '/add', ['App\Controllers\Admin\CategoriesController', 'add']);
+            $r->addRoute('POST', '/delete/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'delete']);
+            $r->addRoute('GET', '/edit/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'getById']);
+            $r->addRoute('POST', '/edit/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'update']);
+            $r->addRoute('POST', '/search', ['App\Controllers\Admin\CategoriesController', 'search']);
         });
 
         // INVOICES
@@ -118,8 +131,16 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         $r->addGroup('/api', function (RouteCollector $r) {
             $r->addRoute('POST', '/account/login', ['App\Controllers\Client\AuthController', 'login']);
-            $r->addRoute('POST', '/account/register', ['App\Controllers\Client\AuthController','register']);
+            $r->addRoute('POST', '/account/register', ['App\Controllers\Client\AuthController', 'register']);
             $r->addRoute('POST', '/account/forgot', ['App\Controllers\Client\AuthController', 'forgotPassword']);
+        });
+
+        $r->addGroup('/cart', function (RouteCollector $r) {
+            $r->addRoute('GET', '', ['App\Controllers\Client\CartController', 'indexPage']);
+            $r->addRoute('POST', '/add', ['App\Controllers\Client\CartController', 'add']);
+            $r->addRoute('POST', '/remove', ['App\Controllers\Client\CartController', 'remove']);
+            $r->addRoute('POST', '/update', ['App\Controllers\Client\CartController', 'update']);
+            $r->addRoute('POST', '/clear', ['App\Controllers\Client\CartController', 'clear']);
         });
     });
 
