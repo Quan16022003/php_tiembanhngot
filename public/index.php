@@ -145,6 +145,8 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         // cart
         $r->addRoute('GET', '/cart/addtocart', ['App\Controllers\Client\CartController', 'addToCart']);
         $r->addRoute('GET','/cart', ['App\Controllers\Client\CartController', 'index']);
+        $r->addRoute('POST','/cart/add', ['App\Controllers\Client\CartController', 'addToCart']);
+
     });
 
 });

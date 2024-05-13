@@ -20,28 +20,47 @@ class CartController extends ClientController
     // Trong CartController.php
     public function index()
     {
-        
-        // $cartModel->getAll();
-        // echo $cartModel;
-        // var_dump ($cartModel);
-        // $cart = $this->addToCart();
-        // Trả về view 'cart.twig' với dữ liệu cần thiết
-        $data['cart'] = $this->cartModel->getAll();
-        // print_r($data);
-        $this->render('cart',$data);    
-        
-        // $this->render('cart', ['cartData' => $cartModel]);
+
+        if (isset($_SESSION['username'])) {
+            $userModel = new UserModel();
+            $userID = $userModel->getUserIdByUsername($_SESSION['username']);
+            $data['cart'] = $this->cartModel->getAllCart($userID);
+            print_r($data['cart']);
+            parent::render('cart', $data);
+        } else {
+            parent::render('login_required_message');
+        }
     }
 
-    public function addToCart(){
-        $product_id = $_GET['product_id'];
-        $quantity = $_GET['quantity_product'];
-        $username = isset($_SESSION['username']) ? $_SESSION['username'] : null;
+    public function addToCart(): void
+    {
+        if (!isset($_SESSION['username'])) {
+            header('Location: /account/login');
+            return;
+        }
+
         $userModel = new UserModel();
-        $user_id = $userModel->getUserIdByUsername($username);
-        
-        $cartModel = new CartModel();
-        $cartModel->addToCart($user_id, $product_id, $quantity);
-        header('Location: /products/'.$product_id);
+        $userId = $userModel->getUserIdByUsername($_SESSION['username']);
+        $productID = $_POST['product_id'];
+        $quantity = $_POST['quantity'];
+
+        $existingCartItem = $this->cartModel->getCartItem($userId, $productID);
+
+        if ($existingCartItem) {
+            // Nếu sản phẩm đã tồn tại, cập nhật số lượng
+            $newQuantity = $existingCartItem['quantity'] + $quantity;
+            if ($this->cartModel->updateCart($userId, $productID, $newQuantity)) {
+                echo 'success';
+            } else {
+                echo 'error';
+            }
+        } else {
+            // Nếu sản phẩm chưa tồn tại, thêm mới vào giỏ hàng
+            if ($this->cartModel->addCart($userId, $productID, $quantity)) {
+                echo 'success';
+            } else {
+                echo 'error';
+            }
+        }
     }
 }

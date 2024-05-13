@@ -62,6 +62,6 @@ class UserModel
         $stmt->bind_param("s", $username);
         $stmt->execute();
         $result = $stmt->get_result();
-        return $result->fetch_assoc();
+        return $result->fetch_assoc()['id'];
     }
 }

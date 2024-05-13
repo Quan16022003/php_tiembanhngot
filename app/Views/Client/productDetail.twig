@@ -1,119 +1,50 @@
-{% set page = 'products' %}
 {% extends 'layout.twig' %}
 
-{% block title %}Products - My Website{% endblock %}
-
-{% block stylesheets %}
-    <link rel="stylesheet" href="http://localhost/public/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-/qzgaXzFO7TuR+7V+4y2P/bQ+vn0aZLCBX8e3wPwgwxbY/gFhJGQmDDdRrafi8LJG0JEm/b6lJ0lmnLxGzu+Tw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-{% endblock %}
+{% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-<!-- content -->
-{{ data }}
-<section class="py-5">
-  <div class="container">
-    <div class="row gx-5">
-      <aside class="col-lg-6">
-        <div class="border rounded-4 mb-3 d-flex justify-content-center">
-          <a data-fslightbox="mygalley" class="rounded-4" target="_blank" data-type="image" href="{{product.image_link}}">
-            <img style="max-width: 100%; max-height: 100vh; margin: auto;" class="rounded-4 fit" src="{{product.image_link}}" />
-          </a>
-        </div>
-        <div class="d-flex justify-content-center mb-3">
-          <a data-fslightbox="mygallery" class="border mx-1 rounded-2" target="_blank" data-type="image" href="{{ product.image_link }}" class="item-thumb">
-            <img width="60" height="60" class="rounded-2" src="{{ product.image_link }}" />
-          </a>
+    <form id="product_detail_form" class="container-fluid" method="post" action="/cart/add">
+        <h1>{{ product.name }}</h1>
+        <p>Category: {{ product.category_id }}</p>
+        <p>Description: {{ product.content }}</p>
+        <p>Price: {{ product.price }} &#8363;</p>
+        {% if product.discount %}
+            <p>Discount: {{ product.discount }}%</p>
+            <p>Discounted Price: {{ product.price * (100 - product.discount) / 100 }} &#8363;</p>
+        {% endif %}
+        {#        <img src="{{ product.image_link }}" alt="{{ product.name }}">#}
+        <label for="quantity">Số lượng <input id="quantity" type="number" name="quantity" value="1" min="1"> </label>
+        <button type="submit">Thêm vào giỏ hàng</button>
+        <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+        <input type="hidden" id="name" name="name" value="{{ product.name }}">
+        <input type="hidden" id="content" name="content" value="{{ product.content }}">
+        <input type="hidden" id="price" name="price" value="{{ product.price }}">
+        <input type="hidden" id="image_link" name="image_link" value="{{ product.image_link }}">
+    </form>
 
-          
-        </div>
-        <!-- thumbs-wrap.// -->
-        <!-- gallery-wrap .end// -->
-      </aside>
-      <main class="col-lg-6">
-        <div class="ps-lg-3">
-          <h4 class="title text-dark">
-           {{product.name}}
-          </h4>
-          <div class="d-flex flex-row my-3">
-            <div class="text-warning mb-1 me-2">
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i>
-              <i class="fas fa-star-half-alt"></i>
-
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <span class="h5">{{product.price}}</span>
-            <span class="text-muted">/VNĐ</span>
-          </div>
-
-          <p>
-             {{product.content}}
-          </p>
-
-          <div class="row">
-            <dt class="col-3">Type:</dt>
-            <dd class="col-9">{{product.category_id}}</dd>
-          </div>
-
-          <hr />
-
-
-            <!-- col.// -->
-            <form action="http://localhost/cart/addtocart" method="GET">
-              <div class="row">
-                <div class="col-md-4 col-6 mb-3">
-                  <label class="mb-2 d-block">Quantity</label>
-                  <div class="input-group mb-3 d-flex justify-content-center" style="width: 170px;">
-                    <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon1" data-mdb-ripple-color="dark">
-                      <i class="fas fa-minus"></i>
-                    </button>
-                    <input type="text" name="quantity_product" class="form-control-quantity text-center border border-secondary" placeholder="14" aria-label="Example text with button addon" aria-describedby="button-addon1" />
-                    <button class="btn btn-white border border-secondary px-3" type="button" id="button-addon2" data-mdb-ripple-color="dark">
-                      <i class="fas fa-plus"></i>
-                    </button>
-                    <input type="hidden" name="product_id" value="{{ product.id }}"/>
-                  </div>
-                </div>
-              </div>
-              <button type="submit" class="btn btn-primary shadow-0"> <i class="me-1 fa fa-shopping-basket"></i> Add to cart </button>
-            </form>
-
-        </div>
-      </main>
-    </div>
-  </div>
-</section>
-<!-- content -->
+{% endblock %}
 {% block scripts %}
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    var inputQuantity = document.querySelector(".form-control-quantity");
-    var btnMinus = document.querySelector("#button-addon1");
-    var btnPlus = document.querySelector("#button-addon2");
+    <script>
+        // $(document).ready(function() {
+        //     $('#product_detail_form').submit(function(event) {
+        //         event.preventDefault();
+        //
+        //         const formData = $(this).serialize();
+        //
+        //         $.ajax({
+        //             type: 'POST',
+        //             url: '/cart/add',
+        //             data: formData,
+        //             success: function(response) {
+        //                 console.log(response);
+        //                 alert('Sản phẩm đã được thêm vào giỏ hàng thành công!');
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error(xhr.responseText);
+        //             }
+        //         });
+        //     });
+        // });
 
-    // Thiết lập giá trị mặc định cho input số lượng là 1
-    inputQuantity.value = 1;
-
-    btnMinus.addEventListener("click", function() {
-        var currentValue = parseInt(inputQuantity.value);
-        if (!isNaN(currentValue) && currentValue > 1) {
-            inputQuantity.value = currentValue - 1;
-        }
-    });
-
-    btnPlus.addEventListener("click", function() {
-        var currentValue = parseInt(inputQuantity.value);
-        if (!isNaN(currentValue)) {
-            inputQuantity.value = currentValue + 1;
-        }
-    });
-});
-</script>
+    </script>
 {% endblock %}
-{% endblock %}
-
