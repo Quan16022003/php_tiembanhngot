@@ -4,12 +4,13 @@ require_once '../vendor/autoload.php';
 
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
+define('INC_ROOT', __DIR__);
 
 // Define routes
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
     $r->addGroup('/admin', function (RouteCollector $r) {
-        $r->addRoute('GET', '/', ['App\Controllers\Admin\HomeController', 'index']);
+        $r->addRoute('GET', '', ['App\Controllers\Admin\HomeController', 'index']);
 
         // ACCOUNT
         $r->addRoute('GET', '/login', ['App\Controllers\Admin\AuthController', 'index']);
@@ -52,6 +53,24 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/view/{invoiceId}', ['App\Controllers\Admin\InvoicesController', 'getById']);
         });
 
+        // SUPPLIERS
+        $r->addGroup('/suppliers', function (RouteCollector $r) {
+            $r->addRoute('GET', '', ['App\Controllers\Admin\SupplierController', 'index']);
+            $r->addRoute('GET', '/create', ['App\Controllers\Admin\SupplierController', 'create']);
+            $r->addRoute('POST', '/store', ['App\Controllers\Admin\SupplierController', 'store']);
+            $r->addRoute('GET', '/{id:\d+}', ['App\Controllers\Admin\SupplierController', 'show']);
+            $r->addRoute('GET', '/{id:\d+}/edit', ['App\Controllers\Admin\SupplierController', 'edit']);
+            $r->addRoute('POST', '/{id:\d+}/update', ['App\Controllers\Admin\SupplierController', 'update']);
+            $r->addRoute('GET', '/{id:\d+}/delete', ['App\Controllers\Admin\SupplierController', 'delete']);
+        });
+
+        // PURCHASE ORDERS
+        $r->addGroup('/purchase_orders', function (RouteCollector $r) {
+            $r->addRoute('GET', '', ['App\Controllers\Admin\PurchaseOrders', 'index']);
+            $r->addRoute('GET', '/new', ['App\Controllers\Admin\PurchaseOrders', 'showCreatePOPage']);
+
+        });
+
         // HOMES
         $r->addRoute('GET', '/home', ['App\Controllers\Admin\HomeController', 'index']);
         $r->addRoute('GET', '/blank', ['App\Controllers\Admin\HomeController', 'showBlankPage']);
@@ -84,8 +103,16 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('POST', '/edit', ['App\Controllers\Admin\UserController', 'editPermission']);
             $r->addRoute('POST', '/delete', ['App\Controllers\Admin\UserController', 'deletePermission']);
         });
+
+        $r->addGroup('/api', function (RouteCollector $r) {
+            $r->addRoute('GET', '/get_all_suppliers', ['App\Controllers\Admin\SupplierController', 'api_getAllSuppliers']);
+            $r->addRoute('GET', '/get_supplier_by_id/{id}', ['App\Controllers\Admin\SupplierController', 'api_getSupplierById']);
+
+        });
     });
 
+
+    // CLIENT
     $r->addGroup('', function (RouteCollector $r) {
         $r->addRoute('GET', '/', ['App\Controllers\Client\HomeController', 'index']);
         $r->addRoute('GET', '/about-us', ['App\Controllers\Client\AboutUsController', 'index']);
@@ -123,7 +150,6 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 // Dispatch the request
 $httpMethod = $_SERVER['REQUEST_METHOD'];
 $uri = $_SERVER['REQUEST_URI'];
-
 // Strip query string (?foo=bar) and decode URI
 if (false !== $pos = strpos($uri, '?')) {
     $uri = substr($uri, 0, $pos);

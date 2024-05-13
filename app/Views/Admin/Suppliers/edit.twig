@@ -1,0 +1,66 @@
+{% set page = 'suppliers' %}
+{% extends './layout.twig' %}
+
+{% block title %}{{ supplier.name }} | Edit{% endblock %}
+
+{% block stylesheets %}
+    <style></style>
+{% endblock %}
+
+{% block content %}
+<form method="POST" action="/admin/suppliers/{{ supplier.id }}/update">
+    <div class="ps-md-5 pe-md-5">
+        <div class="mb-4">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-dark mb-0">
+                    <a class="btn btn-light btn-sm d-none d-sm-inline-block" role="button" href="/admin/suppliers/{{ supplier.id }}">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                    {{ supplier.company_name }}
+                </h3>
+                <button class="btn btn-outline-success btn-sm d-none d-sm-inline-block" type="submit" role="button">Lưu</button>
+            </div>
+        </div>
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="mb-3">
+                    <label for="companyName" class="form-label">Company Name:</label>
+                    <input type="text" class="form-control" id="companyName" name="companyName" value="{{ supplier.company_name }}" required>
+                </div>
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address:</label>
+                    <textarea class="form-control" id="address" name="address">{{ supplier.address }}</textarea>
+                </div>
+                <div class="mb-5 row row-cols-1 row-cols-lg-2">
+                    <div class="col">
+                        <label for="country" class="form-label">Country:</label>
+                        <input type="text" class="form-control" id="country" name="country" value="{{  supplier.country }}">
+                    </div>
+                    <div class="col">
+                        <label for="postalCode" class="form-label">Postal Code:</label>
+                        <input type="text" class="form-control" id="postalCode" name="postalCode" value="{{ supplier.postal_code }}">
+                    </div>
+
+                </div>
+                <div class="mb-3">
+                    <label for="contactName" class="form-label">Contact Name:</label>
+                    <input type="text" class="form-control" id="contactName" name="contactName" value="{{ supplier.contact_name }}">
+                </div>
+                <div class="mb-3 row row-cols-1 row-cols-lg-2">
+                    <div class="col">
+                        <label for="contactEmail" class="form-label">Contact Email:</label>
+                        <input type="email" class="form-control" id="contactEmail" name="contactEmail" value="{{ supplier.contact_email }}">
+                    </div>
+                    <div class="col">
+                        <label for="contactPhone" class="form-label">Contact Phone:</label>
+                        <input type="text" class="form-control" id="contactPhone" name="contactPhone" value="{{ supplier.contact_phone }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock %}
+{% block scripts %}
+
+{% endblock %}
