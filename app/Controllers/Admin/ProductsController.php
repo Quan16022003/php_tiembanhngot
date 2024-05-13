@@ -196,5 +196,9 @@ class ProductsController extends Controller
         echo json_encode($products);
     }
 
-
+    public function api_getAllProducts() {
+        $model = new AdminProductsModel();
+        $products = $model->getAllProducts();
+        echo json_encode(["products" => $products]);
+    }
 }

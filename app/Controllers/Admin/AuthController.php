@@ -18,7 +18,6 @@ class AuthController extends Controller
 
     public function index(): void
     {
-        session_start();
         if (isset($_SESSION['admin_id'])) {
             header('Location: /admin/home');
             exit;
@@ -28,7 +27,6 @@ class AuthController extends Controller
     }
     public function login(): void
     {
-        session_start();
         $username = $_POST['username'];
         $password = $_POST['password'];
 
@@ -43,7 +41,6 @@ class AuthController extends Controller
     }
     public function logout():void
     {
-        session_start();
         if (isset($_SESSION)) {
             session_unset();
             session_destroy();
@@ -54,7 +51,6 @@ class AuthController extends Controller
 
     public function showProfilePage()
     {
-        session_start();
         $model = new AdminUserModel();
         $id = $_SESSION['admin_id'];
         $user = $model->getUserById($id);

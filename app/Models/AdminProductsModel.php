@@ -153,4 +153,11 @@ class AdminProductsModel
         $row = $result->fetch_assoc();
         return $row['total'];
     }
+
+    public function getAllProducts()
+    {
+        $sql = "SELECT * FROM product";
+        $result = $this->db->conn->query($sql);
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
 }
