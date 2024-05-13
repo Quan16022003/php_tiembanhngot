@@ -123,6 +123,9 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('POST', '/account/register', ['App\Controllers\Client\AuthController','register']);
             $r->addRoute('POST', '/account/forgot', ['App\Controllers\Client\AuthController', 'forgotPassword']);
         });
+        // cart
+        $r->addRoute('GET', '/cart/addtocart', ['App\Controllers\Client\CartController', 'addToCart']);
+        $r->addRoute('GET','/cart', ['App\Controllers\Client\CartController', 'index']);
     });
 
 });
