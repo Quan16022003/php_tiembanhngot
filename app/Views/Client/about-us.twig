@@ -4,6 +4,105 @@
 {% block title %}About - My Website{% endblock %}
 
 {% block content %}
-    <h2>About Us</h2>
-    <p>Learn more about our company...</p>
+    <style>
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .carousel-item img {
+            height: 500px; /* Thay đổi giá trị này theo yêu cầu */
+            object-fit: cover; /* Đảm bảo hình ảnh vẫn giữ nguyên tỷ lệ khi thay đổi kích thước */
+        }
+
+        .list-unstyled {
+            margin-top: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .text-decoration-none {
+            position: relative;
+            text-decoration: none; /* Loại bỏ gạch dưới mặc định */
+        }
+
+        .text-decoration-none::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; /* Đẩy đường gạch dưới xuống một chút để nó không chồng lên chữ */
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-image: linear-gradient(to right, white, white 50%, transparent 50%); /* Gradient từ đen sang trong suốt */
+            background-size: 200% 100%; /* Kích thước gradient là gấp đôi chiều rộng */
+            background-position: right bottom; /* Bắt đầu gradient từ bên phải */
+            transition: background-position 0.3s; /* Hiệu ứng chuyển đổi vị trí gradient */
+        }
+
+        .text-decoration-none:hover::after, /* Hiệu ứng khi hover */
+        .text-decoration-none.active::after { /* Hiệu ứng khi active */
+            background-position: left bottom; /* Di chuyển gradient sang trái */
+        }
+    </style>
+    <div class="position-relative mb-5">
+        <section>
+            <video class="embed-responsive w-100 z-n1" preload="auto" autoplay="" muted="" loop="" playsinline=""
+                   data-poster="https://parisbaguette.com/wp-content/themes/parisbaguette/assets/images/blank.gif"
+                   poster="https://parisbaguette.com/wp-content/themes/parisbaguette/assets/images/blank.gif"
+                   data-loaded="true">
+                <source type="video/mp4" data-src="https://parisbaguette.com/wp-content/uploads/pb-brand.mp4"
+                        src="https://parisbaguette.com/wp-content/uploads/pb-brand.mp4">
+            </video>
+            <div class="overlay">
+                <div class="text-white text-center">
+                    <h2>About Us</h2>
+                    <h2>Welcome to your neighborhood bakery café.</h2>
+                </div>
+            </div>
+        </section>
+    </div>
+    <h2 class="text-center mt-5 mb-5">We make the best bakery for you</h2>
+    <div class="carousel slide">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="https://images.unsplash.com/photo-1568254183919-78a4f43a2877?q=80&w=1769&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                     class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1555507036-ab1f4038808a?q=80&w=1926&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                     class="d-block w-100" alt="...">
+            </div>
+            <div class="carousel-item">
+                <img src="https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?q=80&w=1770&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                     class="d-block w-100" alt="...">
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls"
+                data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls"
+                data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+    <h2 class="text-center mt-5 mb-5">Bakery for everyone</h2>
+    <div class="row justify-content-center" style="background: peachpuff">
+        <div class="mt-5 mb-5 col-10 col-lg-4 d-flex align-items-center justify-content-center text-center">
+            <ul class="list-unstyled fs-5 fw-bold my-4">
+                <li><a class="text-white text-decoration-none text-uppercase" href="/cart"><span>Online Ordering</span></a>
+                </li>
+                <li><a class="text-white text-decoration-none text-uppercase" href="/products"><span>Menu</span></a>
+                </li>
+                <li><a class="text-white text-decoration-none text-uppercase active" href="/about-us"><span>About</span></a>
+                </li>
+                <li><a class="text-white text-decoration-none text-uppercase" href="/contact"><span>Contact</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
 {% endblock %}

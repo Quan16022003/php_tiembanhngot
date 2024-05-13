@@ -16,18 +16,25 @@
                             <div class="card-body">
                                 <div class="mb-3">
                                     <label class="form-label" for="productId">Mã sản phẩm:</label>
-                                    <input type="text" class="form-control" id="productId" name="productId" required>
+                                    <input type="text" class="form-control" id="productId" name="productId"
+                                           value="{{ productId }}" readonly>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
                                         <label class="form-label" for="productName">Tên sản phẩm:</label>
                                         <input type="text" class="form-control" id="productName" name="productName"
+                                               oninput="validateInput(this, 1, 50)"
                                                required>
+                                        <div id="productNameError" class="alert alert-danger mt-2"
+                                             style="display: none;"></div>
                                     </div>
                                     <div class="col">
                                         <label class="form-label" for="productPrice">Giá:</label>
                                         <input type="text" class="form-control" id="productPrice" name="productPrice"
+                                               oninput="validateInput(this,1,10)"
                                                required>
+                                        <div id="productPriceError" class="alert alert-danger mt-2"
+                                             style="display: none;"></div>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -35,6 +42,8 @@
                                         <label class="form-label" for="productContent">Mô tả (Tuỳ chọn)</label>
                                         <input type="text" class="form-control" id="productContent"
                                                name="productContent">
+                                        <div id="productContentError" class="alert alert-danger mt-2"
+                                             style="display: none;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -48,6 +57,7 @@
                                     <div class="dz-message" data-dz-message>
                                         Drop files here or click to upload
                                     </div>
+                                    <input type="hidden" id="hiddenImagePath" name="hiddenImagePath" value="">
                                 </div>
                             </div>
                         </div>
@@ -87,6 +97,7 @@
 {% endblock %}
 {% block scripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script src="/public/js/global.js"></script>
     <script>
         function cancel() {
             window.location.href = '/admin/products';
@@ -101,11 +112,75 @@
 
         Dropzone.autoDiscover = false; // Ngăn Dropzone tự động khởi tạo các phần tử có lớp "dropzone"
         const myDropzone = new Dropzone("#dropzoneContainer", {
-            url: "/upload",
+            url: "/admin/products/upload-image",
+            maxFiles: 1,
             maxFilesize: 5, // Giới hạn dung lượng tệp (đơn vị: MB)
             acceptedFiles: ".jpg, .jpeg, .png, .gif",
-            dictDefaultMessage: "Kéo và thả tệp vào đây hoặc nhấn vào để chọn tệp"
+            dictDefaultMessage: "Kéo và thả tệp vào đây hoặc nhấn vào để chọn tệp",
+            addRemoveLinks: true, // Thêm liên kết xóa
+            dictRemoveFile: 'Xóa hình ảnh', // Text cho liên kết xóa
         });
+
+        myDropzone.on("success", function (file, response) {
+            // Lấy đường dẫn hình ảnh từ response và lưu vào biến
+            var imagePath = response.imagePath;
+            // Lưu đường dẫn hình ảnh vào một hidden input để gửi cùng với các thông tin sản phẩm khác khi nhấn nút lưu
+            document.getElementById("hiddenImagePath").value = imagePath;
+        });
+
+
+        function validateInput(input, minLength, maxLength) {
+            var value = input.value;
+            var errorDiv = document.getElementById(input.id + 'Error');
+            var submitButton = document.querySelector('button[type="submit"]');
+            var hasError = false;
+
+            // Kiểm tra xem input có rỗng không
+            if (value.length === 0) {
+                showError(errorDiv, "Input không được trống.");
+                hasError = true;
+            }
+
+            // Kiểm tra độ dài của input
+            if (value.length < minLength) {
+                showError(errorDiv, "Input quá ngắn. Độ dài tối thiểu là " + minLength + ".");
+                hasError = true;
+            }
+
+            if (value.length > maxLength) {
+                showError(errorDiv, "Input quá dài. Độ dài tối đa là " + maxLength + ".");
+                hasError = true;
+            }
+
+            // Kiểm tra input có chứa ký tự không hợp lệ không
+            if (!/^[a-zA-Z0-9 ]*$/.test(value)) { // Thêm ký tự khoảng trắng vào biểu thức chính quy
+                showError(errorDiv, "Input chứa ký tự không hợp lệ.");
+                hasError = true;
+            }
+
+
+            // Kiểm tra input không phải là số (chỉ cho productPrice)
+            if (input.id === 'productPrice' && isNaN(value)) {
+                showError(errorDiv, "Input phải là số.");
+                hasError = true;
+            }
+
+            // Nếu có lỗi, vô hiệu hóa nút lưu
+            if (hasError) {
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Nếu không có lỗi, kích hoạt nút lưu
+            errorDiv.style.display = 'none';
+            submitButton.disabled = false;
+        }
+
+        // Hàm hiển thị lỗi
+        function showError(errorDiv, errorMessage) {
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = errorMessage;
+        }
 
     </script>
 {% endblock %}

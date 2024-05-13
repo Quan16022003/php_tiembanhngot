@@ -1,0 +1,218 @@
+{% set page = 'purchase_orders' %}
+{% extends 'layout.twig' %}
+
+{% block title %}Hiển thị đơn hàng mua{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block content %}
+    <div class="ps-md-5 pe-md-5 pb-5">
+        <div class="mb-4">
+            <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                <h3 class="text-dark mb-0">
+                    <a class="btn btn-light btn-sm d-none d-sm-inline-block" role="button" href="/admin/purchase_orders">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </a>
+                    #PO{{ PO.id }} <span class="badge rounded-pill" style="background: {{ PO.status_color }};" >{{ PO.status_name }}</span>
+                </h3>
+            <div>
+                {% if PO.status < 5 %}
+                <button class="btn btn-primary" onclick="mainAction('{{ nextAction }}', {{ PO.id }})">{{ nextAction }}</button>
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    More action
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/admin/purchase_orders/{{ PO.id }}/edit">Sửa</a></li>
+                    <li><a class="dropdown-item" href="/admin/purchase_orders/{{ PO.id }}/delete" onclick="return confirm('Bạn có chắc chắn muốn xóa?');">Xóa</a></li>
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+        </div>
+
+        <div class="card shadow">
+            <div class="card-header py-3">
+                <p class="text-primary m-0 fw-bold">Thông tin đơn hàng</p>
+            </div>
+            <div class="card-body">
+                <h3 class="card-title">Nhập thông tin nhà cung cấp</h3>
+                <hr>
+                <div class="container-fluid mb-3">
+                    <div class="row">
+                        <div class="col col-12 col-md-4">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control border-0 shadow-none" id="companyNameInput" value="{{ PO.supplier_company_name }}" readonly>
+                                <label for="companyNameInput">Tên công ty</label>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-md-8">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control border-0 shadow-none" id="addressInput" value="{{ PO.supplier_address }}" readonly>
+                                <label for="addressInput">Địa chỉ</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-12 col-md-4">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control border-0 shadow-none" id="contactNameInput" value="{{ PO.supplier_contact_name }}" readonly>
+                                <label for="contactNameInput">Tên liên hệ</label>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-md-4">
+                            <div class="form-floating mb-3">
+                                <input type="email" class="form-control border-0 shadow-none" id="emailInput" value="{{ PO.supplier_email }}" readonly>
+                                <label for="emailInput">Email</label>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-md-4">
+                            <div class="form-floating mb-3">
+                                <input type="tel" class="form-control border-0 shadow-none" id="phoneInput" value="{{ PO.supplier_phone }}" readonly>
+                                <label for="phoneInput">Điện thoại</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="card-title">Thông tin đơn hàng mua</h3>
+                <hr>
+                <div class="container-fluid mb-3">
+                    <div class="row">
+                        <div class="col col-12 col-lg-4">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control border-0 shadow-none" id="orderDate" value="{{ PO.order_date }}" readonly>
+                                <label for="orderDate">Ngày đặt hàng</label>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-lg-4">
+                            <div class="form-floating mb-3">
+                                <input type="date" class="form-control border-0 shadow-none" id="deliveryDate" value="{{ PO.delivery_date }}" readonly>
+                                <label for="deliveryDate">Ngày giao hàng</label>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-lg-4">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control border-0 shadow-none" id="paymentMethod" value="{{ PO.payment_method }}" readonly>
+                                <label for="paymentMethod">Phương thức thanh toán</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-4">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control border-0 shadow-none" id="shippingMethod" value="{{ PO.shipping_method }}" readonly>
+                                <label for="shippingMethod">Phương thức vận chuyển</label>
+                            </div>
+                        </div>
+                        <div class="col col-lg-8">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control border-0 shadow-none" id="shippingAddress" value="{{ PO.shipping_address }}" readonly>
+                                <label for="shippingAddress">Địa chỉ giao hàng</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-lg-8">
+                            <div class="form-floating">
+                                <textarea class="form-control border-0 shadow-none" id="shippingTerms" style="height: 100px" readonly>{{ PO.shipping_terms }}</textarea>
+                                <label for="shippingTerms">Điều khoản giao hàng</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="card-title">Sản phẩm</h3>
+                <hr>
+                <div class="container-fluid mb-3">
+                    {% set i = 0 %}
+                    {% for product in products %}
+                        {% set i = i+1 %}
+                        <div class="row">
+                            <div class="col col-1 d-none d-lg-block">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control border-0 shadow-none" id="stt{{ i }}" value="#{{ i }}">
+                                </div>
+                            </div>
+                            <div class="col col-12 col-lg-5">
+                                <div class="form-floating mb-3">
+                                    <input type="text" class="form-control border-0 shadow-none" id="productName{{ i }}" value="{{ product.name }}" readonly>
+                                    <label for="productName{{ i }}">Tên sản phẩm</label>
+                                </div>
+                            </div>
+                            <div class="col col-lg-2">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control border-0 shadow-none" id="quantity{{ i }}" value="{{ product.quantity }}" readonly>
+                                    <label for="quantity{{ i }}">Số lượng</label>
+                                </div>
+                            </div>
+                            <div class="col col-lg-2">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control border-0 shadow-none" id="price{{ i }}" value="{{ product.unit_price }}" readonly>
+                                    <label for="price{{ i }}">Giá</label>
+                                </div>
+                            </div>
+                            <div class="col col-lg-2">
+                                <div class="form-floating mb-3">
+                                    <input type="number" class="form-control border-0 shadow-none" id="total{{ i }}" value="{{ product.total_price }}" readonly>
+                                    <label for="total{{ i }}">Tổng</label>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                    {% endfor %}
+                    <div class="row justify-content-lg-end">
+                        <div class="col col-12 col-lg-5">
+                            <div class="form-floating mb-3">
+                                <textarea class="form-control border-0 shadow-none" id="notes" readonly>{% if PO.notes %}{{ PO.notes }}{% else %}Không{% endif %}</textarea>
+                                <label for="notes">Ghi chú</label>
+                            </div>
+                        </div>
+                        <div class="col col-12 col-lg-4">
+                            <table class="table table-responsive">
+                                <tbody>
+                                <tr>
+                                    <td class="fw-bold">Tổng cộng</td>
+                                    <td class="text-end">{{ PO.sub_total|formatCurrency }} &#8363;</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Thuế ({{ PO.tax }}%)</td>
+                                    <td class="text-end">{{ PO.tax_price|formatCurrency }} &#8363;</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Phí vận chuyển</td>
+                                    <td class="text-end">{{ PO.shipping_fee|formatCurrency }} &#8363;</td>
+                                </tr>
+                                <tr>
+                                    <td class="fw-bold">Tổng cộng</td>
+                                    <td class="text-end">{{ PO.total|formatCurrency }} &#8363;</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        function mainAction(actionName, id) {
+            if (confirm(actionName + ' ?')) {
+                $.ajax({
+                    url: "/admin/purchase_orders/" + id + "/update_status",
+                    type: "GET",
+                    success: function(data) {
+                        console.log(data);
+                        if (data === 'OK') {
+                            window.location.reload();
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error('Error fetching options:', errorThrown);
+                    }
+                });
+            }
+        }
+    </script>
+{% endblock %}

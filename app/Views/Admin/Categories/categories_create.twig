@@ -1,0 +1,134 @@
+{% extends './layout.twig' %}
+{% block title %}Add Products{% endblock %}
+{% block stylesheets %}
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/dropzone.min.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+    <div class="content-wrapper">
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <form method="post" action="/admin/categories/create" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header mb-0">
+                                <h5 class="card-tile mb-0">Categories Information</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label" for="categoryId">Mã danh mục:</label>
+                                    <input type="text" class="form-control" id="categoryId" name="categoryId"
+                                           value="{{ categoryId }}" readonly>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col">
+                                        <label class="form-label" for="categoryName">Tên danh mục:</label>
+                                        <input type="text" class="form-control" id="categoryName" name="categoryName"
+                                               oninput="validateInput(this, 1, 50)"
+                                               required>
+                                        <div id="categoryNameError" class="alert alert-danger mt-2"
+                                             style="display: none;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <button type="submit" class="btn btn-outline-success">Thêm danh mục</button>
+                        <button type="button" class="btn btn-outline-warning" onclick="cancel()">Hủy</button>
+                        <button type="button" class="btn btn-outline-danger" onclick="reset()">Reset
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2z"/>
+                                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        function cancel() {
+            window.location.href = '/admin/categorys';
+        }
+
+        function reset() {
+            document.getElementById("categoryId").value = "";
+            document.getElementById("categoryName").value = "";
+            document.getElementById("categoryPrice").value = "";
+            document.getElementById("categoryContent").value = "";
+        }
+
+        Dropzone.autoDiscover = false; // Ngăn Dropzone tự động khởi tạo các phần tử có lớp "dropzone"
+        const myDropzone = new Dropzone("#dropzoneContainer", {
+            url: "/admin/categorys/upload-image",
+            maxFiles: 1,
+            maxFilesize: 5, // Giới hạn dung lượng tệp (đơn vị: MB)
+            acceptedFiles: ".jpg, .jpeg, .png, .gif",
+            dictDefaultMessage: "Kéo và thả tệp vào đây hoặc nhấn vào để chọn tệp",
+            addRemoveLinks: true, // Thêm liên kết xóa
+            dictRemoveFile: 'Xóa hình ảnh', // Text cho liên kết xóa
+        });
+
+        myDropzone.on("success", function (file, response) {
+            // Lấy đường dẫn hình ảnh từ response và lưu vào biến
+            var imagePath = response.imagePath;
+            // Lưu đường dẫn hình ảnh vào một hidden input để gửi cùng với các thông tin sản phẩm khác khi nhấn nút lưu
+            document.getElementById("hiddenImagePath").value = imagePath;
+        });
+
+
+        function validateInput(input, minLength, maxLength) {
+            var value = input.value;
+            var errorDiv = document.getElementById(input.id + 'Error');
+            var submitButton = document.querySelector('button[type="submit"]');
+            var hasError = false;
+
+            // Kiểm tra xem input có rỗng không
+            if (value.length === 0) {
+                showError(errorDiv, "Input không được trống.");
+                hasError = true;
+            }
+
+            // Kiểm tra độ dài của input
+            if (value.length < minLength) {
+                showError(errorDiv, "Input quá ngắn. Độ dài tối thiểu là " + minLength + ".");
+                hasError = true;
+            }
+
+            if (value.length > maxLength) {
+                showError(errorDiv, "Input quá dài. Độ dài tối đa là " + maxLength + ".");
+                hasError = true;
+            }
+
+            // Kiểm tra input có chứa ký tự không hợp lệ không
+            if (!/^[\p{L}0-9 ]*$/u.test(value)) { // Thêm ký tự khoảng trắng vào biểu thức chính quy
+                showError(errorDiv, "Input chứa ký tự không hợp lệ.");
+                hasError = true;
+            }
+
+            // Nếu có lỗi, vô hiệu hóa nút lưu
+            if (hasError) {
+                submitButton.disabled = true;
+                return;
+            }
+
+            // Nếu không có lỗi, kích hoạt nút lưu
+            errorDiv.style.display = 'none';
+            submitButton.disabled = false;
+        }
+
+        // Hàm hiển thị lỗi
+        function showError(errorDiv, errorMessage) {
+            errorDiv.style.display = 'block';
+            errorDiv.textContent = errorMessage;
+        }
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
+    <script src="/public/js/global.js"></script>
+{% endblock %}

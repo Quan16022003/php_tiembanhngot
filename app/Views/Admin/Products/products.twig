@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="/public/css/global.css">
     </head>
     <div class="container-fluid overflow-auto">
-        <div class="row mb-3 slide-right">
+        <div class="row mb-3">
             <div class="col-md-6">
                 <form id="search-form" class="form-inline">
                     <div class="input-group">
@@ -28,9 +28,10 @@
                 <a href="/admin/products/add" class="btn btn-success">Mở phiếu xuất</a>
             </div>
         </div>
-        <div class="row rounded">
-            <div class="col ">
-                <table class=" fade-bottom datatables-products table border-top dataTable no-footer dtr-column collapsed">
+        <div class="row">
+            <div class="col table-responsive table" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table id="example"
+                       class="datatables-products table border-top dataTable no-footer dtr-column collapsed">
                     <thead>
                     <tr>
                         <th onclick="sortTable(0)">ID</th>
@@ -49,7 +50,11 @@
                         <tr>
                             <td>{{ product.id }}</td>
                             <td>{{ product.name }}</td>
-                            <td id="category_name">{{ product.category_id }}</td>
+                            {% for category in categories %}
+                                {% if category.id == product.category_id %}
+                                    <td>{{ category.name }}</td>
+                                {% endif %}
+                            {% endfor %}
                             <td>{{ product.price }}</td>
                             <td>{{ product.discount }}</td>
                             <td>{{ product.stock }}</td>
@@ -63,11 +68,11 @@
                             </td>
                             <td>{{ product.view }}</td>
                             <td class="operation-button">
-                                <button class="btn btn-info edit-button btn-warning"
+                                <button class="btn btn-info btn-warning"
                                         onclick="editProduct('{{ product.id }}')">
                                     Sửa
                                 </button>
-                                <button class="btn btn-danger delete-button"
+                                <button class="btn btn-danger"
                                         onclick="deleteProduct('{{ product.id }}')">Xóa
                                 </button>
                             </td>
@@ -79,7 +84,7 @@
                     <ul class="pagination justify-content-center">
                         {% for i in 1..totalPages %}
                             <li class="page-item {% if i == currentPage %}active{% endif %}">
-                                <a class="page-link" href="/admin/products?page={{ i }}">{{ i }}</a>
+                                <a class="page-link pagination-link" href="#" data-page="{{ i }}">{{ i }}</a>
                             </li>
                         {% endfor %}
                     </ul>
@@ -102,7 +107,30 @@
 {% endblock %}
 {% block scripts %}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/sl-2.0.1/datatables.min.js"></script>
+
     <script>
+        // Sử dụng jQuery để xử lý sự kiện click trên các liên kết phân trang
+        $(document).on('click', '.pagination-link', function (event) {
+            event.preventDefault();
+            var page = $(this).data('page');
+            $.ajax({
+                url: '/admin/products?page=' + page,
+                method: 'GET',
+                success: function (response) {
+                    // Cập nhật nội dung của trang với dữ liệu mới
+                    $('body').html(response);
+                },
+                error: function (xhr, status, error) {
+                    // Xử lý lỗi nếu có
+                    console.error('Error:', error);
+                }
+            });
+        });
+
+
         let sortStates = {}; // Lưu trữ trạng thái sắp xếp cho mỗi cột
 
         // Hàm sắp xếp bảng theo cột
@@ -147,11 +175,6 @@
             window.location.href = "/admin/products/add";
         }
 
-        function hideAddProductForm() {
-            let form = document.getElementById("add-product-form");
-            form.style.display = "none";
-        }
-
         // Hàm xử lý khi nhấp vào nút sửa
         function editProduct(productID) {
             window.location.href = "/admin/products/edit/" + productID;
@@ -177,28 +200,14 @@
             }
         }
 
-        document.getElementById('search-form').addEventListener('submit', function (event) {
+        // Xử lý sự kiện submit form tìm kiếm
+        document.getElementById('search-form').addEventListener('input', function (event) {
             event.preventDefault(); // Ngăn chặn việc gửi yêu cầu tìm kiếm mặc định của form
 
             const query = document.getElementById('search-input').value;
 
             // Thực hiện tìm kiếm bằng cách gửi yêu cầu HTTP đến máy chủ và nhận kết quả
             performSearch(query);
-        });
-
-        // Hàm chuyển từ cateId sang text
-        const categoryMap = {
-            1: "Bánh mì",
-            2: "Bánh kem nhỏ",
-            3: "Bánh ngọt"
-        };
-        document.querySelectorAll('table td#category_name').forEach(td => {
-            const categoryId = parseInt(td.innerText);
-            if (categoryMap.hasOwnProperty(categoryId)) {
-                td.innerText = categoryMap[categoryId];
-            } else {
-                td.innerText = "Không xác định";
-            }
         });
 
         // Hàm tìm kiếm
@@ -218,17 +227,40 @@
                     // Hiển thị kết quả tìm kiếm mới
                     results.forEach(result => {
                         const row = document.createElement('tr');
+                        let categoryName = "Không xác định"; // Giá trị mặc định
+
+                        // Ánh xạ category_id sang category_name
+                        switch (result.category_id) {
+                            case 1:
+                                categoryName = "Bánh mì";
+                                break;
+                            case 2:
+                                categoryName = "Bánh ngọt";
+                                break;
+                            // Thêm các trường hợp khác nếu cần
+                            default:
+                                categoryName = "Bánh kem nhỏ";
+                        }
+
                         row.innerHTML = `<td>${result.id}</td>
-                                         <td>${result.name}</td>
-                                         <td>${result.price}</td>
-                                         <td>${result.discount}</td>
-                                         <td>${result.stock}</td>
-                                         <td>${result.created_at}</td>
-                                         <td>${result.view}</td>
-                                         <td class="operation-button">
-                                            <button class="btn edit-button" onclick="editProduct('${result.id}')">Sửa</button>
-                                            <button class="btn delete-button" onclick="deleteProduct('${result.id}')">Xóa</button>
-                                         </td>`;
+                                 <td>${result.name}</td>
+                                 <td>${categoryName}</td>
+                                 <td>${result.price}</td>
+                                 <td>${result.discount}</td>
+                                 <td>${result.stock}</td>
+                                 <td>
+                                        <div class="progress">
+                                            <div class="progress-bar progress-bar-animated progress-bar-striped bg-success"
+                                                role="progressbar"
+                                                style="width: ${result.stock}%">
+                                            </div>
+                                        </div>
+                                 </td>
+                                 <td>${result.view}</td>
+                                 <td class="operation-button">
+                                    <button class="btn btn-danger" onclick="editProduct('${result.id}')">Sửa</button>
+                                    <button class="btn btn-warning" onclick="deleteProduct('${result.id}')">Xóa</button>
+                                 </td>`;
                         document.getElementById('results-body').appendChild(row);
                     });
                 })
@@ -237,14 +269,23 @@
                 });
         }
 
-        function showData() {
-            $.ajax({
-                url: 'app/Controllers/Admin/ProductsController.php',
-                method: 'post',
-                warning: function (result) {
-                    $('#results-body').html(result);
+        $(document).ready(function () {
+            var table = $('#example').DataTable({
+                "language": {
+                    "decimal": "",
+                    "emptyTable": "Không có dữ liệu trong bảng",
+                    "info": "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "infoEmpty": "Hiển thị 0 đến 0 trong tổng số 0 mục",
+                    "infoFiltered": "(được lọc từ tổng số _MAX_ mục)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "processing": "",
+                    "search": "Tìm kiếm:",
+                    "zeroRecords": "Không tìm thấy bản ghi phù hợp",
                 }
-            })
-        }
+            });
+        });
     </script>
 {% endblock %}

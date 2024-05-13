@@ -6,6 +6,8 @@ use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
 define('INC_ROOT', __DIR__);
 
+session_start();
+
 // Define routes
 $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
@@ -19,7 +21,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/account/profile', ['App\Controllers\Admin\AuthController', 'showProfilePage']);
 
         // DASHBOARD
-        $r->addRoute('GET', '/dashboard', ['App\Controllers\Admin\DashboardController', 'index']);
+        $r->addRoute('GET', '/dashboard', ['App\Controllers\Admin\DashboardController', 'TopProductsOfAWeek']);
 
         // PRODUCTS
         $r->addGroup('/products', function (RouteCollector $r) {
@@ -33,6 +35,19 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('POST', '/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'update']);
             $r->addRoute('POST', '/search', ['App\Controllers\Admin\ProductsController', 'search']);
 
+        });
+
+        // CATEGORIES
+        $r->addGroup('/categories', function (RouteCollector $r) {
+            $r->addRoute('GET', '', ['App\Controllers\Admin\CategoriesController', 'index']);
+            $r->addRoute('GET', '/create', ['App\Controllers\Admin\CategoriesController', 'openCreate']);
+            $r->addRoute('POST', '/create', ['App\Controllers\Admin\CategoriesController', 'create']);
+            $r->addRoute('GET', '/add', ['App\Controllers\Admin\CategoriesController', 'openAdd']);
+            $r->addRoute('POST', '/add', ['App\Controllers\Admin\CategoriesController', 'add']);
+            $r->addRoute('POST', '/delete/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'delete']);
+            $r->addRoute('GET', '/edit/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'getById']);
+            $r->addRoute('POST', '/edit/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'update']);
+            $r->addRoute('POST', '/search', ['App\Controllers\Admin\CategoriesController', 'search']);
         });
 
         // INVOICES
@@ -54,9 +69,13 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         // PURCHASE ORDERS
         $r->addGroup('/purchase_orders', function (RouteCollector $r) {
-            $r->addRoute('GET', '', ['App\Controllers\Admin\PurchaseOrders', 'index']);
-            $r->addRoute('GET', '/new', ['App\Controllers\Admin\PurchaseOrders', 'showCreatePOPage']);
-
+            $r->addRoute('GET', '', ['App\Controllers\Admin\PurchaseOrdersController', 'index']);
+            $r->addRoute('GET', '/new', ['App\Controllers\Admin\PurchaseOrdersController', 'create']);
+            $r->addRoute('POST', '/store', ['App\Controllers\Admin\PurchaseOrdersController', 'store']);
+            $r->addRoute('GET', '/{id:\d+}', ['App\Controllers\Admin\PurchaseOrdersController', 'show']);
+            $r->addRoute('GET', '/{id:\d+}/edit', ['App\Controllers\Admin\PurchaseOrdersController', 'edit']);
+            $r->addRoute('POST', '/{id:\d+}/update', ['App\Controllers\Admin\PurchaseOrdersController', 'update']);
+            $r->addRoute('GET', '/{id:\d+}/update_status', ['App\Controllers\Admin\PurchaseOrdersController', 'updateStatus']);
         });
 
         // HOMES
@@ -95,7 +114,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addGroup('/api', function (RouteCollector $r) {
             $r->addRoute('GET', '/get_all_suppliers', ['App\Controllers\Admin\SupplierController', 'api_getAllSuppliers']);
             $r->addRoute('GET', '/get_supplier_by_id/{id}', ['App\Controllers\Admin\SupplierController', 'api_getSupplierById']);
-
+            $r->addRoute('GET', '/get_all_products', ['App\Controllers\Admin\ProductsController', 'api_getAllProducts']);
         });
     });
 
@@ -120,12 +139,20 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
 
         $r->addGroup('/api', function (RouteCollector $r) {
             $r->addRoute('POST', '/account/login', ['App\Controllers\Client\AuthController', 'login']);
-            $r->addRoute('POST', '/account/register', ['App\Controllers\Client\AuthController','register']);
+            $r->addRoute('POST', '/account/register', ['App\Controllers\Client\AuthController', 'register']);
             $r->addRoute('POST', '/account/forgot', ['App\Controllers\Client\AuthController', 'forgotPassword']);
         });
         // cart
         $r->addRoute('GET', '/cart/addtocart', ['App\Controllers\Client\CartController', 'addToCart']);
         $r->addRoute('GET','/cart', ['App\Controllers\Client\CartController', 'index']);
+
+        $r->addGroup('/cart', function (RouteCollector $r) {
+            $r->addRoute('GET', '', ['App\Controllers\Client\CartController', 'indexPage']);
+            $r->addRoute('POST', '/add', ['App\Controllers\Client\CartController', 'add']);
+            $r->addRoute('POST', '/remove', ['App\Controllers\Client\CartController', 'remove']);
+            $r->addRoute('POST', '/update', ['App\Controllers\Client\CartController', 'update']);
+            $r->addRoute('POST', '/clear', ['App\Controllers\Client\CartController', 'clear']);
+        });
     });
 
 });

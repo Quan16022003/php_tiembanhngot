@@ -5,13 +5,12 @@ namespace App\Controllers\Client;
 
 use App\Models\CartModel;
 use App\Models\UserModel;
+use App\Models\AdminProductsModel;
 use mysql_xdevapi\Result;
 
 class CartController extends ClientController
 {
     private CartModel $cartModel;
-    
-
     public function __construct()
     {
         parent::__construct();
@@ -49,4 +48,17 @@ class CartController extends ClientController
     }
 
 
+
+
+    public function indexPage(): void
+    {
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $cartsPerPage = 10;
+        $offset = ($page - 1) * $cartsPerPage;
+        $model = new CartModel();
+        $carts = $model->getCart($offset, $cartsPerPage);
+        $totalCart = $model->getTotalCart();
+        $totalPages = ceil($totalCart / $cartsPerPage);
+        $this->render('Cart/cart', ['carts' => $carts, 'totalPages' => $totalPages, 'currentPage' => $page]);
+    }
 }
