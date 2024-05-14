@@ -103,13 +103,13 @@ class UserController extends AdminController
     public function showPermissionPage(): void
     {
         $data['permissions'] = $this->userModel->getPermissions();
-        parent::render('permissions', $data);
+        parent::render('permissions/permissions', $data);
     }
 
     public function showAddPermissionPage(): void
     {
         $data['actions'] = $this->userModel->selectAllActions();
-        parent::render('permissions_add', $data);
+        parent::render('permissions/permissions_add', $data);
     }
 
     public function addPermission(): void
@@ -133,7 +133,7 @@ class UserController extends AdminController
         $data['actions'] = $this->userModel->selectAllActions();
         $data['per_act'] = $this->userModel->selectAllPerAction($id);
 
-        parent::render('permissions_edit', $data);
+        parent::render('permissions/permissions_edit', $data);
     }
 
     public function editPermission(): void

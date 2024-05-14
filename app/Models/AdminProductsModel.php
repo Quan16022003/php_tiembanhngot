@@ -13,17 +13,6 @@ class AdminProductsModel
         $this->db = Database::getInstance();
     }
 
-    public function index(): false|array
-    {
-        $sql = "SELECT * FROM product";
-        $result = $this->db->conn->query($sql);
-        if (!$result) {
-            echo "List is empty!" . $this->db->conn->error;
-            return false;
-        }
-        return $result->fetch_all(MYSQLI_ASSOC);
-    }
-
     public function insert($productId, $productCategoryId, $productName, $productPrice, $productQuantity): bool
     {
         // Kiểm tra xem sản phẩm có tồn tại không
@@ -51,15 +40,6 @@ class AdminProductsModel
 
     public function create($productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage): bool
     {
-        echo "console.log('Data inserted into database:')";
-        echo "console.log('Product ID:', '$productId')";
-        echo "console.log('Product Category ID:', '$productCategoryId')";
-        echo "console.log('Product Name:', '$productName')";
-        echo "console.log('Product Price:', '$productPrice')";
-        echo "console.log('Product Content:', '$productContent')";
-        echo "console.log('Product Image:', '$productImage')";
-        $existingProduct = $this->getProductByID($productId);
-
         if ($existingProduct) {
             echo "ID đã tồn tại!";
             return false;
@@ -206,7 +186,7 @@ class AdminProductsModel
         $result = $this->db->conn->query($sql);
         return $result->fetch_all(MYSQLI_ASSOC);
     }
-  
+
     public function deleteImageByProductId($productId): bool
     {
         // Cập nhật cột image_link thành null cho sản phẩm có productId tương ứng
@@ -247,4 +227,50 @@ class AdminProductsModel
         $stmt->bindParam(':id', $productId);
         return $stmt->execute();
     }
+
+    public function insertFromCsv($filePath)
+    {
+        $file = fopen($filePath, "r");
+
+        if ($file) {
+            // Bỏ qua dòng tiêu đề
+            fgetcsv($file);
+
+            while (($data = fgetcsv($file)) !== false) {
+                // Phân tích dữ liệu từ mỗi dòng
+                $id = $data[0];
+                $name = $data[1];
+                $category_id = $data[2];
+                $price = $data[3];
+                $discount = $data[4];
+                $stock = $data[5];
+                $view = $data[6];
+                $supplier_id = $data[7];
+
+                // Chèn dữ liệu vào cơ sở dữ liệu
+                $sql = "INSERT INTO product (id, category_id, name, price, discount, stock, view, supplier_id) 
+                        VALUES ('$id', '$name', '$category_id', '$price', '$discount', '$stock', '$view', '$supplier_id')";
+
+                if ($this->db->conn->query($sql) !== true) {
+                    echo "Error: " . $sql . "<br>" . $this->db->error;
+                }
+            }
+
+            fclose($file);
+        } else {
+            echo "Error opening file";
+        }
+    }
+
+    public function exportToCSV($data)
+    {
+        $csvData = '';
+        $csvData .= "ID,Tên sản phẩm,Loại,Giá,Giảm giá,Tồn kho,Lượt xem\n";
+        foreach ($data as $product) {
+            $csvData .= "{$product['id']},{$product['name']},{$product['category_id']},{$product['price']},{$product['discount']},{$product['stock']},{$product['view']}\n";
+        }
+        return $csvData;
+    }
+
+
 }
