@@ -9,6 +9,7 @@ class Database
 {
     private static ?Database $instance = null;
     public ?mysqli $conn = NULL;
+
     private string $host = 'localhost';
     private string $dbName = 'cuahangbanbanh';
     private string $user = 'root';
@@ -18,6 +19,7 @@ class Database
     private function __construct()
     {
         $this->conn = new mysqli($this->host, $this->user, $this->password, $this->dbName);
+
 
         if ($this->conn->connect_error) {
             echo 'Failed: ' . $this->conn->connect_error;

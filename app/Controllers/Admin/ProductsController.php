@@ -18,14 +18,6 @@ class ProductsController extends Controller
         if (is_array($id) && isset($id['productID'])) {
             $id = $id['productID'];
         }
-        // In ra các dữ liệu được gửi lên console
-//        echo "console.log('Data sent to server:')";
-//        echo "console.log('Product ID:', '$productId')";
-//        echo "console.log('Product Category ID:', '$productCategoryId')";
-//        echo "console.log('Product Name:', '$productName')";
-//        echo "console.log('Product Price:', '$productPrice')";
-//        echo "console.log('Product Content:', '$productContent')";
-
         $model = new AdminProductsModel();
         $categoryModel = new CategoriesModel();
 
@@ -181,34 +173,6 @@ class ProductsController extends Controller
         }
     }
 
-
-    public function addExcel(): void
-    {
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            $target_dir = "uploads/";
-            $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-            $uploadOk = 1;
-            $fileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-
-            // Kiểm tra xem tệp có phải là tệp Excel không
-            if ($fileType != "xlsx" && $fileType != "xls") {
-                echo "Chỉ cho phép tải lên các tệp Excel (XLSX hoặc XLS).";
-                $uploadOk = 0;
-            }
-
-            // Kiểm tra nếu có lỗi xảy ra khi tải lên
-            if ($uploadOk == 0) {
-                echo "Tệp của bạn không được tải lên.";
-            } else {
-                if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-                    echo "Tệp " . basename($_FILES["fileToUpload"]["name"]) . " đã được tải lên thành công.";
-                } else {
-                    echo "Có lỗi xảy ra khi tải lên tệp của bạn.";
-                }
-            }
-        }
-    }
-
     public function add(): void
     {
         if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -270,12 +234,13 @@ class ProductsController extends Controller
         echo json_encode($products);
     }
 
-    public function api_getAllProducts() {
+    public function api_getAllProducts()
+    {
         $model = new AdminProductsModel();
         $products = $model->getAllProducts();
         echo json_encode(["products" => $products]);
     }
-  
+
     public function deleteImage(): void
     {
         // Kiểm tra xem yêu cầu có phải là POST không
@@ -351,4 +316,29 @@ class ProductsController extends Controller
             }
         }
     }
+
+    public function uploadCsv()
+    {
+        $model = new AdminProductsModel();
+        if (isset($_FILES['csv'])) {
+            $tmpName = $_FILES['csv']['tmp_name'];
+            $product = $model->insertFromCsv($tmpName);
+        }
+    }
+
+    public function exportToCsv()
+    {
+        $model = new AdminProductsModel();
+        $products = $model->getAllProducts(); // Ví dụ: phương thức để lấy tất cả sản phẩm
+        $csvData = $model->exportToCsv($products);
+        $fileName = 'exported_file.csv';
+
+        // Thiết lập header để tải về file CSV
+        header('Content-Type: text/csv; charset=utf-8');
+        header('Content-Disposition: attachment; filename=' . $fileName);
+
+        echo $csvData;
+    }
+
+
 }
