@@ -94,16 +94,17 @@ class Database
         }
         return $rows;
     }
+
     public function selectById($table = '', $id = ''): ?array
     {
-    $sql = "SELECT * FROM `$table` WHERE id = ?";
-    $stmt = $this->conn->prepare($sql);
-    $stmt->bind_param('i', $id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $row = $result->fetch_assoc();
-    $stmt->close();
-    return $row;
+        $sql = "SELECT * FROM `$table` WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param('i', $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        $stmt->close();
+        return $row;
     }
 
     public function insertById($customer_id, $product_id, $quantity = 1): bool
@@ -115,27 +116,4 @@ class Database
         $stmt->close();
         return $success;
     }
-    
-    public function getAllcart()
-    {
-        try {
-            $sql = "SELECT c.quantity, p.name AS product_name, p.price
-                    FROM cart c
-                    JOIN product p ON c.product_id = p.id";
-            $stmt = $this->conn->prepare($sql);
-            $stmt->execute();
-            $result = $stmt->get_result(); // Lấy kết quả dưới dạng một đối tượng kết quả có thể sử dụng được
-            $data = [];
-            while ($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-            return $data;
-        } catch (PDOException $e) {
-            // Xử lý ngoại lệ nếu có lỗi xảy ra
-            echo "Lỗi: " . $e->getMessage();
-            return false;
-        }
-    }
-    
-
 }

@@ -11,16 +11,15 @@ use mysql_xdevapi\Result;
 class CartController extends ClientController
 {
     private CartModel $cartModel;
+
     public function __construct()
     {
         parent::__construct();
         $this->cartModel = new CartModel();
     }
 
-    // Trong CartController.php
     public function index()
     {
-
         if (isset($_SESSION['username'])) {
             $userModel = new UserModel();
             $userID = $userModel->getUserIdByUsername($_SESSION['username']);

@@ -13,7 +13,7 @@ class CartModel
         $this->db = Database::getInstance();
     }
 
-    public function getAllCart(int $userId)
+    public function getAllCart($userId)
     {
         $sql = "SELECT cart.id, product_id, name, content, price, quantity, image_link
                 FROM cart 
@@ -26,6 +26,21 @@ class CartModel
         $cart = array();
         while ($row = $result->fetch_assoc()) {
             $cart[$row['product_id']] = $row;
+        }
+        $stmt->close();
+        return $cart;
+    }
+
+    public function getCartByUserId($userId)
+    {
+        $sql = "SELECT * FROM cart WHERE user_id = ?";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $cart = array();
+        while ($row = $result->fetch_assoc()) {
+            $cart[] = $row;
         }
         $stmt->close();
         return $cart;

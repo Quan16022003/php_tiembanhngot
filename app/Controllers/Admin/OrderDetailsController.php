@@ -3,11 +3,10 @@
 namespace App\Controllers\Admin;
 
 use Core\Controller;
-use App\Models\OrderModel;
 use App\Models\OrderDetailsModel;
 use App\Models\CartModel;
 
-class OrdersController extends Controller
+class OrderDetailsController extends Controller
 {
     public function __construct()
     {
@@ -20,8 +19,8 @@ class OrdersController extends Controller
             $id = $id['orderId'];
         }
 
-        $model = new OrderModel();
-        $order = $model->getOrderByID($id);
+        $model = new OrderDetailsModel();
+        $order = $model->getOrderDetailsById($id);
         if ($order) {
             parent::render('orders_update', ['order' => $order]);
         } else {
@@ -40,7 +39,7 @@ class OrdersController extends Controller
             $orderPrice = $_POST["orderPrice"];
             $orderStock = $_POST["orderStock"];
             $orderImage = $_POST["orderImage"];
-            $model = new OrderModel();
+            $model = new OrderDetailsModel();
             $success = $model->update($orderId, $orderCategoryId, $orderContent, $orderName, $orderPrice, $orderStock, $orderImage);
             if ($success) {
                 header("Location: " . $_SERVER['REQUEST_URI']);
@@ -53,7 +52,7 @@ class OrdersController extends Controller
 
     public function index(): void
     {
-        $model = new OrderModel();
+        $model = new OrderDetailsModel();
         $orders = $model->index();
 
         if ($orders === false) {
@@ -68,9 +67,9 @@ class OrdersController extends Controller
         $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
         $ordersPerPage = 10;
         $offset = ($page - 1) * $ordersPerPage;
-        $model = new OrderModel();
-        $orders = $model->getAllOrders($offset, $ordersPerPage);
-        $totalorders = $model->getTotalOrders();
+        $model = new OrderDetailsModel();
+        $orders = $model->getAllOrderDetails($offset, $ordersPerPage);
+        $totalorders = $model->getTotalOrderDetails();
         $totalPages = ceil($totalorders / $ordersPerPage);
         $this->render('orders', ['orders' => $orders, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
@@ -82,35 +81,24 @@ class OrdersController extends Controller
 
     public function create(): void
     {
-        $order = new OrderModel();
-        $this->getOrderData($order);
+        $order = new OrderDetailsModel();
+        $this->createOrderData($order);
+        print_r($order);
         $order->save();
-        $orderId = $order->getId();
-        $this->getOrderDetailsFromCart($orderId);
+        $orderID = $order->getId();
+        $orderDetail = new OrderDetailsModel();
+        $orderDetail->createOrderDetails($orderID, $_POST['user_id']);
+        print_r($orderDetail);
 //        header("Location: /");
     }
 
-    private function getOrderData($order)
+    private function createOrderData($order)
     {
         $order->setTotalPrice($_POST['total']);
         $order->setUserID($_POST['user_id']);
         $order->setAddress1($_POST['address1']);
         $order->setAddress2($_POST['address2']);
         $order->setPhoneNumber($_POST['phone']);
-    }
-
-    private function getOrderDetailsFromCart($orderId)
-    {
-        $model = new CartModel();
-        $cartItems = $model->getCartByUserId($_POST['user_id']);
-        var_dump($cartItems);
-        foreach ($cartItems as $item) {
-            $detail = new OrderDetailsModel();
-            $detail->setOrderId($orderId);
-            $detail->setProductId($item['product_id']);
-            $detail->setQuantity($item['quantity']);
-            $detail->save();
-        }
     }
 
     public function delete(): void
