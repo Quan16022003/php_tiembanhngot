@@ -108,8 +108,6 @@ class ProductsController extends Controller
 
     public function openCreate(): void
     {
-        $model = new AdminProductsModel();
-        $productId = $model->generateProductId();
         $this->render('Products/products_create', ['productId' => $productId]);
     }
 
@@ -129,25 +127,14 @@ class ProductsController extends Controller
             $productPrice = $_POST["productPrice"];
             $productContent = $_POST["productContent"];
 
-            // Kiểm tra xem có tệp được tải lên không
             if (!empty($_FILES['productImage']['name'])) {
-                // Đường dẫn đến thư mục lưu trữ hình ảnh trên máy chủ
                 $uploadDirectory = "/public/uploads/";
-
-                // Tạo thư mục lưu trữ hình ảnh nếu nó không tồn tại
                 if (!file_exists($uploadDirectory)) {
                     mkdir($uploadDirectory, 0777, true);
                 }
-
-                // Đặt tên cho hình ảnh mới dựa trên timestamp và tên tệp
                 $imageName = time() . '_' . $_FILES['productImage']['name'];
-
-                // Đường dẫn đầy đủ đến hình ảnh trên máy chủ
                 $targetFilePath = $uploadDirectory . $imageName;
-
-                // Di chuyển tệp tải lên vào thư mục lưu trữ
                 if (move_uploaded_file($_FILES['productImage']['tmp_name'], $targetFilePath)) {
-                    // Đường dẫn hình ảnh trong thư mục lưu trữ
                     $productImage = $uploadDirectory . $imageName;
                 } else {
                     echo "Đã xảy ra lỗi khi tải lên hình ảnh.";
@@ -164,8 +151,7 @@ class ProductsController extends Controller
             $success = $model->create($productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage);
 
             if ($success) {
-                echo "Thêm sản phẩm thành công!";
-//                header("Location: /admin/products/edit/$productId");
+                header("Location: /admin/products/edit/$productId");
                 exit;
             } else {
                 echo "Thêm sản phẩm thất bại!";

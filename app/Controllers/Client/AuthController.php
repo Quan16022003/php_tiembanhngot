@@ -6,15 +6,18 @@ use Core\Controller;
 use App\Models\UserModel;
 use PHPMailer\PHPMailer\PHPMailer;
 
-class AuthController extends ClientController {
+class AuthController extends ClientController
+{
     private $userModel;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct('Client');
         $this->userModel = new UserModel();
     }
 
-    public function showLoginPage(): void {
+    public function showLoginPage(): void
+    {
         if (isset($_SESSION['username'])) {
             header('Location: /');
             exit;
@@ -22,7 +25,8 @@ class AuthController extends ClientController {
         parent::render('login');
     }
 
-    public function register() {
+    public function register()
+    {
         if (isset($_POST['action']) && $_POST['action'] == 'register') {
             $name = $this->checkInput($_POST['name']);
             $uname = $this->checkInput($_POST['uname']);
@@ -44,15 +48,19 @@ class AuthController extends ClientController {
         }
     }
 
-    public function login() {
+    public function login()
+    {
         if (isset($_POST['action']) && $_POST['action'] == 'login') {
             $username = $this->checkInput($_POST['username']);
             $password = $this->checkInput($_POST['password']);
 
             $user = $this->userModel->loginUser($username, $password);
+            $userId = $this->userModel->getUserIdByUsername($username);
+
 
             if ($user != null) {
                 $_SESSION['username'] = $username;
+                $_SESSION['userId'] = $userId;
                 echo 'ok';
                 if (!empty($_POST['rem'])) {
                     setcookie("username", $_POST['username'], time() + (10 * 365 * 24 * 60 * 60));
@@ -72,11 +80,14 @@ class AuthController extends ClientController {
         }
     }
 
-    public function logout() {
+    public function logout()
+    {
         session_destroy();
         header('Location: /account/login');
     }
-    public function forgotPassword() {
+
+    public function forgotPassword()
+    {
         $mail = new PHPMailer(true);
 
         try {
@@ -117,7 +128,8 @@ class AuthController extends ClientController {
         }
     }
 
-    public function resetPassword() {
+    public function resetPassword()
+    {
         $msg = "";
 
         if (isset($_GET['email']) && isset($_GET['token'])) {
@@ -151,7 +163,8 @@ class AuthController extends ClientController {
         parent::render('resetPassword', ['msg' => $msg]);
     }
 
-    public function generateChangePasswordEmail($resetLink) {
+    public function generateChangePasswordEmail($resetLink)
+    {
         $recipientName = "Quân";
         $userAgent = $_SERVER['HTTP_USER_AGENT'];
         $operatingSystem = $this->getOSInfo($userAgent);
@@ -176,14 +189,17 @@ class AuthController extends ClientController {
         return $body;
     }
 
-    function checkInput($data) {
+    function checkInput($data)
+    {
         $data = trim($data);
         $data = stripslashes($data);
         $data = htmlspecialchars($data);
 
         return $data;
     }
-    function getBrowserInfo($user_agent) {
+
+    function getBrowserInfo($user_agent)
+    {
         $browser_info = 'Unknown';
 
         if (strpos($user_agent, 'MSIE') !== FALSE || strpos($user_agent, 'Trident') !== FALSE) {
@@ -202,18 +218,20 @@ class AuthController extends ClientController {
 
         return $browser_info;
     }
-    function getOSInfo($user_agent) {
+
+    function getOSInfo($user_agent)
+    {
         $os_info = 'Unknown';
 
-        if (strpos($user_agent, 'Win')!== FALSE) {
+        if (strpos($user_agent, 'Win') !== FALSE) {
             $os_info = 'Windows';
-        } elseif (strpos($user_agent, 'Mac')!== FALSE) {
+        } elseif (strpos($user_agent, 'Mac') !== FALSE) {
             $os_info = 'MacOS';
-        } elseif (strpos($user_agent, 'Linux')!== FALSE) {
+        } elseif (strpos($user_agent, 'Linux') !== FALSE) {
             $os_info = 'Linux';
-        } elseif (strpos($user_agent, 'Android')!== FALSE) {
+        } elseif (strpos($user_agent, 'Android') !== FALSE) {
             $os_info = 'Android';
-        } elseif (strpos($user_agent, 'iOS')!== FALSE) {
+        } elseif (strpos($user_agent, 'iOS') !== FALSE) {
             $os_info = 'iOS';
         }
 
