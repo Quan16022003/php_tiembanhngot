@@ -13,45 +13,15 @@ class AdminProductsModel
         $this->db = Database::getInstance();
     }
 
-    public function insert($productId, $productCategoryId, $productName, $productPrice, $productQuantity): bool
-    {
-        // Kiểm tra xem sản phẩm có tồn tại không
-        $existingProduct = $this->getProductByID($productId);
-
-        if ($existingProduct) {
-            // Nếu sản phẩm đã tồn tại, cập nhật số lượng
-            $newQuantity = $existingProduct['stock'] + $productQuantity;
-            $sql = "UPDATE product SET stock = ? WHERE id = ?";
-            $stmt = $this->db->conn->prepare($sql);
-            $stmt->bind_param("is", $newQuantity, $productId);
-            $success = $stmt->execute();
-            $stmt->close();
-        } else {
-            // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
-            $sql = "INSERT INTO product (id, category_id, name, price, stock) VALUES (?, ?, ?, ?, ?)";
-            $stmt = $this->db->conn->prepare($sql);
-            $stmt->bind_param("sssss", $productId, $productCategoryId, $productName, $productPrice, $productQuantity);
-            $success = $stmt->execute();
-            $stmt->close();
-        }
-
-        return $success;
-    }
-
     public function create($productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage): bool
     {
-        if ($existingProduct) {
-            echo "ID đã tồn tại!";
-            return false;
-        } else {
-            // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
-            $sql = "INSERT INTO product (id, category_id, name, price, content, image_link) VALUES (?, ?, ?, ?, ?, ?)";
-            $stmt = $this->db->conn->prepare($sql);
-            $stmt->bind_param("sissss", $productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage);
-            $success = $stmt->execute();
-            $stmt->close();
-            return $success;
-        }
+        // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
+        $sql = "INSERT INTO product (id, category_id, name, price, content, image_link) VALUES (?, ?, ?, ?, ?, ?)";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("sissss", $productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage);
+        $success = $stmt->execute();
+        $stmt->close();
+        return $success;
     }
 
 
@@ -157,7 +127,6 @@ class AdminProductsModel
         $stmt->bind_param("ssssss", $searchText, $searchText, $searchText, $searchText, $searchText, $searchText);
         $stmt->execute();
 
-        // Trả về kết quả
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
@@ -196,27 +165,6 @@ class AdminProductsModel
         $success = $stmt->execute();
         $stmt->close();
         return $success;
-    }
-
-    public function generateProductId()
-    {
-        // Query to get the last product ID
-        $sql = "SELECT id FROM product ORDER BY id DESC LIMIT 1";
-        $stmt = $this->db->conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $lastId = $result->fetch_assoc()['id'];
-
-        // Extract the numeric part of the ID
-        $number = intval(substr($lastId, 2));
-
-        // Increment the number
-        $number++;
-
-        // Generate the new ID
-        $newId = 'SP' . str_pad($number, 4, '0', STR_PAD_LEFT);
-
-        return $newId;
     }
 
     public function saveImageLink($productId, $imageLink)

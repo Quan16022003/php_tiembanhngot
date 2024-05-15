@@ -9,17 +9,18 @@ class OrderModel
     private $id;
     private $orderDate;
     private $totalPrice;
-    private $customerId;
+    private $userId;
     private $address1;
     private $address2;
     private $phoneNumber;
     private $createdAt;
 
-    public function __construct($data = []) {
+    public function __construct($data = [])
+    {
         $this->id = $data['id'] ?? null;
         $this->orderDate = $data['order_date'] ?? null;
         $this->totalPrice = $data['total_price'] ?? null;
-        $this->customerId = $data['user_id'] ?? null;
+        $this->userId = $data['user_id'] ?? null;
         $this->address1 = $data['address1'] ?? null;
         $this->address2 = $data['address2'] ?? null;
         $this->phoneNumber = $data['phone_number'] ?? null;
@@ -36,24 +37,32 @@ class OrderModel
         }
     }
 
-    public function createOrder($db) {
-        $sql = "INSERT INTO `order`(`order_date`, `total_price`, `customer_id`, `address1`, `address2`, `phone_number`, `created_at`) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public function createOrder($db)
+    {
+        $sql = "INSERT INTO `order`(`total_price`, `user_id`, `address1`, `address2`, `phone_number`) VALUES (?, ?, ?, ?, ?)";
         $stmt = $db->prepare($sql);
-        $stmt->bind_param("siiisss", $this->orderDate, $this->totalPrice, $this->customerId, $this->address1, $this->address2, $this->phoneNumber, $this->createdAt);
+        $stmt->bind_param("iiiss", $this->totalPrice, $this->userId, $this->address1, $this->address2, $this->phoneNumber);
+        if ($stmt->execute()) {
+            $this->id = $stmt->insert_id;
+            $stmt->close();
+            return true;
+        } else {
+            $stmt->close();
+            return false;
+        }
+    }
+
+    public function updateOrder($db)
+    {
+        $sql = "UPDATE `order` SET `order_date`=?, `total_price`=?, `user_id`=?, `address1`=?, `address2`=?, `phone_number`=?, `created_at`=? WHERE `id`=?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("siiisssi", $this->orderDate, $this->totalPrice, $this->userId, $this->address1, $this->address2, $this->phoneNumber, $this->createdAt, $this->id);
         $success = $stmt->execute();
-        $this->id = $stmt->insert_id;
         $stmt->close();
     }
 
-    public function updateOrder($db) {
-        $sql = "UPDATE `order` SET `order_date`=?, `total_price`=?, `customer_id`=?, `address1`=?, `address2`=?, `phone_number`=?, `created_at`=? WHERE `id`=?";
-        $stmt = $db->prepare($sql);
-        $stmt->bind_param("siiisssi", $this->orderDate, $this->totalPrice, $this->customerId, $this->address1, $this->address2, $this->phoneNumber, $this->createdAt, $this->id);
-        $success = $stmt->execute();
-        $stmt->close();
-    }
-
-    public static function getAllOrders() {
+    public static function getAllOrders()
+    {
         $db = Database::getConnection();
         $sql = "SELECT o.*, u.name
                 FROM `order` o
@@ -118,4 +127,76 @@ class OrderModel
         }
         return $orders;
     }
+
+    public function getOrderDate(): mixed
+    {
+        return $this->orderDate;
+    }
+
+    public function setOrderDate(mixed $orderDate): void
+    {
+        $this->orderDate = $orderDate;
+    }
+
+    public function getTotalPrice(): mixed
+    {
+        return $this->totalPrice;
+    }
+
+    public function setTotalPrice(mixed $totalPrice): void
+    {
+        $this->totalPrice = $totalPrice;
+    }
+
+    public function getUserId(): mixed
+    {
+        return $this->userId;
+    }
+
+    public function setUserId(mixed $userId): void
+    {
+        $this->userId = $userId;
+    }
+
+    public function getAddress1(): mixed
+    {
+        return $this->address1;
+    }
+
+    public function setAddress1(mixed $address1): void
+    {
+        $this->address1 = $address1;
+    }
+
+    public function getAddress2(): mixed
+    {
+        return $this->address2;
+    }
+
+    public function setAddress2(mixed $address2): void
+    {
+        $this->address2 = $address2;
+    }
+
+    public function getPhoneNumber(): mixed
+    {
+        return $this->phoneNumber;
+    }
+
+    public function setPhoneNumber(mixed $phoneNumber): void
+    {
+        $this->phoneNumber = $phoneNumber;
+    }
+
+    public function getCreatedAt(): mixed
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(mixed $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+
 }

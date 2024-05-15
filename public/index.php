@@ -4,6 +4,7 @@ require_once '../vendor/autoload.php';
 
 use FastRoute\RouteCollector;
 use function FastRoute\simpleDispatcher;
+
 define('INC_ROOT', __DIR__);
 
 session_start();
@@ -48,12 +49,6 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/edit/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'getById']);
             $r->addRoute('POST', '/edit/{categoryID}', ['App\Controllers\Admin\CategoriesController', 'update']);
             $r->addRoute('POST', '/search', ['App\Controllers\Admin\CategoriesController', 'search']);
-        });
-
-        // INVOICES
-        $r->addGroup('/invoices', function (RouteCollector $r) {
-            $r->addRoute('GET', '', ['App\Controllers\Admin\InvoicesController', 'indexPage']);
-            $r->addRoute('GET', '/view/{invoiceId}', ['App\Controllers\Admin\InvoicesController', 'getById']);
         });
 
         // SUPPLIERS
@@ -151,9 +146,12 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         });
         // cart
         $r->addRoute('GET', '/cart/addtocart', ['App\Controllers\Client\CartController', 'addToCart']);
-        $r->addRoute('GET','/cart', ['App\Controllers\Client\CartController', 'index']);
-        $r->addRoute('POST','/cart/add', ['App\Controllers\Client\CartController', 'addToCart']);
+        $r->addRoute('GET', '/cart', ['App\Controllers\Client\CartController', 'index']);
+        $r->addRoute('POST', '/cart/add', ['App\Controllers\Client\CartController', 'addToCart']);
 
+        // checkout
+        $r->addRoute('GET', '/checkout/{cartId}', ['App\Controllers\Client\CheckOutController', 'showCheckOutPage']);
+        $r->addRoute('POST', '/checkout/submit', ['App\Controllers\Admin\OrdersController', 'create']);
     });
 
 });
