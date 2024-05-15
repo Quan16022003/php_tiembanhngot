@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Core\Database;
 
-class OrderDetailModel
+class OrderDetailsModel
 {
     private $id;
     private $orderId;

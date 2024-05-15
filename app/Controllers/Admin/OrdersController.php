@@ -3,6 +3,7 @@
 namespace App\Controllers\Admin;
 
 use App\Models\OrderDetailModel;
+use App\Models\OrderDetailsModel;
 use App\Models\OrderLogsModel;
 use App\Models\OrderModel;
 use App\Models\UserModel;
@@ -41,11 +42,44 @@ class OrdersController extends AdminController
         $id = $vars['id'];
         $data = [
             'order' => OrderModel::getOrderById($id),
-            'products' => OrderDetailModel::getAllOrderDetailByOrderId($id),
+            'products' => OrderDetailsModel::getAllOrderDetailByOrderId($id),
             'statuses' => OrderModel::getAllStatusOrder(),
             'logs' => OrderLogsModel::getLogsForOrder($id)
         ];
         parent::render('Orders/show', $data);
+    }
+
+    public function create(): void
+    {
+        $order = new OrderModel();
+        $this->getOrderData($order);
+        $order->save();
+        $orderId = $order->getId();
+        $this->getOrderDetailsFromCart($orderId);
+//        header("Location: /");
+    }
+
+    private function getOrderData($order)
+    {
+        $order->setTotalPrice($_POST['total']);
+        $order->setUserID($_POST['user_id']);
+        $order->setAddress1($_POST['address1']);
+        $order->setAddress2($_POST['address2']);
+        $order->setPhoneNumber($_POST['phone']);
+    }
+
+    private function getOrderDetailsFromCart($orderId)
+    {
+        $model = new CartModel();
+        $cartItems = $model->getCartByUserId($_POST['user_id']);
+        var_dump($cartItems);
+        foreach ($cartItems as $item) {
+            $detail = new OrderDetailsModel();
+            $detail->setOrderId($orderId);
+            $detail->setProductId($item['product_id']);
+            $detail->setQuantity($item['quantity']);
+            $detail->save();
+        }
     }
 
     public function updateStatus($vars) {
