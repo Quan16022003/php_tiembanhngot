@@ -78,6 +78,13 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
             $r->addRoute('GET', '/{id:\d+}/update_status', ['App\Controllers\Admin\PurchaseOrdersController', 'updateStatus']);
         });
 
+        // ORDERS
+        $r->addGroup(('/orders'), function(RouteCollector $r) {
+            $r->addRoute('GET', '', ['App\Controllers\Admin\OrdersController', 'index']);
+            $r->addRoute('GET', '/{id:\d+}', ['App\Controllers\Admin\OrdersController', 'show']);
+            $r->addRoute('POST', '/{id:\d+}/update_status', ['App\Controllers\Admin\OrdersController', 'updateStatus']);
+        });
+
         // HOMES
         $r->addRoute('GET', '/home', ['App\Controllers\Admin\HomeController', 'index']);
         $r->addRoute('GET', '/blank', ['App\Controllers\Admin\HomeController', 'showBlankPage']);

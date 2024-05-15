@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Core\Database;
+
 class OrderDetailModel
 {
     private $id;
@@ -47,7 +49,7 @@ class OrderDetailModel
 
     public static function getAllOrderDetails() {
         $db = Database::getConnection();
-        $sql = "SELECT * FROM `order_detail`";
+        $sql = "SELECT o.*, p.name FROM `order_detail` o INNER JOIN product p ON o.product_id = p.id;";
         $result = $db->query($sql);
         $orderDetails = [];
         while ($row = $result->fetch_assoc()) {
@@ -58,7 +60,7 @@ class OrderDetailModel
 
     public static function getOrderDetailById($id) {
         $db = Database::getConnection();
-        $sql = "SELECT * FROM `order_detail` WHERE `id`=?";
+        $sql = "SELECT o.*, p.name FROM `order_detail` o INNER JOIN product p ON o.product_id = p.id WHERE `id`=?";
         $stmt = $db->prepare($sql);
         $stmt->bind_param("i", $id);
         $stmt->execute();
@@ -69,7 +71,7 @@ class OrderDetailModel
 
     public static function getAllOrderDetailByOrderId($orderId) {
         $db = Database::getConnection();
-        $sql = "SELECT * FROM `order_detail` WHERE `order_id`=?";
+        $sql = "SELECT o.*, p.name, o.quantity*o.price as total FROM `order_detail` o INNER JOIN product p ON o.product_id = p.id WHERE `order_id`=?";
         $stmt = $db->prepare($sql);
         $stmt->bind_param("i", $orderId);
         $stmt->execute();

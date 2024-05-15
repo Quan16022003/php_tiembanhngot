@@ -1,0 +1,219 @@
+{% set page = 'purchase_orders' %}
+{% extends 'layout.twig' %}
+
+{% block title %}Hiển thị đơn hàng mua{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        .timeline {
+            border-left: 1px solid hsl(0, 0%, 90%);
+            position: relative;
+            list-style: none;
+        }
+
+        .timeline .timeline-item {
+            position: relative;
+        }
+
+        .timeline .timeline-item:after {
+            position: absolute;
+            display: block;
+            top: 0;
+        }
+
+        .timeline .timeline-item:after {
+            background-color: hsl(0, 0%, 90%);
+            left: -38px;
+            border-radius: 50%;
+            height: 11px;
+            width: 11px;
+            content: "";
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="ps-md-3 pe-md-3">
+        <h3 class="text-dark">
+            <a class="btn btn-light btn-sm d-none d-sm-inline-block" role="button" href="/admin/orders">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            {% set status = statuses[order.status] %}
+            Đơn hàng #{{ order.id }} <span class="badge text-bg-{{ status.color }} rounded-pill" >{{ status.name }}</span>
+        </h3>
+        <p class="text-dark mb-4">{{ order.created_at }}</p>
+        <div class="row row-cols-lg-2">
+            <div class="col col-lg-8">
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Danh sách sản phẩm</h5>
+                        <div class="table-responsive-md">
+                            <table class="table table-responsive-md">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Tổng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set total = 0 %}
+                                {% for product in products %}
+                                    <tr>
+                                        <td>{{ product.id }}</td>
+                                        <td>{{ product.name }}</td>
+                                        <td>{{ product.quantity }}</td>
+                                        <td>{{ product.price|formatCurrency }}</td>
+                                        {% set total_unit = product.quantity * product.price %}
+                                        <td>{{ total_unit|formatCurrency }}</td>
+                                        {% set total = total + total_unit %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-end">Tổng cộng: <span class="fw-bold">{{ total|formatCurrency }}</span></p>
+                    </div>
+                </div>
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Timeline</h5>
+                        <!-- Section: Timeline -->
+                        <section class="py-2">
+                            <ul class="timeline">
+                                {% for log in logs %}
+                                <li class="timeline-item mb-5">
+                                    <h6 class="fw-bold">{{ log.description }}</h6>
+                                    <p class="text-muted mb-2 fw-bold">{{ log.timestamp }}</p>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </section>
+                        <!-- Section: Timeline -->
+                    </div>
+                </div>
+            </div>
+            <div class="col col-lg-4">
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Thông tin khách hàng</h5>
+                        <table class="table">
+                            <tbody>
+                            <tr>
+                                <th scope="row">Tên khách hàng</th>
+                                <td>{{ order.name }}</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">Số điện thoại</th>
+                                <td>{{ order.phone_number }}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Địa chỉ giao hàng</h5>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="address1" disabled>{{ order.address1 }}</textarea>
+                            <label for="address1">Địa chỉ 1</label>
+                        </div>
+                        <div class="form-floating mb-3">
+                            <textarea class="form-control" id="address1" disabled>{% if order.address2 %}{{ order.address2 }}{% else %}Không có{% endif %}</textarea>
+                            <label for="address1">Địa chỉ 2</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card shadow mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Thay đổi trạng thái</h5>
+                        <form id="updateStatusForm" data-orderid="{{ order.id }}">
+                            <select id="newStatusSelect" name="newStatus" class="form-select">
+                                {% for id, status in statuses %}
+                                    <option value="{{ status.id }}" {% if status.id == order.status %}selected{% endif %}>{{ status.name }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit" class="btn btn-primary mt-2" id="updateStatusButton" disabled>Cập nhật</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-timeline/1.0.0/bootstrap-timeline.min.css"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        $(document).ready(function() {
+            const currentStatus = {{ order.status }};
+
+            $('#newStatusSelect').change(function() {
+                var newStatus = $(this).val();
+
+                // Kiểm tra xem trạng thái mới có khác trạng thái hiện tại không
+                if (newStatus != currentStatus) {
+                    $('#updateStatusButton').prop('disabled', false);
+                } else {
+                    $('#updateStatusButton').prop('disabled', true);
+                }
+                console.log(currentStatus);
+            });
+            $('#updateStatusForm').submit(function(event) {
+                event.preventDefault();
+
+                var orderId = $(this).data('orderid');
+                var newStatus = $(this).find('select[name="newStatus"]').val();
+
+                Swal.fire({
+                    title: 'Xác nhận thay đổi trạng thái',
+                    text: "Bạn có chắc chắn muốn thay đổi trạng thái đơn hàng từ '" + currentStatus + "' sang '" + newStatus + "' không?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Đồng ý',
+                    cancelButtonText: 'Hủy'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: '/admin/orders/' + orderId + '/update_status',
+                            method: 'POST',
+                            data: { newStatus: newStatus },
+                            dataType: 'json',
+                            success: function(response) {
+                                console.log(response);
+                                if (response.success) {
+                                    Swal.fire(
+                                        'Thành công!',
+                                        'Trạng thái đơn hàng đã được cập nhật.',
+                                        'success'
+                                    ).then(() => {
+                                        location.reload();
+                                    });
+                                } else {
+                                    Swal.fire(
+                                        'Lỗi!',
+                                        'Đã có lỗi xảy ra trong quá trình cập nhật.',
+                                        'error'
+                                    );
+                                }
+                            },
+                            error: function() {
+                                Swal.fire(
+                                    'Lỗi!',
+                                    'Đã có lỗi xảy ra trong quá trình cập nhật.',
+                                    'error'
+                                );
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock %}

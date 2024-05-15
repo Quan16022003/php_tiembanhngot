@@ -11,9 +11,9 @@ class Database
     public ?mysqli $conn = NULL;
 
     private string $host = 'localhost';
-    private string $dbName = 'cuahangbanbanh';
+    private string $dbName = 'eco';
     private string $user = 'root';
-    private string $password = 'namdt2003';
+    private string $password = '';
 
     // Hàm kết nối CSDL
     private function __construct()
