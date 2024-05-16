@@ -1,5 +1,62 @@
-<footer class="mb-4 border-top pt-3 ps-3 pe-3">
-    <div class="d-flex flex-wrap justify-content-between align-items-center">
+<footer class="mb-4 border-top">
+    <style>
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .carousel-item img {
+            height: 500px; /* Thay đổi giá trị này theo yêu cầu */
+            object-fit: cover; /* Đảm bảo hình ảnh vẫn giữ nguyên tỷ lệ khi thay đổi kích thước */
+        }
+
+        .list-unstyled {
+            margin-top: 0;
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .text-decoration-none {
+            position: relative;
+            text-decoration: none; /* Loại bỏ gạch dưới mặc định */
+        }
+
+        .text-decoration-none::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; /* Đẩy đường gạch dưới xuống một chút để nó không chồng lên chữ */
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-image: linear-gradient(to right, white, white 50%, transparent 50%); /* Gradient từ đen sang trong suốt */
+            background-size: 200% 100%; /* Kích thước gradient là gấp đôi chiều rộng */
+            background-position: right bottom; /* Bắt đầu gradient từ bên phải */
+            transition: background-position 0.3s; /* Hiệu ứng chuyển đổi vị trí gradient */
+        }
+
+        .text-decoration-none:hover::after, /* Hiệu ứng khi hover */
+        .text-decoration-none.active::after { /* Hiệu ứng khi active */
+            background-position: left bottom; /* Di chuyển gradient sang trái */
+        }
+    </style>
+
+    <div class="row justify-content-center" style="background: saddlebrown">
+        <div class="mt-5 mb-5 col-10 col-lg-4 d-flex align-items-center justify-content-center text-center">
+            <ul class="list-unstyled fs-5 fw-bold my-4">
+                <li><a class="text-white text-decoration-none text-uppercase" href="/cart"><span>Online Ordering</span></a>
+                </li>
+                <li><a class="text-white text-decoration-none text-uppercase" href="/products"><span>Menu</span></a>
+                </li>
+                <li><a class="text-white text-decoration-none text-uppercase" href="/about-us"><span>About</span></a>
+                </li>
+                <li><a class="text-white text-decoration-none text-uppercase" href="/contact"><span>Contact</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-between align-items-center p-3">
         <div class="col-md-4 d-flex align-items-center">
             <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
                 <img src="images/logo.png" alt="logo" height="25">
@@ -23,10 +80,18 @@
             <li class="ms-3"><a class="text-body-secondary" href="https://www.facebook.com/">
                     <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="24" height="24" viewBox="0 0 24 24">
                         <path d="M3 12.9C3 12.9 3.1 12.9 3 12.9 3.1 12.9 3 12.9 3 12.9zM12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.2 8.6 9.9v-7.5H8.4V12h2.3v-1.6c0-2.6 1.2-3.7 3.4-3.7 1 0 1.5.1 1.8.1v2h-1.5c-.9 0-1.2.9-1.2 1.9V12h2.7l-.4 2.4h-2.3v7.5c4.9-.6 8.8-4.8 8.8-9.9C22 6.5 17.5 2 12 2z"></path>
-                    </svg></a></li>
+                    </svg>
+                </a></li>
         </ul>
+        <p class="footer-bottom">
+            - © {{ post.published_at|date("Y") }} ABC Bakery. All rights reserved. - CÔNG TY TNHH MỘT THÀNH VIÊN BÁNH
+            KẸO Á
+            CHÂU MS doanh nghiệp: 0302259104 do sở Kế Hoạch và Đầu Tư TP.Hồ Chí Minh cấp lần đầu ngày 14/03/2001, đăng
+            ký
+            thay đổi lần thứ 16 ngày 26/04/2017. Người chịu trách nhiệm: Kao Siêu Lực Trụ sở: 1175A, đường 3/2, phường
+            6,
+            quận 11, Tp. HCM, Việt Nam Điện thoại: (028) 37520857 Fax: (028) 38551242 Email: contact@abcbakery.co
+        </p>
     </div>
-    <p class="footer-bottom">
-        - © {{ post.published_at|date("Y") }} ABC Bakery. All rights reserved. - CÔNG TY TNHH MỘT THÀNH VIÊN BÁNH KẸO Á CHÂU MS doanh nghiệp: 0302259104 do sở Kế Hoạch và Đầu Tư TP.Hồ Chí Minh cấp lần đầu ngày 14/03/2001, đăng ký thay đổi lần thứ 16 ngày 26/04/2017. Người chịu trách nhiệm: Kao Siêu Lực Trụ sở: 1175A, đường 3/2, phường 6, quận 11, Tp. HCM, Việt Nam Điện thoại: (028) 37520857 Fax: (028) 38551242 Email: contact@abcbakery.co
-    </p>
+
 </footer>

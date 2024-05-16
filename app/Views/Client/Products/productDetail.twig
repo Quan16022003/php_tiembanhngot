@@ -1,0 +1,79 @@
+{% extends './layout.twig' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-0">
+        <form id="product_detail_form" method="post" action="/cart/add">
+            <div class="row m-4">
+                <div class="col p-0">
+                    <img src="{{ product.image }} " alt="{{ product.name }}" class="img-fluid w-100">
+                </div>
+                <div class="col m-4 flex-column align-items-center justify-content-center">
+                    <h1>Name: {{ product.name }}</h1>
+                    <p>Category: {{ product.category_id }}</p>
+                    <p>Description: {{ product.content }}</p>
+                    <p>Price: {{ product.price }} &#8363;</p>
+                    {% if product.discount %}
+                        <p>Discount: {{ product.discount }}%</p>
+                        <p>Discounted Price: {{ product.price * (100 - product.discount) / 100 }} &#8363;</p>
+                    {% endif %}
+                    <div class="d-flex flex-row align-items-center">
+                        <label for="quantity">Số lượng:</label>
+                        <input id="quantity" type="number" name="quantity" value="1" min="1"
+                               class="h-25 form-control m-3 w-25">
+                    </div>
+                    <span>Stock: {{ product.stock }}</span>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" id="product_id" name="product_id" value="{{ product.id }}">
+            <input type="hidden" id="name" name="name" value="{{ product.name }}">
+            <input type="hidden" id="content" name="content" value="{{ product.content }}">
+            <input type="hidden" id="price" name="price" value="{{ product.price }}">
+            <input type="hidden" id="image_link" name="image_link" value="{{ product.image_link }}">
+        </form>
+        <div class="row my-4 mx-1">
+            <h2>Related Products</h2>
+            <div class="row row-cols-1 row-cols-md-4 g-4">
+                {% for product in related_products %}
+                <div class="col">
+                    <div class="card h-100">
+                        <img src="{{ product.image_link }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title text-truncate">{{ product.name }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        // $(document).ready(function() {
+        //     $('#product_detail_form').submit(function(event) {
+        //         event.preventDefault();
+        //
+        //         const formData = $(this).serialize();
+        //
+        //         $.ajax({
+        //             type: 'POST',
+        //             url: '/cart/add',
+        //             data: formData,
+        //             success: function(response) {
+        //                 console.log(response);
+        //                 alert('Sản phẩm đã được thêm vào giỏ hàng thành công!');
+        //             },
+        //             error: function(xhr, status, error) {
+        //                 console.error(xhr.responseText);
+        //             }
+        //         });
+        //     });
+        // });
+
+    </script>
+{% endblock %}

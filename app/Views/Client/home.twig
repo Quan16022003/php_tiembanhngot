@@ -8,18 +8,32 @@
 {% endblock %}
 
 {% block content %}
+        <video class="embed-responsive w-100 z-n1" preload="auto" autoplay="" muted="" loop="" playsinline=""
+               data-poster="https://parisbaguette.com/wp-content/themes/parisbaguette/assets/images/blank.gif"
+               poster="https://parisbaguette.com/wp-content/themes/parisbaguette/assets/images/blank.gif"
+               data-loaded="true">
+            <source type="video/mp4" data-src="https://parisbaguette.com/wp-content/uploads/pb-brand.mp4"
+                    src="https://parisbaguette.com/wp-content/uploads/pb-brand.mp4">
+        </video>
+        <div class="overlay">
+            <div class="text-white text-center">
+                <h2>Welcome.</h2>
+            </div>
+        </div>
     <div id="carousel" class="carousel slide carousel-fade m-0 mb-lg-4" data-bs-ride="carousel">
         <div class="carousel-indicators">
             {% for i in 0..sliders|length-1 %}
-            <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ i }}" {% if i == 0 %}class="active" aria-current="true" {% endif %} aria-label="Slide {{ i+1 }}"></button>
+                <button type="button" data-bs-target="#carousel" data-bs-slide-to="{{ i }}"
+                        {% if i == 0 %}class="active" aria-current="true" {% endif %}
+                        aria-label="Slide {{ i+1 }}"></button>
             {% endfor %}
         </div>
 
         <div class="carousel-inner">
             {% for key, value in sliders %}
-            <div class="carousel-item {{ key == 0 ? 'active' : '' }}">
-                <img src="{{ value }}" class="d-block w-100" alt="banner">
-            </div>
+                <div class="carousel-item {{ key == 0 ? 'active' : '' }}">
+                    <img src="{{ value }}" class="d-block w-100" alt="banner">
+                </div>
             {% endfor %}
         </div>
         <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
@@ -31,9 +45,9 @@
             <span class="visually-hidden">Next</span>
         </button>
     </div>
-{#    CAROUSEL END#}
+    {#    CAROUSEL END #}
 
-{#    PRODUCT START#}
+    {#    PRODUCT START #}
     <div class="row row-cols-1 row-cols-md-3 g-4 mb-5 ms-lg-5 me-lg-5 m-auto">
         {% for category in categories %}
             <div class="col">
@@ -52,11 +66,11 @@
             </div>
         {% endfor %}
     </div>
-{#    PRODUCT END#}
+    {#    PRODUCT END #}
 
-{#    SOLOGAN START#}
+    {#    SOLOGAN START #}
 
 
 
-    {#    SOLOGAN END#}
+    {#    SOLOGAN END #}
 {% endblock %}

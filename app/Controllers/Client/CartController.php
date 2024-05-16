@@ -49,7 +49,7 @@ class CartController extends ClientController
             // Nếu sản phẩm đã tồn tại, cập nhật số lượng
             $newQuantity = $existingCartItem['quantity'] + $quantity;
             if ($this->cartModel->updateCart($userId, $productID, $newQuantity)) {
-                echo 'success';
+                header('Location: /cart');
             } else {
                 echo 'error';
             }
