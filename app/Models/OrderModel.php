@@ -128,6 +128,16 @@ class OrderModel
         return $orders;
     }
 
+    public function getId(): mixed
+    {
+        return $this->id;
+    }
+
+    public function setId(mixed $id): void
+    {
+        $this->id = $id;
+    }
+
     public function getOrderDate(): mixed
     {
         return $this->orderDate;
