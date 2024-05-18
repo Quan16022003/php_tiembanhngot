@@ -1,48 +1,65 @@
 <?php
-
 namespace App\Controllers\Admin;
 
-use Core\Controller;
 use App\Models\AdminDashboardModel;
+use App\Models\CategoriesModel;
+use Core\Controller;
 
 class DashboardController extends Controller
 {
+    private $adminDashboardModel;
+    private $categoriesModel;
+    private $years;
+    private $selectedYear;
+    private $startDate;
+    private $endDate;
+    private $selectedCategory;
+
     public function __construct()
     {
         parent::__construct('Admin');
-
+        $this->adminDashboardModel = new AdminDashboardModel();
+        $this->categoriesModel = new CategoriesModel();
+        $this->initData();
     }
 
-    public function TopProductsOfAWeek(): void
+    private function initData(): void
     {
-        $model = new AdminDashboardModel();
-        $years = $model->getYearsFromDatabase();
-
-        $startDate = null;
-        $endDate = null;
-        if (isset($_GET['week']) && $_GET['week'] !== 'all') {
-            [$startDate, $endDate] = explode('|', $_GET['week']);
-            $startDate = date('Y-m-d', strtotime($startDate));
-            $endDate = date('Y-m-d', strtotime($endDate));
-
-        }
-        $totalSoldByType = $model->getTotalSoldProductsByType($startDate, $endDate);
-
-//        if (empty($totalSoldByType)) {
-//            echo "Không có dữ liệu tổng số lượng sản phẩm đã bán theo loại!";
-//            return;
-//        }
-
-        // Mặc định chọn năm hiện tại
-        $selectedYear = date('Y');
-
-        // Pass dữ liệu vào view
-        $data = [
-            'years' => $years,
-            'selectedYear' => $selectedYear,
-            'totalSoldByType' => $totalSoldByType
-        ];
-//        echo json_encode($data);
-        parent::render('dashboard/dashboard', $data);
+        // Kiểm tra và gán giá trị cho các biến
+        $this->startDate = isset($_GET['start_date']) && $_GET['start_date'] ? date('Y-m-d', strtotime($_GET['start_date'])) : null;
+        $this->endDate = isset($_GET['end_date']) && $_GET['end_date'] ? date('Y-m-d', strtotime($_GET['end_date'])) : null;
+        $this->selectedCategory = isset($_GET['categories']) && $_GET['categories'] !== null ? $_GET['categories'] : null;
+        // Gọi phương thức để lấy dữ liệu từ model và khởi tạo các biến khác
+        $this->years = $this->adminDashboardModel->getYearsFromDatabase();
+        $this->selectedYear = date('Y');
     }
+
+    public function listProductSales(): void
+    {
+        try {
+            // Lấy dữ liệu từ model
+            $totalSoldByType = $this->adminDashboardModel->getTotalSoldProductsByType($this->startDate, $this->endDate, $this->selectedCategory);
+
+            // Lấy danh mục từ model
+            $categories = $this->categoriesModel->getAllCategories();
+
+            // Render view với dữ liệu đã lấy được
+            $this->render('dashboard/products', [
+                'years' => $this->years,
+                'selectedYear' => $this->selectedYear,
+                'startDate' => $this->startDate,
+                'endDate' => $this->endDate,
+                'selectedCategory' => $this->selectedCategory,
+                'totalSoldByType' => $totalSoldByType,
+                'categories' => $categories
+            ]);
+        } catch (\Exception $e) {
+            // Xử lý ngoại lệ
+            $this->handleError($e);
+        }
+    }
+
+    // Các phương thức khác có thể sử dụng các biến years, selectedYear, startDate, endDate, selectedCategory tương tự như trong phương thức topProductsOfAWeek()
+
+    // Các phương thức phụ trợ và xử lý ngoại lệ
 }

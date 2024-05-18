@@ -168,27 +168,28 @@
         }
 
         // Hàm xử lý khi nhấp vào nút sửa
-        function editProduct(productID) {
-            window.location.href = "/admin/products/edit/" + productID;
+        function editProduct(id) {
+            window.location.href = "/admin/products/edit/" + id;
         }
 
         // Hàm xử lý khi nhấp vào nút xóa
-        function deleteProduct(productID) {
+        function deleteProduct(id) {
             if (confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?")) {
                 const xhr = new XMLHttpRequest();
-                xhr.open("POST", "/admin/products/delete/" + productID, true);
+                xhr.open("POST", "/admin/products/delete/" + id, true);
                 xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             // Xóa sản phẩm thành công, có thể reload trang hoặc làm gì đó khác
+
                             location.reload()
                         } else {
                             console.error("Có lỗi xảy ra khi gửi yêu cầu xóa sản phẩm.");
                         }
                     }
                 };
-                xhr.send("productID=" + productID);
+                xhr.send("id=" + id);
             }
         }
 

@@ -1,0 +1,112 @@
+{% extends './layout.twig' %}
+{% block title %}Edit Products{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="edit-product-form" id="edit-product-form">
+            <h2>Thông tin sản phẩm</h2>
+            <form id="edit-products-form" method="post" enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group m-4">
+                            <label for="id">Mã sản phẩm:</label>
+                            <input type="text" class="form-control" id="id" name="id" readonly
+                                   value="{{ product.id }}">
+                        </div>
+                        <div class="form-group m-4">
+                            <label for="name">Tên sản phẩm:</label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   value="{{ product.name }}" required>
+                        </div>
+
+                        <div class="form-group m-4">
+                            <label for="content">Mô tả:</label>
+                            <input type="text" class="form-control" id="content" name="content"
+                                   value="{{ product.content }}" required>
+                        </div>
+
+                        <div class="form-group m-4">
+                            <label for="price">Giá:</label>
+                            <input type="text" class="form-control" id="price" name="price"
+                                   value="{{ product.price }}" required>
+                        </div>
+
+                        <div class="form-group m-4">
+                            <label for="image">Hình ảnh:</label>
+                            <div class="d-flex">
+                                <input class="form-control" type="file" name="image" id="image"/>
+                                <input id="current_image" type="hidden" name="current_image"
+                                       value="{{ product.image_link }}">
+                                <button class="btn btn-danger" type="button" onclick="deleteImage()">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group m-4">
+                            <label for="category_id">Mã thể loại:</label>
+                            <select class="form-control" id="category_id" name="category_id">
+                                {% for category in categories %}
+                                    {% if category.id == product.category_id %}
+                                        <option value="{{ category.id }}" selected>{{ category.name }}</option>
+                                    {% else %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group m-4">
+                            <label for="supplier_id">Mã NCC:</label>
+                            <select class="form-control" id="supplier_id" name="supplier_id">
+                                {% if not product.supplier_id %}
+                                    <option value="" selected>Không có nhà cung cấp</option>
+                                {% endif %}
+                                {% for supplier in suppliers %}
+                                    {% if supplier.id == product.supplier_id %}
+                                        <option value="{{ supplier.id }}" selected>{{ supplier.company_name }}</option>
+                                    {% else %}
+                                        <option value="{{ supplier.id }}">{{ supplier.company_name }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group m-4">
+                            <label for="stock">Số lượng:</label>
+                            <input type="text" class="form-control" id="stock" name="stock"
+                                   value="{{ product.stock }}" required>
+                        </div>
+                        <div class="m-4">
+                            <img src="/public/uploads/{{ product.image_link }}" class="w-100 rounded-5">
+                        </div>
+                    </div>
+                </div>
+                <div class="m-4">
+                    <button type="submit" class="btn btn-success">Lưu</button>
+                    <a href="/admin/products" class="btn btn-secondary">Hủy</a>
+                </div>
+            </form>
+            {% if app.session.get('message') %}
+                <div class="alert alert-success">
+                    {{ app.session.get('message') }}
+                </div>
+                {% do app.session.remove('message') %}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script src="/public/js/global.js"></script>
+    <script>
+        function deleteImage() {
+            // Xóa giá trị của trường nhập liệu hình ảnh
+            const input = document.getElementById('image');
+            input.value = '';
+            // Xóa giá trị của trường ẩn lưu trữ tên hình ảnh hiện tại
+            const hiddenInput = document.getElementById('current_image');
+            hiddenInput.value = '';
+            // Hiển thị thông báo hoặc thực hiện các hành động khác nếu cần
+            alert("Hình ảnh đã được loại bỏ.");
+        }
+    </script>
+{% endblock %}

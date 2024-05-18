@@ -22,18 +22,19 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/account/profile', ['App\Controllers\Admin\AuthController', 'showProfilePage']);
 
         // DASHBOARD
-        $r->addRoute('GET', '/dashboard', ['App\Controllers\Admin\DashboardController', 'TopProductsOfAWeek']);
+        $r->addRoute('GET', '/dashboard', ['App\Controllers\Admin\DashboardController', 'listProductSales']);
 
         // PRODUCTS
         $r->addGroup('/products', function (RouteCollector $r) {
-            $r->addRoute('GET', '', ['App\Controllers\Admin\ProductsController', 'indexPage']);
+            $r->addRoute('GET', '', ['App\Controllers\Admin\ProductsController', 'read']);
             $r->addRoute('GET', '/create', ['App\Controllers\Admin\ProductsController', 'openCreate']);
             $r->addRoute('POST', '/create', ['App\Controllers\Admin\ProductsController', 'create']);
             $r->addRoute('GET', '/add', ['App\Controllers\Admin\ProductsController', 'openAdd']);
-            $r->addRoute('POST', '/add', ['App\Controllers\Admin\ProductsController', 'add']);
+            $r->addRoute('POST', '/add', ['App\Controllers\Admin\ProductsController', 'uploadCSV']);
+            $r->addRoute('GET', '/exportToCSV', ['App\Controllers\Admin\ProductsController', 'exportToCSV']);
             $r->addRoute('POST', '/delete/{productID}', ['App\Controllers\Admin\ProductsController', 'delete']);
-            $r->addRoute('GET', '/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'getById']);
-            $r->addRoute('POST', '/edit/{productID}', ['App\Controllers\Admin\ProductsController', 'update']);
+            $r->addRoute('GET', '/edit/{id}', ['App\Controllers\Admin\ProductsController', 'getById']);
+            $r->addRoute('POST', '/edit/{id}', ['App\Controllers\Admin\ProductsController', 'update']);
             $r->addRoute('POST', '/search', ['App\Controllers\Admin\ProductsController', 'search']);
 
         });
@@ -74,7 +75,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         });
 
         // ORDERS
-        $r->addGroup(('/orders'), function(RouteCollector $r) {
+        $r->addGroup(('/orders'), function (RouteCollector $r) {
             $r->addRoute('GET', '', ['App\Controllers\Admin\OrdersController', 'index']);
             $r->addRoute('GET', '/{id:\d+}', ['App\Controllers\Admin\OrdersController', 'show']);
             $r->addRoute('POST', '/{id:\d+}/update_status', ['App\Controllers\Admin\OrdersController', 'updateStatus']);
@@ -152,6 +153,14 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         // checkout
         $r->addRoute('GET', '/checkout/{cartId}', ['App\Controllers\Client\CheckOutController', 'showCheckOutPage']);
         $r->addRoute('POST', '/checkout/submit', ['App\Controllers\Admin\OrdersController', 'create']);
+
+        // ORDERS
+        $r->addGroup(('/orders'), function (RouteCollector $r) {
+            $r->addRoute('GET', '/{id}', ['App\Controllers\Client\OrderController', 'index']);
+            $r->addRoute('GET', '/details/{id}', ['App\Controllers\Client\OrderController', 'show']);
+            $r->addRoute('POST', '/{id}/update_status', ['App\Controllers\Client\OrderController', 'updateStatus']);
+        });
+
     });
 
 });

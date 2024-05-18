@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Client;
 
+use App\Models\AdminProductsModel;
 use App\Models\UserModel;
 use Core\Controller;
 use App\Models\OrderModel;
@@ -23,10 +24,10 @@ class CheckOutController extends ClientController
     {
         $userModel = new UserModel();
         $username = $_SESSION['username'];
-        $userID = $userModel->getUserIdByUsername($username);
+        $userId = $userModel->getUserIdByUsername($username);
         $userName = $userModel->getNameByUsername($username);
-        $data['cart'] = $this->cartModel->getAllCart($userID);
-        $cart = $this->cartModel->getAllCart($userID);
+        $data['cart'] = $this->cartModel->getAllCart($userId);
+        $cart = $this->cartModel->getAllCart($userId);
 
         $totalPrice = array_reduce($cart, function ($sum, $item) {
             return $sum + ($item['quantity'] * $item['price']);
@@ -34,7 +35,7 @@ class CheckOutController extends ClientController
 
         parent::render('checkout/index', [
             'userName' => $userName,
-            'userID' => $userID,
+            'userId' => $userId,
             'cart' => $cart,
             'totalPrice' => $totalPrice
         ]);
@@ -50,10 +51,23 @@ class CheckOutController extends ClientController
             $total = $this->checkInput($_POST['total']);
 
             if ($this->orderModel->createOrder($name, $email, $phone, $address, $total, $created)) {
+                $this->reduceProductStock();
                 echo 'Order Placed Successfully!';
             } else {
                 echo 'Something went wrong. Please try again!';
             }
+        }
+    }
+
+    public function reduceProductStock($userId)
+    {
+        $cart = $this->cartModel->getAllCart($userId);
+        $productModel = new AdminProductsModel();
+
+        foreach ($cart as $item) {
+            $productId = $item['product_id'];
+            $quantity = $item['quantity'];
+            $productModel->reduceStock($productId, $quantity);
         }
     }
 }
