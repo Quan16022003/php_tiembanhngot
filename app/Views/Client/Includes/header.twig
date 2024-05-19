@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-lg ps-lg-5 pe-lg-5 shadow-sm" aria-label="Main navigation">
     <div class="container-fluid">
         <div class="navbar-toggler p-0 border-0">
-            <a class="btn btn-sm p-1 border-0" data-bs-toggle="offcanvas" href="#offcanvasMenu" role="button" aria-controls="offcanvasMenu">
+            <a class="btn btn-sm p-1 border-0" data-bs-toggle="offcanvas" href="#offcanvasMenu" role="button"
+               aria-controls="offcanvasMenu">
                 <span class="material-symbols-outlined">menu</span>
             </a>
         </div>
@@ -14,53 +15,56 @@
                 <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
             </div>
             <div class="offcanvas-body">
-                <ul class="navbar-nav justify-content-start flex-grow-1 pe-lg-3">
-                {% set navigations = {
-                    ''         : "Trang chủ",
-                    'about-us' : "Về chúng tôi",
-                    'products' : 'Sản phẩm',
-                    'contact'  : 'Liên hệ'
-                } %}
+                <ul class="navbar-nav justify-content-start flex-grow-1">
+                    {% set navigations = {
+                        ''         : "Trang chủ",
+                        'about-us' : "Về chúng tôi",
+                        'products' : 'Sản phẩm',
+                        'contact'  : 'Liên hệ'
+                    } %}
 
-                {% for key, val in navigations %}
-                    <li class="nav-item text-center ps-lg-4">
-                        <a class="nav-link {{ page == key ? 'active' : '' }}"
-                           aria-current="page"
-                           href="/{{ key }}">{{ val }}</a>
-                    </li>
-                {% endfor %}
+                    {% for key, val in navigations %}
+                        <li class="nav-item text-center ps-lg-4">
+                            <a class="nav-link {{ page == key ? 'active' : '' }}"
+                               aria-current="page"
+                               href="/{{ key }}">{{ val }}</a>
+                        </li>
+                    {% endfor %}
                 </ul>
-                <a class="btn btn-sm d-none d-xl-inline-block border-0" data-bs-toggle="offcanvas" href="#offcanvasSearchBox" role="button" aria-controls="offcanvasSearchBox">
+                <a class="btn btn-sm d-none d-xl-inline-block border-0" data-bs-toggle="offcanvas"
+                   href="#offcanvasSearchBox" role="button" aria-controls="offcanvasSearchBox">
                     <div class="input-group">
                         <span class="input-group-text material-symbols-outlined border-0">search</span>
-                        <input type="text" class="form-control bg-light border-0 shadow-none" placeholder="Tìm kiếm" aria-label="Username" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control bg-light border-0 shadow-none" placeholder="Tìm kiếm"
+                               aria-label="Username" aria-describedby="basic-addon1">
                     </div>
                 </a>
             </div>
         </div>
         <div>
-            <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block d-xl-none" data-bs-toggle="offcanvas" href="#offcanvasSearchBox" role="button" aria-controls="offcanvasSearchBox">
+            <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block d-xl-none" data-bs-toggle="offcanvas"
+               href="#offcanvasSearchBox" role="button" aria-controls="offcanvasSearchBox">
                 <span class="material-symbols-outlined">search</span>
             </a>
-            <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block"  type="button" href="/account/login">
+            <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block" type="button" href="/account/login">
                 <span class="material-symbols-outlined d-inline d-xl-block">person</span>
             </a>
-{#            {% if session.login %}#}
-{#                <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block"  type="button" href="/account">#}
-{#                    <span class="material-symbols-outlined d-inline d-xl-block">person</span>#}
-{#                </a>#}
-{#            {% else %}#}
-{#                <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block"  type="button" data-bs-toggle="modal" data-bs-target="#loginModal">#}
-{#                    <span class="material-symbols-outlined d-inline d-xl-block">person</span>#}
-{#                </a>#}
-{#            {% endif %}#}
+            {#            {% if session.login %} #}
+            {#                <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block"  type="button" href="/account"> #}
+            {#                    <span class="material-symbols-outlined d-inline d-xl-block">person</span> #}
+            {#                </a> #}
+            {#            {% else %} #}
+            {#                <a class="btn btn-sm ps-2 border-0 d-none d-lg-inline-block"  type="button" data-bs-toggle="modal" data-bs-target="#loginModal"> #}
+            {#                    <span class="material-symbols-outlined d-inline d-xl-block">person</span> #}
+            {#                </a> #}
+            {#            {% endif %} #}
             <a class="btn btn-sm ps-2 border-0" role="button" href="#">
                 <span class="material-symbols-outlined d-inline d-xl-block">favorite</span>
             </a>
             <a class="btn btn-sm ps-2 border-0" role="button" href="http://localhost/cart">
-            <a class="btn btn-sm ps-2 border-0" role="button" href="/cart">
-                <span class="material-symbols-outlined d-inline d-xl-block">shopping_bag</span>
-            </a>
+                <a class="btn btn-sm ps-2 border-0" role="button" href="/cart">
+                    <span class="material-symbols-outlined d-inline d-xl-block">shopping_bag</span>
+                </a>
         </div>
     </div>
 </nav>

@@ -1,51 +1,9 @@
 {% set page = 'about-us' %}
 {% extends 'layout.twig' %}
 
-{% block title %}About - My Website{% endblock %}
+{% block title %}About{% endblock %}
 
 {% block content %}
-    <style>
-        .overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .carousel-item img {
-            height: 500px; /* Thay đổi giá trị này theo yêu cầu */
-            object-fit: cover; /* Đảm bảo hình ảnh vẫn giữ nguyên tỷ lệ khi thay đổi kích thước */
-        }
-
-        .list-unstyled {
-            margin-top: 0;
-            padding-left: 0;
-            list-style: none;
-        }
-
-        .text-decoration-none {
-            position: relative;
-            text-decoration: none; /* Loại bỏ gạch dưới mặc định */
-        }
-
-        .text-decoration-none::after {
-            content: '';
-            position: absolute;
-            bottom: -2px; /* Đẩy đường gạch dưới xuống một chút để nó không chồng lên chữ */
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background-image: linear-gradient(to right, white, white 50%, transparent 50%); /* Gradient từ đen sang trong suốt */
-            background-size: 200% 100%; /* Kích thước gradient là gấp đôi chiều rộng */
-            background-position: right bottom; /* Bắt đầu gradient từ bên phải */
-            transition: background-position 0.3s; /* Hiệu ứng chuyển đổi vị trí gradient */
-        }
-
-        .text-decoration-none:hover::after, /* Hiệu ứng khi hover */
-        .text-decoration-none.active::after { /* Hiệu ứng khi active */
-            background-position: left bottom; /* Di chuyển gradient sang trái */
-        }
-    </style>
     <div class="position-relative mb-5">
         <section>
             <video class="embed-responsive w-100 z-n1" preload="auto" autoplay="" muted="" loop="" playsinline=""
@@ -57,7 +15,7 @@
             </video>
             <div class="overlay">
                 <div class="text-white text-center">
-                    <h2>About Us</h2>
+                    <h1>About Us</h1>
                     <h2>Welcome to your neighborhood bakery café.</h2>
                 </div>
             </div>
@@ -91,18 +49,4 @@
         </button>
     </div>
     <h2 class="text-center mt-5 mb-5">Bakery for everyone</h2>
-    <div class="row justify-content-center" style="background: peachpuff">
-        <div class="mt-5 mb-5 col-10 col-lg-4 d-flex align-items-center justify-content-center text-center">
-            <ul class="list-unstyled fs-5 fw-bold my-4">
-                <li><a class="text-white text-decoration-none text-uppercase" href="/cart"><span>Online Ordering</span></a>
-                </li>
-                <li><a class="text-white text-decoration-none text-uppercase" href="/products"><span>Menu</span></a>
-                </li>
-                <li><a class="text-white text-decoration-none text-uppercase active" href="/about-us"><span>About</span></a>
-                </li>
-                <li><a class="text-white text-decoration-none text-uppercase" href="/contact"><span>Contact</span></a>
-                </li>
-            </ul>
-        </div>
-    </div>
 {% endblock %}

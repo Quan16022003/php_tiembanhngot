@@ -59,15 +59,15 @@ class ProductController extends ClientController
         $this->render('Products/product', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
 
-    function productDetail($vars): void
+    function productDetail($id): void
     {
-        $id = null;
         // $id = $_GET['id'];
-        if(is_array($vars) && isset($vars['id'])){
+        if (is_array($vars) && isset($vars['id'])) {
             $id = $vars['id'];
         }
-        $data['product'] = $this->productModel->selectProductbyID($id);
-        $this->render('productDetail',$data);
-        
+        $data = $this->productModel->selectProductbyID($id);
+        var_dump($data);
+        $this->render('products/productDetail', ['product' => $data]);
+
     }
 }

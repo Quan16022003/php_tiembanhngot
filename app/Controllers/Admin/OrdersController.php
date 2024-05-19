@@ -2,9 +2,9 @@
 
 namespace App\Controllers\Admin;
 
-use App\Models\OrderDetailModel;
 use App\Models\OrderDetailsModel;
 use App\Models\OrderLogsModel;
+use App\Models\CartModel;
 use App\Models\OrderModel;
 use App\Models\UserModel;
 use Core\Controller;
@@ -56,7 +56,7 @@ class OrdersController extends AdminController
         $order->save();
         $orderId = $order->getId();
         $this->getOrderDetailsFromCart($orderId);
-//        header("Location: /");
+        header("Location: /");
     }
 
     private function getOrderData($order)
