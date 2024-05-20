@@ -71,7 +71,7 @@ class ProductController extends ClientController
         $this->render('Products/product', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
 
-    function productDetail($id): void
+    function productDetail($vars): void
     {
         // $id = $_GET['id'];
         if (is_array($vars) && isset($vars['id'])) {

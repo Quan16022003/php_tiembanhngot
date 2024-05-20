@@ -129,7 +129,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/products', ['App\Controllers\Client\ProductController', 'index']);
         // $r->addRoute('GET', '/products/{id:\d+}', ['App\Controllers\Client\ProductController', 'index']);
         $r->addRoute('GET', '/search', ['App\Controllers\Client\SearchController', 'index']);
-        $r->addRoute('GET', '/products/{productsId}', ['App\Controllers\Client\ProductController', 'productDetail']);
+        $r->addRoute('GET', '/products/{id}', ['App\Controllers\Client\ProductController', 'productDetail']);
 
         $r->addGroup('/account', function (RouteCollector $r) {
             $r->addRoute('GET', '/login', ['App\Controllers\Client\AuthController', 'showLoginPage']);
