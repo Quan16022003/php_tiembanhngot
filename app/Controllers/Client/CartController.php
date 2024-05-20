@@ -23,8 +23,8 @@ class CartController extends ClientController
         if (isset($_SESSION['username'])) {
             $userModel = new UserModel();
             $userID = $userModel->getUserIdByUsername($_SESSION['username']);
-            $data['cart'] = $this->cartModel->getAllCart($userID);
-            print_r($data['cart']);
+            $data['carts'] = $this->cartModel->getAllCart($userID);
+//            echo json_encode($data['carts']);
             parent::render('cart', $data);
         } else {
             parent::render('login_required_message');

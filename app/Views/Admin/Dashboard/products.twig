@@ -17,7 +17,7 @@
                 <div class="col-auto">
                     <label for="categories">Categories:</label>
                     <select name="categories" id="categories" class="form-select">
-                        <option disabled {% if selectedCategory == null %}selected{% endif %}>All categories
+                        <option value="all" {% if selectedCategory == null %}selected{% endif %}>All Categories
                         </option>
                         {% for category in categories %}
                             <option value="{{ category.id }}"

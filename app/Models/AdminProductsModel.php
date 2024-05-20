@@ -18,7 +18,7 @@ class AdminProductsModel
         // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
         $sql = "INSERT INTO product (category_id, name, price, content, image_link, supplier_id) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->conn->prepare($sql);
-        $stmt->bind_param("issssi",  $productCategoryId, $productName, $productPrice, $productContent, $productImage, $productSupplierId);
+        $stmt->bind_param("issssi", $productCategoryId, $productName, $productPrice, $productContent, $productImage, $productSupplierId);
         $success = $stmt->execute();
         $stmt->close();
         return $success;

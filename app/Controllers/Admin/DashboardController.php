@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controllers\Admin;
 
 use App\Models\AdminDashboardModel;
@@ -37,6 +38,9 @@ class DashboardController extends Controller
     public function listProductSales(): void
     {
         try {
+            if ($this->selectedCategory === 'all') {
+                $this->selectedCategory = null;
+            }
             // Lấy dữ liệu từ model
             $totalSoldByType = $this->adminDashboardModel->getTotalSoldProductsByType($this->startDate, $this->endDate, $this->selectedCategory);
 

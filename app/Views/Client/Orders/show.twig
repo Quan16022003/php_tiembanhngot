@@ -29,8 +29,9 @@
         <!-- Thêm các thông tin khác nếu cần -->
 
         <h3>Cập Nhật Trạng Thái</h3>
-        {% if order.status != 'delivered' %}
+        {% if order.status != 'completed' %}
             <form action="/orders/{{ order.id }}/update_status" method="post">
+                <input type="hidden" name="id" value="{{ order.id }}">
                 <button type="submit" class="btn btn-primary">Received</button>
             </form>
         {% else %}

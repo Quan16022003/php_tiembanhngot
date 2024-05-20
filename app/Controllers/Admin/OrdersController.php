@@ -11,10 +11,11 @@ use Core\Controller;
 
 class OrdersController extends AdminController
 {
-    public function index() {
+    public function index()
+    {
         $status = $_GET['status'] ?? '';
 
-        $orders = match($status) {
+        $orders = match ($status) {
             'pending' => OrderModel::getAllOrdersByStatus(1),
             'confirmed' => OrderModel::getAllOrdersByStatus(2),
             'shipping' => OrderModel::getAllOrdersByStatus(3),
@@ -31,14 +32,16 @@ class OrdersController extends AdminController
         parent::render('Orders/index', $data);
     }
 
-    public function getById($vars) {
+    public function getById($vars)
+    {
         $id = $vars['id'];
         $order = OrderModel::getOrderById($id);
         $order['products'] = OrderDetailModel::getAllOrderDetailByOrderId($order['id']);
         echo json_encode($order);
     }
 
-    public function show($vars) {
+    public function show($vars)
+    {
         $id = $vars['id'];
         $data = [
             'order' => OrderModel::getOrderById($id),
@@ -56,7 +59,7 @@ class OrdersController extends AdminController
         $order->save();
         $orderId = $order->getId();
         $this->getOrderDetailsFromCart($orderId);
-        header("Location: /");
+        header("Location: /orders/{$orderId}");
     }
 
     private function getOrderData($order)
@@ -83,13 +86,13 @@ class OrdersController extends AdminController
         }
     }
 
-    public function updateStatus($vars) {
+    public function updateStatus($vars)
+    {
         $id = $vars['id'];
         $newStatus = $_POST['newStatus'];
         // Trả về JSON
         echo json_encode(['success' => OrderModel::updateOrderStatus($id, $newStatus)]);
     }
-
 
 
 }
