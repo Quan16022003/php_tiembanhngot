@@ -57,24 +57,23 @@ class ProductsController extends Controller
             $productName = $_POST["name"];
             $productPrice = $_POST["price"];
             $productContent = $_POST["content"];
-            $supplierId = $POST["supplier_id"];
+            $supplierId = $_POST["supplier_id"];
+            $productImage = null;
 
-            if (!empty($_FILES['image']['name'])) {
-                $uploadDirectory = "/public/uploads/";
-                if (!file_exists($uploadDirectory)) {
-                    mkdir($uploadDirectory, 0777, true);
-                }
-                $imageName = time() . '_' . $_FILES['image']['name'];
-                $targetFilePath = $uploadDirectory . $imageName;
-                if (move_uploaded_file($_FILES['image']['tmp_name'], $targetFilePath)) {
-                    $productImage = $uploadDirectory . $imageName;
+            // Kiểm tra xem người dùng đã chọn tùy chọn xóa hình ảnh hay không
+            if (!empty($_FILES["image"]["name"]) && !empty($_FILES["image"]["tmp_name"])) {
+                // Di chuyển và lưu trữ tệp hình ảnh mới
+                $productImage = $_FILES["image"]["name"];
+                $productImageTemp = $_FILES["image"]["tmp_name"];
+                $folder = __DIR__ . '/../../../public/uploads/' . $productImage;
+                if (move_uploaded_file($productImageTemp, $folder)) {
+                    echo "Uploaded";
                 } else {
-                    echo "Đã xảy ra lỗi khi tải lên hình ảnh.";
-                    return;
+                    echo "Failed";
                 }
             } else {
-                // Nếu không có tệp hình ảnh được tải lên, sử dụng một đường dẫn mặc định hoặc để trống
-                $productImage = ""; // Đường dẫn mặc định hoặc rỗng
+                // Nếu không có tệp hình ảnh mới và không chọn xóa, sử dụng tên hình ảnh hiện tại
+                $productImage = $_POST["current_image"];
             }
 
             // Thực hiện thêm sản phẩm vào cơ sở dữ liệu
@@ -82,7 +81,7 @@ class ProductsController extends Controller
             $success = $model->create($productCategoryId, $productName, $productPrice, $productContent, $productImage, $supplierId);
 
             if ($success) {
-                header("Location: /admin/products/edit/$productId");
+                header("Location: /admin/products");
                 exit;
             } else {
                 echo "Thêm sản phẩm thất bại!";

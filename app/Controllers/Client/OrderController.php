@@ -49,20 +49,18 @@ class OrderController extends ClientController
     }
 
     // Cập nhật trạng thái đơn hàng
-    public function updateStatus($id): void
+    public function updateStatus(): void
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $status = 4;
-            $success = (new OrderModel())->updateOrderStatus($id, $status);
+            $id = $_POST['id'];
+            $success = (new OrderModel())->updateOrderStatus($id, 4);
 
             if ($success) {
                 echo json_encode(['success' => true]);
-                // Nếu muốn chuyển hướng người dùng sau khi cập nhật thành công
-                // header("Location: /orders/$id");
+                 header("Location: /orders/$id");
             } else {
                 echo json_encode(['success' => false]);
             }
-
             exit;
         }
     }

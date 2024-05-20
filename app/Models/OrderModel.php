@@ -134,7 +134,7 @@ class OrderModel
         return $orders;
     }
 
-    public static function updateOrderStatus($id, $status)
+    public static function updateOrderStatus(int $id, $status)
     {
         $db = Database::getConnection();
         $sql = "UPDATE `order` SET `status_id`= ? WHERE `id`=?";
