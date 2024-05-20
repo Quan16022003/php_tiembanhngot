@@ -182,6 +182,20 @@ class OrderModel
         }
         return $orderDetails;
     }
+    public static function getAllOrdersByUserId($userId) {
+        $db = Database::getConnection();
+        $sql = "SELECT * FROM `order` o WHERE o.user_id =?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+
+        $orders = [];
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $orders[] = $row;
+        }
+        return $orders;
+    }
 
     public function getId(): mixed
     {

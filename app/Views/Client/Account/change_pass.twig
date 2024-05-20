@@ -1,0 +1,40 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Account - My Website{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-lg-5">
+        <h3>Trang khách hàng</h3>
+        <div class="row row-cols-lg-2">
+            <div class="col col-12 col-lg-3 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">TÀI KHOẢN CỦA TÔI</h5>
+                        <p class="card-text">Tên tài khoản: <a href="/account">Nguyễn Hoàng Quân</a></p>
+                        <hr>
+                        <a href="/account/edit-information" class="btn btn-primary w-100 mb-2">THAY ĐỔI THÔNG TIN</a>
+                        <a href="/account/change-password" class="btn btn-primary w-100">THAY ĐỔI MẬT KHẨU</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-12 col-lg-9 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Thay đổi mật khẩu</h5>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
