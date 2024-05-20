@@ -14,7 +14,7 @@ class ProductModel
         $this->db = Database::getInstance();
     }
 
-    public function selectAll($limit, $page, $orderBy = 'created', $direction = 'desc'): \stdClass
+    public function selectAll($limit, $page, $orderBy = 'created', $direction = 'desc', $categoryIds): \stdClass
     {
         $validColumns = ['created', 'title', 'price'];
         $validDirections = ['asc', 'desc'];
@@ -23,32 +23,40 @@ class ProductModel
             throw new \InvalidArgumentException('Invalid orderBy or direction.');
         }
 
+
+
         $query = "SELECT product.`id`, product.`name` AS `title`, category.id AS `category_name`, product.price , created_at AS `created`
                         FROM `product` 
                         INNER JOIN category
-                        ON product.category_id = category.id ORDER BY " . "`$orderBy`" . " " . "$direction";
+                        ON product.category_id = category.id";
+        if (!empty($categoryIds)) {
+            $query .= " WHERE category.id IN (". implode(',', $categoryIds). ")";
+        }
+
+        $query .= " ORDER BY $orderBy $direction";
+
         $paginator = new Paginator($this->db->conn, $query);
         return $paginator->getData($limit, $page);
     }
 
-    public function selectAllPriceASC(mixed $limit, mixed $page): \stdClass
+    public function selectAllPriceASC(mixed $limit, mixed $page, $categoryIds): \stdClass
     {
-        return $this->selectAll($limit, $page, 'price', 'asc');
+        return $this->selectAll($limit, $page, 'price', 'asc', $categoryIds);
     }
 
-    public function selectAllPriceDESC(mixed $limit, mixed $page): \stdClass
+    public function selectAllPriceDESC(mixed $limit, mixed $page, $categoryIds): \stdClass
     {
-        return $this->selectAll($limit, $page, 'price', 'desc');
+        return $this->selectAll($limit, $page, 'price', 'desc', $categoryIds);
     }
 
-    public function selectAllTitleASC(mixed $limit, mixed $page): \stdClass
+    public function selectAllTitleASC(mixed $limit, mixed $page, $categoryIds): \stdClass
     {
-        return $this->selectAll($limit, $page, 'title', 'asc');
+        return $this->selectAll($limit, $page, 'title', 'asc', $categoryIds);
     }
 
-    public function selectAllTitleDESC(mixed $limit, mixed $page): \stdClass
+    public function selectAllTitleDESC(mixed $limit, mixed $page, $categoryIds): \stdClass
     {
-        return $this->selectAll($limit, $page, 'title', 'desc');
+        return $this->selectAll($limit, $page, 'title', 'desc', $categoryIds);
     }
 
     public function selectProductbyID($id): ?array

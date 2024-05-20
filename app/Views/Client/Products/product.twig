@@ -90,10 +90,30 @@
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const sortSelect = document.getElementById("sortOptions");
+        const filterButton = document.getElementById('filterButton');
+
+        function getCheckedCategoryIds() {
+            return Array.from(document.querySelectorAll('input[type="checkbox"][name^="categoryIds"]:checked'))
+                .map(checkbox => checkbox.value);
+        }
+
+        function buildFilterUrl() {
+            const sortValue = sortSelect.value;
+            const categoryIds = getCheckedCategoryIds();
+
+            let url = '/products?';
+            if (sortValue) url += `sort_by=${sortValue}&`;
+            if (categoryIds.length) url += `categoryIds=${categoryIds.join(',')}`;
+
+            return url;
+        }
 
         sortSelect.addEventListener("change", function() {
-            const selectedValue = sortSelect.value;
-            window.location.href = "/products?sort_by=" + selectedValue;
+            window.location.href = buildFilterUrl();
+        });
+
+        filterButton.addEventListener('click', function () {
+            window.location.href = buildFilterUrl();
         });
     });
 </script>
