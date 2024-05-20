@@ -32,9 +32,9 @@ class OrderDetailsModel
 
     public function createOrderDetail($db)
     {
-        $sql = "INSERT INTO `order_detail`(`order_id`, `product_id`, `quantity`) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO `order_detail`(`order_id`, `product_id`, `quantity`, `price`) VALUES (?, ?, ?, ?)";
         $stmt = $db->prepare($sql);
-        $stmt->bind_param("iii", $this->orderId, $this->productId, $this->quantity);
+        $stmt->bind_param("iiii", $this->orderId, $this->productId, $this->quantity, $this->price);
         $success = $stmt->execute();
         $this->id = $stmt->insert_id;
         $stmt->close();
@@ -152,7 +152,7 @@ class OrderDetailsModel
 
     public function setUnitPrice(mixed $unitPrice): void
     {
-        $this->unitPrice = $unitPrice;
+        $this->price = $unitPrice;
     }
 
     public function getTotalPrice(): mixed

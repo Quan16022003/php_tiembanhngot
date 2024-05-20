@@ -154,16 +154,17 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/checkout/{cartId}', ['App\Controllers\Client\CheckOutController', 'showCheckOutPage']);
         $r->addRoute('POST', '/checkout/submit', ['App\Controllers\Admin\OrdersController', 'create']);
 
-        $r->addGroup(('/orders'), function (RouteCollector $r) {
-            $r->addRoute('GET', '/{id}', ['App\Controllers\Client\OrderController', 'index']);
-            $r->addRoute('GET', '/details/{id}', ['App\Controllers\Client\OrderController', 'show']);
-            $r->addRoute('POST', '/{id}/update_status', ['App\Controllers\Client\OrderController', 'updateStatus']);
-        });
+//        $r->addGroup(('/orders'), function (RouteCollector $r) {
+//            $r->addRoute('GET', '/{id}', ['App\Controllers\Client\OrderController', 'index']);
+//            $r->addRoute('GET', '/details/{id}', ['App\Controllers\Client\OrderController', 'show']);
+//            $r->addRoute('POST', '/{id}/update_status', ['App\Controllers\Client\OrderController', 'updateStatus']);
+//        });
 
         // account
         $r->addRoute('GET', '/account', ['App\Controllers\Client\AccountController', 'index']);
         $r->addRoute('GET', '/account/update-info', ['App\Controllers\Client\AccountController', 'updateInfo']);
         $r->addRoute('GET', '/account/change-pass', ['App\Controllers\Client\AccountController', 'changePass']);
+        $r->addRoute('GET', '/account/order-details', ['App\Controllers\Client\AccountController', 'orderDetails']);
     });
 
 });

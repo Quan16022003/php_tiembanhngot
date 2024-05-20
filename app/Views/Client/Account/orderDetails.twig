@@ -1,0 +1,74 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Account - My Website{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-lg-5">
+        <h3>Trang khách hàng</h3>
+        <div class="row row-cols-lg-2">
+            <div class="col col-12 col-lg-3 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">TÀI KHOẢN CỦA TÔI</h5>
+                        <p class="card-text">Tên tài khoản: <a href="/account">Nguyễn Hoàng Quân</a></p>
+                        <hr>
+                        <a href="/account/edit-information" class="btn btn-primary w-100 mb-2">THAY ĐỔI THÔNG TIN</a>
+                        <a href="/account/change-password" class="btn btn-primary w-100">THAY ĐỔI MẬT KHẨU</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-12 col-lg-9 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Chi tiết đơn hàng</h5>
+                        <hr>
+                        <h5 class="card-text">Thông tin giao hàng</h5>
+                        <p class="card-text">Tên khách hàng: {{ order.name }}</p>
+                        <p class="card-text">Số điện thoại: {{ order.phone_number }}</p>
+                        <p class="card-text">Địa chỉ giao hàng 1: {{ order.address1 }}</p>
+                        <p class="card-text">Địa chỉ giao hàng 2: {{ order.address2 }}</p>
+                        <h5 class="card-text">Danh sách sản phẩm</h5>
+                        <div class="table-responsive-md">
+                            <table class="table table-responsive-md">
+                                <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Tên sản phẩm</th>
+                                    <th scope="col">Số lượng</th>
+                                    <th scope="col">Giá</th>
+                                    <th scope="col">Tổng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set total = 0 %}
+                                {% for product in products %}
+                                    <tr>
+                                        <td>{{ product.id }}</td>
+                                        <td>{{ product.name }}</td>
+                                        <td>{{ product.quantity }}</td>
+                                        <td>{{ product.price|formatCurrency }}</td>
+                                        {% set total_unit = product.quantity * product.price %}
+                                        <td>{{ total_unit|formatCurrency }}</td>
+                                        {% set total = total + total_unit %}
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-end">Tổng cộng: <span class="fw-bold">{{ total|formatCurrency }}</span></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}

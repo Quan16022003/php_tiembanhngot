@@ -33,7 +33,7 @@ class CartModel
 
     public function getCartByUserId($userId)
     {
-        $sql = "SELECT * FROM cart WHERE user_id = ?";
+        $sql = "SELECT c.*, p.price FROM cart c LEFT JOIN product p ON c.product_id = p.id WHERE c.user_id = ?";
         $stmt = $this->db->conn->prepare($sql);
         $stmt->bind_param("i", $userId);
         $stmt->execute();

@@ -1,0 +1,68 @@
+{% set page = 'customers' %}
+{% extends './layout.twig' %}
+
+{% block title %}Khách hàng{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/datatables.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-dark mb-0">Orders</h3>
+    </div>
+    <div class="card shadow">
+        <div class="card-body">
+            <div class="table-responsive table" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                <table id="customer-table" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                    <th>Tên khách hàng</th>
+                    <th>Email</th>
+                    <th>Số lượng đơn hàng</th>
+                    <th>Tổng chi tiêu</th>
+                    </thead>
+                    <tbody>
+                    {% for customer in customers %}
+                        <tr>
+                            <td><a href="/admin/customer/{{ customer.id }}">{{ customer.name }}</a></td>
+                            <td>{{ customer.email }}</td>
+                            <td>{{ customer.orders }}</td>
+                            <td>{{ customer.total_spent|formatCurrency }} </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/sl-2.0.1/datatables.min.js"></script>
+
+
+    <script>
+        $(document).ready(function() {
+            var table = $('#customer-table').DataTable({
+                "language": {
+                    "decimal"       : "",
+                    "emptyTable"    : "Không có dữ liệu trong bảng",
+                    "info"          : "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "infoEmpty"     : "Hiển thị 0 đến 0 trong tổng số 0 mục",
+                    "infoFiltered"  : "(được lọc từ tổng số _MAX_ mục)",
+                    "infoPostFix"   : "",
+                    "thousands"     : ",",
+                    "lengthMenu"    : "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "processing"    : "",
+                    "search"        : "Tìm kiếm:",
+                    "zeroRecords"   : "Không tìm thấy bản ghi phù hợp",
+                }
+            });
+
+        });
+    </script>
+{% endblock %}

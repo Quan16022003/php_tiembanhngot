@@ -23,7 +23,7 @@ class UserController extends AdminController
     public function showAddUserPage(): void
     {
         $data['permissions'] = $this->userModel->getPermissions();
-        parent::render('user_add', $data);
+        parent::render('Users/user_add', $data);
     }
 
     public function addUser(): void

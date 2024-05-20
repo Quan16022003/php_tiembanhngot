@@ -57,7 +57,7 @@ class ProductsController extends Controller
             $productName = $_POST["name"];
             $productPrice = $_POST["price"];
             $productContent = $_POST["content"];
-            $supplierId = $POST["supplier_id"];
+            $supplierId = $_POST["supplier_id"];
 
             if (!empty($_FILES['image']['name'])) {
                 $uploadDirectory = "/public/uploads/";

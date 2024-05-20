@@ -80,4 +80,27 @@ class UserModel
         $result = $stmt->get_result();
         return $result->fetch_assoc()['name'];
     }
+
+    public function getCustomerPurchaseSummary()
+    {
+        $sql = "SELECT u.id, u.name AS name, u.email, \n"
+
+            . "	COUNT(o.id) AS orders,\n"
+
+            . " COALESCE(SUM(od.price * od.quantity), 0) AS total_spent\n"
+
+            . "FROM users u\n"
+
+            . "LEFT JOIN `order` o ON o.user_id = u.id\n"
+
+            . "LEFT JOIN order_detail od ON od.order_id = o.id\n"
+
+            . "GROUP BY u.id, u.name, u.email;";
+        $result = $this->conn->query($sql);
+        $customers = [];
+        while ($row = $result->fetch_assoc()) {
+            $customers[] = $row;
+        }
+        return $customers;
+    }
 }

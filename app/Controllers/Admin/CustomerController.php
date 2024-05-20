@@ -2,6 +2,7 @@
 
 namespace App\Controllers\Admin;
 
+use App\Models\UserModel;
 use Core\Controller;
 use App\Models\AdminCustomerModel;
 
@@ -10,6 +11,7 @@ class CustomerController extends Controller
     public function __construct()
     {
         parent::__construct('Admin');
+        $this->userModel = new UserModel();
     }
 
     public function getById($Id): void
@@ -64,14 +66,11 @@ class CustomerController extends Controller
 
     public function index(): void
     {
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $customerPerPage = 10;
-        $offset = ($page - 1) * $customerPerPage;
-        $model = new AdminCustomerModel();
-        $customers = $model->getCustomer($offset, $customerPerPage);
-        $totalCustomer = $model->getTotalCustomer();
-        $totalPages = ceil($totalCustomer / $customerPerPage);
-        $this->render('customers/customers', ['customers' => $customers, 'totalPages' => $totalPages, 'currentPage' => $page]);
+        $customers = $this->userModel->getCustomerPurchaseSummary();
+        $data = [
+            'customers' => $customers
+        ];
+        parent::render('Customers/index', $data);
     }
 
     public function create(): void

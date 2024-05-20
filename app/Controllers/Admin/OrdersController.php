@@ -72,13 +72,14 @@ class OrdersController extends AdminController
     {
         $model = new CartModel();
         $cartItems = $model->getCartByUserId($_POST['user_id']);
-        var_dump($cartItems);
         foreach ($cartItems as $item) {
             $detail = new OrderDetailsModel();
             $detail->setOrderId($orderId);
             $detail->setProductId($item['product_id']);
             $detail->setQuantity($item['quantity']);
+            $detail->setUnitPrice($item['price']);
             $detail->save();
+            $model->deleteCart($item['id']);
         }
     }
 

@@ -27,19 +27,20 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {% if page == 'delivery' %}active{% endif %}" href="/admin/products/add">
-                    <i class="fa-solid fa-receipt"></i> <span>Phiếu nhập</span>
+                <a class="nav-link {% if page == 'categories' %}active{% endif %}" href="/admin/categories">
+                    <i class="fa-solid fa-layer-group"></i> <span>Danh sách thể loại</span>
+                </a>
             </li>
             
             <li class="nav-item">
                 <a class="nav-link {% if page == 'suppliers' %}active{% endif %}" href="/admin/suppliers">
-                    <i class="fa-solid fa-bread-slice"></i> <span>Suppliers</span>
+                    <i class="fa-solid fa-bread-slice"></i> <span>Nhà cung cấp</span>
                 </a>
             </li>
 
             <li class="nav-item">
-                <a class="nav-link {% if page == 'categories' %}active{% endif %}" href="/admin/categories">
-                    <i class="fa-solid fa-layer-group"></i> <span>Danh sách thể loại</span>
+                <a class="nav-link {% if page == 'purchase_orders' %}active{% endif %}" href="/admin/purchase_orders">
+                    <i class="fa-solid fa-bread-slice"></i> <span>Purchase orders</span>
                 </a>
             </li>
 
@@ -52,13 +53,9 @@
             <li class="nav-item">
                 <a class="nav-link {% if page == 'customers' %}active{% endif %}" href="/admin/customers">
                     <i class="fa-solid fa-users"></i> <span>Khách hàng</span>
-            </li>
-            
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'purchase_orders' %}active{% endif %}" href="/admin/purchase_orders">
-                    <i class="fa-solid fa-bread-slice"></i> <span>Purchase orders</span>
                 </a>
             </li>
+
 
             <li class="nav-item">
                 <a class="nav-link {% if page == 'user' %}active{% endif %}" href="/admin/user">
@@ -72,11 +69,6 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'blank' %}active{% endif %}" href="/admin/blank">
-                    <i class="fas fa-window-maximize"></i> <span>Blank Page</span>
-                </a>
-            </li>
         </ul>
         <div class="text-center d-none d-md-inline">
             <button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button>
