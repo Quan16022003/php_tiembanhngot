@@ -81,7 +81,7 @@ class AdminUserModel
 
     public function getUserById($id): array
     {
-        $query = "SELECT a.id, a.username, a.name, a.email, a.sdt, a.adress, a.dob, a.gender, p.name as 'permission_name', a.status FROM admin a LEFT JOIN permission p on p.id = a.id_per WHERE a.id = ?";
+        $query = "SELECT a.id, a.username, a.name, a.email, a.sdt, a.address, a.dob, a.gender, p.name as 'permission_name', a.status FROM admin a LEFT JOIN permission p on p.id = a.id_per WHERE a.id = ?";
         $stmt = $this->db->conn->prepare($query);
         $stmt->bind_param("s", $id);
         $stmt->execute();

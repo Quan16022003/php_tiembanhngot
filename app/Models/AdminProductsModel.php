@@ -13,23 +13,23 @@ class AdminProductsModel
         $this->db = Database::getInstance();
     }
 
-    public function create($productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage): bool
+    public function create($productCategoryId, $productName, $productPrice, $productContent, $productImage, $productSupplierId): bool
     {
         // Nếu sản phẩm chưa tồn tại, thực hiện thêm mới
-        $sql = "INSERT INTO product (id, category_id, name, price, content, image_link) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO product (category_id, name, price, content, image_link, supplier_id) VALUES (?, ?, ?, ?, ?, ?)";
         $stmt = $this->db->conn->prepare($sql);
-        $stmt->bind_param("sissss", $productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage);
+        $stmt->bind_param("issssi", $productId, $productCategoryId, $productName, $productPrice, $productContent, $productImage, $productSupplierId);
         $success = $stmt->execute();
         $stmt->close();
         return $success;
     }
 
 
-    public function getProductByID($productID): false|array|null
+    public function getProductById($productId): false|array|null
     {
         $sql = "SELECT * FROM product WHERE id = ?";
         if ($stmt = $this->db->conn->prepare($sql)) {
-            $stmt->bind_param("s", $productID);
+            $stmt->bind_param("i", $productId);
             if ($stmt->execute()) {
                 $result = $stmt->get_result()->fetch_assoc();
                 $stmt->close();
@@ -61,55 +61,13 @@ class AdminProductsModel
         return true;
     }
 
-    public function updateProduct($productId, $productCategoryId, $productName, $productContent, $productImage, $productPrice, $productStock): bool
+    public function updateProduct($productId, $productCategoryId, $productName, $productContent, $productPrice, $productStock, $productImage, $productSupplier)
     {
-        // Lấy thông tin sản phẩm trước đó từ cơ sở dữ liệu
-        $previousProduct = $this->getProductById($productId);
-
-        // Kiểm tra xem $previousProduct có giá trị không
-        if ($previousProduct !== false && $previousProduct !== null) {
-            // Lấy đường dẫn hình ảnh của sản phẩm trước đó
-            $oldImagePath = $previousProduct['image_link'];
-
-            // Kiểm tra xem người dùng đã tải lên hình ảnh mới chưa
-            if ($productImage && isset($productImage['error']) && $productImage['error'] == 0) {
-                $img_name = $productImage['name'];
-                $img_size = $productImage['size'];
-                $tmp_name = $productImage['tmp_name'];
-
-                // Tiếp tục xử lý hình ảnh và lưu trữ
-
-                // Chuyển biến $productImage thành chuỗi
-                $productImage = $new_img_name;
-                if ($oldImagePath && file_exists($oldImagePath)) {
-                    unlink($oldImagePath); // Xoá hình ảnh cũ
-                }
-            } else {
-                // Nếu không có hình ảnh mới, giữ nguyên đường dẫn cũ
-                $productImage = $oldImagePath;
-            }
-
-            // Cập nhật sản phẩm trong cơ sở dữ liệu
-            $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ? WHERE id = ?";
-            $stmt = $this->db->conn->prepare($sql);
-            $stmt->bind_param("sssiiis", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productId);
-
-            // Thực thi câu lệnh SQL và kiểm tra kết quả
-            $success = $stmt->execute();
-            if ($success) {
-                // Hiển thị thông tin sản phẩm trước và sau khi cập nhật
-                // ...
-
-                $stmt->close();
-                return true;
-            } else {
-                echo "Cập nhật sản phẩm thất bại: " . $stmt->error;
-            }
-        } else {
-            echo "Không tìm thấy sản phẩm có ID là $productId";
-        }
-
-        return false;
+        $sql = "UPDATE product SET name = ?, content = ?, image_link = ?, price = ?, stock = ?, category_id = ?, supplier_id = ? WHERE id = ?";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("sssiiisi", $productName, $productContent, $productImage, $productPrice, $productStock, $productCategoryId, $productSupplier, $productId);
+        $success = $stmt->execute();
+        $stmt->close();
     }
 
 
@@ -220,5 +178,13 @@ class AdminProductsModel
         return $csvData;
     }
 
-
+    public function reduceStock($productId, $quantity)
+    {
+        $db = Database::getConnection();
+        $sql = "UPDATE `product` SET `stock` = `stock` - ? WHERE `id` = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("ii", $quantity, $productId);
+        $stmt->execute();
+        $stmt->close();
+    }
 }

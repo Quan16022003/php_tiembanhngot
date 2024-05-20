@@ -7,7 +7,7 @@
         <form id="product_detail_form" method="post" action="/cart/add">
             <div class="row m-4">
                 <div class="col p-0">
-                    <img src="{{ product.image }} " alt="{{ product.name }}" class="img-fluid w-100">
+                    <img src="/public/uploads/{{ product.image_link }} " alt="{{ product.name }}" class="img-fluid w-100 rounded-5">
                 </div>
                 <div class="col m-4 flex-column align-items-center justify-content-center">
                     <h1>Name: {{ product.name }}</h1>

@@ -68,7 +68,7 @@ class ProductController extends ClientController
         $products = $model->getProducts($offset, $productsPerPage);
         $totalProducts = $model->getTotalProducts();
         $totalPages = ceil($totalProducts / $productsPerPage);
-        $this->render('Products/product', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
+        $this->render('products/product', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
 
     function productDetail($vars): void

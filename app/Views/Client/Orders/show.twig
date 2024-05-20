@@ -1,0 +1,47 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Chi Tiết Đơn Hàng{% endblock %}
+
+{% block content %}
+    <div class="container m-4">
+        <h2>Order Details</h2>
+        <table class="table">
+            <tr>
+                <th>Order Id:</th>
+                <td>{{ order.id }}</td>
+            </tr>
+            <tr>
+                <th>Place Date:</th>
+                <td>{{ order.order_date|date('Y-m-d') }}</td>
+            </tr>
+        </table>
+        <h2>Cart</h2>
+        <table class="table">
+            <tr>
+                <th>Product</th>
+                <th>Total</th>
+            </tr>
+            {% for product in orderDetails %}
+                <td>{{ product.name }}</td>
+                <td>{{ product.price }}</td>
+            {% endfor %}
+        </table>
+        <!-- Thêm các thông tin khác nếu cần -->
+
+        <h3>Cập Nhật Trạng Thái</h3>
+        {% if order.status != 'delivered' %}
+            <form action="/orders/{{ order.id }}/update_status" method="post">
+                <button type="submit" class="btn btn-primary">Received</button>
+            </form>
+        {% else %}
+            <div class="alert alert-info">Đơn hàng đã được giao.</div>
+        {% endif %}
+
+        {% if app.session.get('message') %}
+            <div class="alert alert-success mt-3">
+                {{ app.session.get('message') }}
+            </div>
+            {% do app.session.remove('message') %}
+        {% endif %}
+    </div>
+{% endblock %}

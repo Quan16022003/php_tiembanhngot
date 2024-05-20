@@ -27,7 +27,8 @@ class OrderModel
         $this->createdAt = $data['created_at'] ?? null;
     }
 
-    public function save() {
+    public function save()
+    {
         $db = Database::getConnection();
 
         if ($this->id) {
@@ -75,7 +76,16 @@ class OrderModel
         return $orders;
     }
 
-    public static function getOrderById($id) {
+    public static function getTotalOrders()
+    {
+        $db = Database::getConnection();
+        $sql = "SELECT COUNT(*) FROM `order`";
+        $result = $db->query($sql);
+        return (int)$result->fetch_assoc();
+    }
+
+    public static function getOrderById($id)
+    {
         $db = Database::getConnection();
         $sql = "SELECT o.*, u.name
                 FROM `order` o
@@ -89,7 +99,31 @@ class OrderModel
         return $result->fetch_assoc();
     }
 
-    public static function getAllStatusOrder() {
+    public static function getOrdersByUserId($userId)
+    {
+        $db = Database::getConnection();
+        $sql = "SELECT DISTINCT o.*, os.status, u.name as user_name
+            FROM `order` o
+            INNER JOIN `order_status` os ON o.status_id = os.id 
+            INNER JOIN `users` u ON o.user_id = u.id
+            WHERE o.`user_id` = ? 
+            ORDER BY o.`order_date` DESC";
+
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $orders = [];
+        while ($row = $result->fetch_assoc()) {
+            $orders[] = $row;
+        }
+        $stmt->close();
+        return $orders;
+    }
+
+
+    public static function getAllStatusOrder()
+    {
         $db = Database::getConnection();
         $sql = "SELECT * FROM `order_status`";
         $result = $db->query($sql);
@@ -100,9 +134,10 @@ class OrderModel
         return $orders;
     }
 
-    public static function updateOrderStatus($id, $status) {
+    public static function updateOrderStatus($id, $status)
+    {
         $db = Database::getConnection();
-        $sql = "UPDATE `order` SET `status`=? WHERE `id`=?";
+        $sql = "UPDATE `order` SET `status_id`= ? WHERE `id`=?";
         $stmt = $db->prepare($sql);
         $stmt->bind_param("ii", $status, $id);
         $success = $stmt->execute();
@@ -110,7 +145,8 @@ class OrderModel
         return $success;
     }
 
-    public static function getAllOrdersByStatus($status) {
+    public static function getAllOrdersByStatus($status)
+    {
         $db = Database::getConnection();
         $sql = "SELECT o.*, u.name 
             FROM `order` o
@@ -128,6 +164,24 @@ class OrderModel
         return $orders;
     }
 
+    public static function getOrderDetails($orderId)
+    {
+        $db = Database::getConnection();
+        $sql = "SELECT DISTINCT od.*, p.name, p.price
+            FROM `order_detail` od
+            INNER JOIN `product` p ON p.id = od.product_id
+            WHERE od.order_id = ?";
+        $stmt = $db->prepare($sql);
+        $stmt->bind_param("i", $orderId);
+        $stmt->execute();
+
+        $orderDetails = [];
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $orderDetails[] = $row;
+        }
+        return $orderDetails;
+    }
     public static function getAllOrdersByUserId($userId) {
         $db = Database::getConnection();
         $sql = "SELECT * FROM `order` o WHERE o.user_id =?";

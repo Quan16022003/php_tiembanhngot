@@ -23,9 +23,8 @@ class ProductModel
             throw new \InvalidArgumentException('Invalid orderBy or direction.');
         }
 
+        $query = "SELECT product.`id`, product.`name` AS `title`, category.id AS `category_name`, product.price , created_at AS `created`, image_link
 
-
-        $query = "SELECT product.`id`, product.`name` AS `title`, category.id AS `category_name`, product.price , created_at AS `created`
                         FROM `product` 
                         INNER JOIN category
                         ON product.category_id = category.id";

@@ -14,35 +14,30 @@
                                 <h5 class="card-tile mb-0">Product information</h5>
                             </div>
                             <div class="card-body">
-                                <div class="mb-3">
-                                    <label class="form-label" for="productId">Mã sản phẩm:</label>
-                                    <input type="text" class="form-control" id="productId" name="productId"
-                                           value="{{ productId }}" readonly>
-                                </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label class="form-label" for="productName">Tên sản phẩm:</label>
-                                        <input type="text" class="form-control" id="productName" name="productName"
+                                        <label class="form-label" for="name">Tên sản phẩm:</label>
+                                        <input type="text" class="form-control" id="name" name="name"
                                                oninput="validateInput(this, 1, 50)"
                                                required>
-                                        <div id="productNameError" class="alert alert-danger mt-2"
+                                        <div id="nameError" class="alert alert-danger mt-2"
                                              style="display: none;"></div>
                                     </div>
                                     <div class="col">
-                                        <label class="form-label" for="productPrice">Giá:</label>
-                                        <input type="text" class="form-control" id="productPrice" name="productPrice"
+                                        <label class="form-label" for="price">Giá:</label>
+                                        <input type="text" class="form-control" id="price" name="price"
                                                oninput="validateInput(this,1,10)"
                                                required>
-                                        <div id="productPriceError" class="alert alert-danger mt-2"
+                                        <div id="priceError" class="alert alert-danger mt-2"
                                              style="display: none;"></div>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <label class="form-label" for="productContent">Mô tả (Tuỳ chọn)</label>
-                                        <input type="text" class="form-control" id="productContent"
-                                               name="productContent">
-                                        <div id="productContentError" class="alert alert-danger mt-2"
+                                        <label class="form-label" for="content">Mô tả (Tuỳ chọn)</label>
+                                        <input type="text" class="form-control" id="content"
+                                               name="content">
+                                        <div id="contentError" class="alert alert-danger mt-2"
                                              style="display: none;"></div>
                                     </div>
                                 </div>
@@ -53,11 +48,11 @@
                                 <h5 class="card-title mb-0">Media</h5>
                             </div>
                             <div class="card-body ">
-                                <div id="dropzoneContainer" class="dropzone">
-                                    <div class="dz-message" data-dz-message>
-                                        Drop files here or click to upload
-                                    </div>
-                                    <input type="hidden" id="hiddenImagePath" name="hiddenImagePath" value="">
+                                <div class="d-flex">
+                                    <input class="form-control" type="file" name="image" id="image"/>
+                                    <input id="current_image" type="hidden" name="current_image"
+                                           value="{{ product.image_link }}">
+                                    <button class="btn btn-danger" type="button" onclick="deleteImage()">Xóa</button>
                                 </div>
                             </div>
                         </div>
@@ -68,12 +63,27 @@
                                 <h5 class="card-title mb-0">Organize</h5>
                             </div>
                             <div class="card-body">
-                                <label for="productCategoryId">Mã thể loại:</label>
-                                <select class="form-control" id="productCategoryId" name="productCategoryId"
+                                <label for="category_id">Thể loại:</label>
+                                <select class="form-control" id="category_id" name="category_id"
                                         required>
-                                    <option value="1">Bánh mì</option>
-                                    <option value="2">Bánh ngọt</option>
-                                    <option value="3">Bánh kem nhỏ</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <h5 class="card-title mb-0">Origin</h5>
+                            </div>
+                            <div class="card-body">
+                                <label for="supplier_id">NCC:</label>
+                                <select class="form-control" id="supplier_id" name="supplier_id"
+                                        required>
+                                    {% for supplier in suppliers %}
+                                        <option value="{{ supplier.id }}">{{ supplier.company_name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -104,30 +114,11 @@
         }
 
         function reset() {
-            document.getElementById("productId").value = "";
-            document.getElementById("productName").value = "";
-            document.getElementById("productPrice").value = "";
-            document.getElementById("productContent").value = "";
+            document.getElementById("id").value = "";
+            document.getElementById("name").value = "";
+            document.getElementById("price").value = "";
+            document.getElementById("content").value = "";
         }
-
-        Dropzone.autoDiscover = false; // Ngăn Dropzone tự động khởi tạo các phần tử có lớp "dropzone"
-        const myDropzone = new Dropzone("#dropzoneContainer", {
-            url: "/admin/products/upload-image",
-            maxFiles: 1,
-            maxFilesize: 5, // Giới hạn dung lượng tệp (đơn vị: MB)
-            acceptedFiles: ".jpg, .jpeg, .png, .gif",
-            dictDefaultMessage: "Kéo và thả tệp vào đây hoặc nhấn vào để chọn tệp",
-            addRemoveLinks: true, // Thêm liên kết xóa
-            dictRemoveFile: 'Xóa hình ảnh', // Text cho liên kết xóa
-        });
-
-        myDropzone.on("success", function (file, response) {
-            // Lấy đường dẫn hình ảnh từ response và lưu vào biến
-            var imagePath = response.imagePath;
-            // Lưu đường dẫn hình ảnh vào một hidden input để gửi cùng với các thông tin sản phẩm khác khi nhấn nút lưu
-            document.getElementById("hiddenImagePath").value = imagePath;
-        });
-
 
         function validateInput(input, minLength, maxLength) {
             var value = input.value;
@@ -153,14 +144,14 @@
             }
 
             // Kiểm tra input có chứa ký tự không hợp lệ không
-            if (!/^[a-zA-Z0-9 ]*$/.test(value)) { // Thêm ký tự khoảng trắng vào biểu thức chính quy
+            if (!/^[\p{L}\p{N} ]+$/u.test(value)) { // Thêm \p{L} cho ký tự chữ và \p{N} cho ký tự số
                 showError(errorDiv, "Input chứa ký tự không hợp lệ.");
                 hasError = true;
             }
 
 
-            // Kiểm tra input không phải là số (chỉ cho productPrice)
-            if (input.id === 'productPrice' && isNaN(value)) {
+            // Kiểm tra input không phải là số (chỉ cho price)
+            if (input.id === 'price' && isNaN(value)) {
                 showError(errorDiv, "Input phải là số.");
                 hasError = true;
             }

@@ -13,52 +13,83 @@ class AdminDashboardModel
         $this->db = Database::getInstance();
     }
 
-    public function getTotalSoldProductsByType($startDate = null, $endDate = null): array
+    /**
+     * Lấy tổng số sản phẩm đã bán theo loại trong khoảng thời gian và loại sản phẩm cụ thể
+     *
+     * @param string|null $startDate
+     * @param string|null $endDate
+     * @param int|null $categoryId
+     * @return array
+     */
+    public function getTotalSoldProductsByType(string $startDate = null, string $endDate = null, int $categoryId = null): array
     {
-        $sql = "SELECT p.id AS product_id, p.name AS product_name, SUM(id.quantity) AS total_sold 
-            FROM invoice_detail id
-            INNER JOIN invoice i ON id.invoice_id = i.id
-            INNER JOIN product p ON id.product_id = p.id";
+        $sql = "SELECT p.id AS product_id, p.name AS product_name, SUM(id.quantity) AS total_sold, p.price AS product_price 
+                FROM invoice_detail id
+                INNER JOIN invoice i ON id.invoice_id = i.id
+                INNER JOIN product p ON id.product_id = p.id";
+
+        $conditions = [];
+        $params = [];
+        $types = '';
+
         if ($startDate && $endDate) {
-            $sql .= " WHERE i.date BETWEEN ? AND ?";
+            $conditions[] = "i.date BETWEEN ? AND ?";
+            $params[] = $startDate;
+            $params[] = $endDate;
+            $types .= 'ss';
         }
+
+        if ($categoryId) {
+            $conditions[] = "p.category_id = ?";
+            $params[] = $categoryId;
+            $types .= 'i';
+        }
+
+        if (!empty($conditions)) {
+            $sql .= ' WHERE ' . implode(' AND ', $conditions);
+        }
+
         $sql .= " GROUP BY id.product_id";
 
         $stmt = $this->db->conn->prepare($sql);
-        // Nếu có startDate và endDate, bind các tham số
-        if ($startDate !== null && $endDate !== null) {
-            $stmt->bind_param("ss", $startDate, $endDate);
+
+        if ($types) {
+            $stmt->bind_param($types, ...$params);
         }
+
         $stmt->execute();
         $result = $stmt->get_result();
-//        $result = $this->db->conn->query($sql);
 
-        $totalSoldByType = array();
+        $totalSoldByType = [];
         if ($result && $result->num_rows > 0) {
             while ($row = $result->fetch_assoc()) {
                 $totalSoldByType[$row['product_id']] = [
+                    'price' => (int)$row['product_price'],
                     'name' => $row['product_name'],
                     'total_sold' => (int)$row['total_sold']
                 ];
             }
         }
+
+        $stmt->close(); // Đóng statement sau khi sử dụng
         return $totalSoldByType;
     }
 
-    function getYearsFromDatabase()
+    /**
+     * Lấy các năm có dữ liệu từ cơ sở dữ liệu
+     *
+     * @return array
+     */
+    public function getYearsFromDatabase(): array
     {
         $query = "SELECT DISTINCT YEAR(date) AS year FROM invoice ORDER BY year DESC";
         $result = $this->db->conn->query($query);
 
-        $years = array();
-
-        // Lặp qua các kết quả và thêm năm vào mảng
+        $years = [];
         while ($row = $result->fetch_assoc()) {
             $years[] = $row['year'];
         }
-//        echo "console.log('Years:', " . json_encode($years) .
+
         return $years;
     }
-
-
 }

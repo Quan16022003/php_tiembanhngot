@@ -1,0 +1,39 @@
+{% extends './layout.twig' %}
+
+{% block title %}Trạng Thái Giao Hàng{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h2>Trạng Thái Giao Hàng</h2>
+        {% if orders is not empty %}
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Mã Đơn Hàng</th>
+                    <th>Tên Khách Hàng</th>
+                    <th>Trạng Thái</th>
+                    <th>Ngay Dat Hang</th>
+                    <th>Ngày Dự Kiến Giao Hàng</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>{{ order.id }}</td>
+                        <td>{{ order.user_name }}</td>
+                        <td>{{ order.status }}</td>
+                        {% set estimated_delivery = order.order_date|date_modify('+3 days') %}
+                        <td>{{ order.order_date|date('Y-m-d') }}</td>
+                        <td>{{ estimated_delivery|date('Y-m-d') }}</td>
+                        <td>
+                            <a class="btn btn-warning" href="/orders/details/{{ order.id }}">Chi Tiết</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p>Không có đơn hàng nào.</p>
+        {% endif %}
+    </div>
+{% endblock %}
