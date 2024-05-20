@@ -1,0 +1,87 @@
+{% extends 'layout.twig' %}
+
+{% block title %}Account - My Website{% endblock %}
+
+{% block stylesheets %}
+    <link href="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/datatables.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid p-lg-5">
+        <h3>Trang khách hàng</h3>
+        <div class="row row-cols-lg-2">
+            <div class="col col-12 col-lg-3 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">TÀI KHOẢN CỦA TÔI</h5>
+                        <p class="card-text">Tên tài khoản: <a href="/account">Nguyễn Hoàng Quân</a></p>
+                        <hr>
+                        <a href="/account/update-info" class="btn btn-primary w-100 mb-2">THAY ĐỔI THÔNG TIN</a>
+                        <a href="/account/change-pass" class="btn btn-primary w-100">THAY ĐỔI MẬT KHẨU</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-12 col-lg-9 mb-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">ĐƠN HÀNG</h5>
+
+                        <div class="table-responsive table" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                            <table id="order-table" class="table table-striped table-bordered" style="width:100%">
+                                <thead>
+                                <th>Mã phiếu</th>
+                                <th>Trạng thái đơn hàng</th>
+                                <th>Giá trị đơn hàng</th>
+                                <th>Ngày đặt</th>
+                                </thead>
+                                <tbody>
+                                {% for order in orders %}
+                                    {% set status = statuses[order.status] %}
+                                    <tr data-id="{{ order.id }}">
+                                        <td><a href="/admin/orders/{{ order.id }}">#O{{ order.id }}</a></td>
+                                        <td><span class="badge text-bg-{{ status.color }}">{{ status.name }}</span></td>
+                                        <td>{{ order.total_price }}</td>
+                                        <td>{{ order.created_at }}</td>
+                                    </tr>
+                                {% endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://cdn.datatables.net/v/bs5/jq-3.7.0/jszip-3.10.1/dt-2.0.6/b-3.0.2/b-colvis-3.0.2/b-html5-3.0.2/b-print-3.0.2/sp-2.3.1/sl-2.0.1/datatables.min.js"></script>
+
+    <script>
+
+        $(document).ready(function() {
+            var table = $('#order-table').DataTable({
+                searching: false,
+                info: false,
+                lengthChange: false,
+                order: [[3, 'ASC']],
+                "pageLength": 10,
+                "language": {
+                    "decimal"       : "",
+                    "emptyTable"    : "Không có dữ liệu trong bảng",
+                    "info"          : "Hiển thị _START_ đến _END_ trong tổng số _TOTAL_ mục",
+                    "infoEmpty"     : "Hiển thị 0 đến 0 trong tổng số 0 mục",
+                    "infoFiltered"  : "(được lọc từ tổng số _MAX_ mục)",
+                    "infoPostFix"   : "",
+                    "thousands"     : ",",
+                    "lengthMenu"    : "Hiển thị _MENU_ mục",
+                    "loadingRecords": "Đang tải...",
+                    "processing"    : "",
+                    "search"        : "Tìm kiếm:",
+                    "zeroRecords"   : "Không tìm thấy bản ghi phù hợp",
+                }
+            });
+        });
+    </script>
+{% endblock %}

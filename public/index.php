@@ -152,6 +152,11 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         // checkout
         $r->addRoute('GET', '/checkout/{cartId}', ['App\Controllers\Client\CheckOutController', 'showCheckOutPage']);
         $r->addRoute('POST', '/checkout/submit', ['App\Controllers\Admin\OrdersController', 'create']);
+
+        // account
+        $r->addRoute('GET', '/account', ['App\Controllers\Client\AccountController', 'index']);
+        $r->addRoute('GET', '/account/update-info', ['App\Controllers\Client\AccountController', 'updateInfo']);
+        $r->addRoute('GET', '/account/change-pass', ['App\Controllers\Client\AccountController', 'changePass']);
     });
 
 });
