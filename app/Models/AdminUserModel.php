@@ -198,7 +198,9 @@ class AdminUserModel
         $sql = "SELECT a.code, pa.f 
                 FROM per_act pa
                 JOIN action a ON pa.id_action = a.id
-                WHERE pa.id_per = ?";
+                JOIN permission p ON p.id = pa.id_per
+                JOIN admin ad ON ad.id_per = p.id
+                WHERE ad.id = ?";
         $stmt = $this->db->conn->prepare($sql);
         $stmt->bind_param("i", $admin_id);
         $stmt->execute();

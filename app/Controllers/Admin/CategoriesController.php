@@ -5,11 +5,11 @@ namespace App\Controllers\Admin;
 use Core\Controller;
 use App\Models\CategoriesModel;
 
-class CategoriesController extends Controller
+class CategoriesController extends AdminController
 {
     public function __construct()
     {
-        parent::__construct('Admin');
+        parent::__construct();
     }
 
     public function getById($id): void
@@ -59,14 +59,14 @@ class CategoriesController extends Controller
         $categories = $model->getCategories($offset, $categoriesPerPage);
         $totalCategories = $model->getTotalCategories();
         $totalPages = ceil($totalCategories / $categoriesPerPage);
-        $this->render('categories/categories', ['categories' => $categories, 'totalPages' => $totalPages, 'currentPage' => $page]);
+        parent::render('categories/categories', ['categories' => $categories, 'totalPages' => $totalPages, 'currentPage' => $page]);
     }
 
     public function openCreate(): void
     {
         $model = new CategoriesModel();
         $categoryId = $model->generateCategoryId();
-        $this->render('categories/categories_create', ['categoryId' => $categoryId]);
+        parent::render('categories/categories_create', ['categoryId' => $categoryId]);
     }
 
     public function create(): void
@@ -118,6 +118,6 @@ class CategoriesController extends Controller
         $search = $_POST['search'];
         $model = new CategoriesModel();
         $categories = $model->search($search);
-        $this->render('categories/categories', ['categories' => $categories]);
+        parent::render('categories/categories', ['categories' => $categories]);
     }
 }

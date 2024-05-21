@@ -7,11 +7,11 @@ use App\Models\AdminProductsModel;
 use App\Models\CategoriesModel;
 use App\Models\SupplierModel;
 
-class ProductsController extends Controller
+class ProductsController extends AdminController
 {
     public function __construct()
     {
-        parent::__construct('Admin');
+        parent::__construct();
     }
 
     public function openCreate(): void
@@ -20,12 +20,12 @@ class ProductsController extends Controller
         $suppliers = (new SupplierModel())->getAllSuppliers();
         $data = ['categories' => $categories, 'suppliers' => $suppliers];
 //        var_dump(json_encode($data));
-        $this->render('products/create', $data);
+        parent::render('products/create', $data);
     }
 
     public function openAdd(): void
     {
-        $this->render('products/import');
+        parent::render('products/import');
     }
 
     public function getById($id): void
@@ -101,7 +101,7 @@ class ProductsController extends Controller
         $totalProducts = $productsModel->getTotalProducts();
         $totalPages = ceil($totalProducts / $productsPerPage);
         $categories = $categoriesModel->getAllCategories();
-        $this->render('products/index', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page, 'categories' => $categories]);
+        parent::render('products/index', ['products' => $products, 'totalPages' => $totalPages, 'currentPage' => $page, 'categories' => $categories]);
     }
 
     public function update(): void

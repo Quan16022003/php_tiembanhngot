@@ -14,7 +14,7 @@ class UserController extends AdminController
         $this->userModel = new AdminUserModel();
     }
 
-    #[\Override] function index(): void
+    function index(): void
     {
         $data['list'] = $this->userModel->selectAll();
         parent::render('Users/user', $data);
@@ -152,6 +152,7 @@ class UserController extends AdminController
             }
         }
         echo json_encode(Array('success' => true, 'message' => 'Sửa thành công'));
+        $_SESSION['permissions'] = (new AdminUserModel())->getPermissionByAdminId($_SESSION['admin_id']);
     }
 
     public function deletePermission(): void
