@@ -59,7 +59,7 @@ class DashboardController extends Controller
             ]);
         } catch (\Exception $e) {
             // Xử lý ngoại lệ
-            $this->handleError($e);
+            $this->render($e);
         }
     }
 

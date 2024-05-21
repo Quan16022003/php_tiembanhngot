@@ -12,14 +12,14 @@ class AdminUserModel
         $this->db = Database::getInstance();
     }
     public function insert($name, $username, $password, $email,
-                           $sdt, $adress, $dob, $gender, $permission): bool
+                           $sdt, $address, $dob, $gender, $permission): bool
     {
         return $this->db->insert('admin', data: [
             'name' => $name,
             'username' => $username,
             'email' => $email,
             'sdt' => $sdt,
-            'adress' => $adress,
+            'address' => $address,
             'dob' => $dob,
             'gender' => $gender,
             'password' => password_hash($password, PASSWORD_DEFAULT),
@@ -28,7 +28,7 @@ class AdminUserModel
     }
     public function selectAll(): array
     {
-        $sql = "SELECT a.id, a.username, a.name, a.email, p.name as 'permission_name', a.status FROM admin a LEFT JOIN permission p on p.id = a.id_per;";
+        $sql = "SELECT a.id, a.username, a.name, a.email, p.name as 'permission_name' FROM admin a LEFT JOIN permission p on p.id = a.id_per;";
         $result = $this->db->conn->query($sql);
         $rows = [];
         while ($row = $result->fetch_assoc()) {
