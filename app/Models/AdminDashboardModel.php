@@ -23,17 +23,17 @@ class AdminDashboardModel
      */
     public function getTotalSoldProductsByType(string $startDate = null, string $endDate = null, int $categoryId = null): array
     {
-        $sql = "SELECT p.id AS product_id, p.name AS product_name, SUM(id.quantity) AS total_sold, p.price AS product_price 
-                FROM invoice_detail id
-                INNER JOIN invoice i ON id.invoice_id = i.id
-                INNER JOIN product p ON id.product_id = p.id";
+        $sql = "SELECT p.id AS product_id, p.name AS product_name, SUM(od.quantity) AS total_sold, p.price AS product_price 
+                FROM order_detail od
+                INNER JOIN `order` o ON od.order_id = o.id
+                INNER JOIN product p ON od.product_id = p.id";
 
         $conditions = [];
         $params = [];
         $types = '';
 
         if ($startDate && $endDate) {
-            $conditions[] = "i.date BETWEEN ? AND ?";
+            $conditions[] = "i.created_at BETWEEN ? AND ?";
             $params[] = $startDate;
             $params[] = $endDate;
             $types .= 'ss';
@@ -49,7 +49,7 @@ class AdminDashboardModel
             $sql .= ' WHERE ' . implode(' AND ', $conditions);
         }
 
-        $sql .= " GROUP BY id.product_id";
+        $sql .= " GROUP BY od.product_id";
 
         $stmt = $this->db->conn->prepare($sql);
 
@@ -82,7 +82,7 @@ class AdminDashboardModel
      */
     public function getYearsFromDatabase(): array
     {
-        $query = "SELECT DISTINCT YEAR(date) AS year FROM invoice ORDER BY year DESC";
+        $query = "SELECT DISTINCT YEAR(created_at) AS year FROM `order` ORDER BY year DESC";
         $result = $this->db->conn->query($query);
 
         $years = [];

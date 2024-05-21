@@ -11,9 +11,9 @@ class Database
     public ?mysqli $conn = NULL;
 
     private string $host = 'localhost';
-    private string $dbName = 'eco';
+    private string $dbName = 'cuahangbanbanh';
     private string $user = 'root';
-    private string $password = '';
+    private string $password = 'namdt2003';
 
     // Hàm kết nối CSDL
     private function __construct()
@@ -94,7 +94,6 @@ class Database
         }
         return $rows;
     }
-
 
 
     public function insertById($customer_id, $product_id, $quantity = 1): bool
