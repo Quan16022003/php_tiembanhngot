@@ -78,7 +78,6 @@ class ProductController extends ClientController
             $id = $vars['id'];
         }
         $data = $this->productModel->selectProductbyID($id);
-        var_dump($data);
         $this->render('products/productDetail', ['product' => $data]);
 
     }

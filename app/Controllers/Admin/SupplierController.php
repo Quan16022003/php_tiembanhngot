@@ -42,7 +42,7 @@ class SupplierController extends AdminController
         $id = $vars['id'];
 //        echo json_encode(SupplierModel::getSupplierById($id));
         $supplier = SupplierModel::getSupplierById($id);
-        echo $this->twig->render('Suppliers/show.twig', ['supplier' => $supplier]);
+        parent::render('Suppliers/show', ['supplier' => $supplier]);
     }
 
     public function edit($vars)

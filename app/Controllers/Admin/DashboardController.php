@@ -6,7 +6,7 @@ use App\Models\AdminDashboardModel;
 use App\Models\CategoriesModel;
 use Core\Controller;
 
-class DashboardController extends Controller
+class DashboardController extends AdminController
 {
     private $adminDashboardModel;
     private $categoriesModel;
@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
     public function __construct()
     {
-        parent::__construct('Admin');
+        parent::__construct();
         $this->adminDashboardModel = new AdminDashboardModel();
         $this->categoriesModel = new CategoriesModel();
         $this->initData();
@@ -31,7 +31,6 @@ class DashboardController extends Controller
         $this->endDate = isset($_GET['end_date']) && $_GET['end_date'] ? date('Y-m-d', strtotime($_GET['end_date'])) : null;
         $this->selectedCategory = isset($_GET['categories']) && $_GET['categories'] !== null ? $_GET['categories'] : null;
         // Gọi phương thức để lấy dữ liệu từ model và khởi tạo các biến khác
-        $this->years = $this->adminDashboardModel->getYearsFromDatabase();
         $this->selectedYear = date('Y');
     }
 
@@ -48,7 +47,7 @@ class DashboardController extends Controller
             $categories = $this->categoriesModel->getAllCategories();
 
             // Render view với dữ liệu đã lấy được
-            $this->render('dashboard/products', [
+            parent::render('dashboard/products', [
                 'years' => $this->years,
                 'selectedYear' => $this->selectedYear,
                 'startDate' => $this->startDate,

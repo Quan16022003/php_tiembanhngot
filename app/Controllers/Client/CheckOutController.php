@@ -70,4 +70,8 @@ class CheckOutController extends ClientController
             $productModel->reduceStock($productId, $quantity);
         }
     }
+
+    public function thanks() {
+        parent::render('thanks');
+    }
 }

@@ -13,7 +13,7 @@
                     <h1>Name: {{ product.name }}</h1>
                     <p>Category: {{ product.category_id }}</p>
                     <p>Description: {{ product.content }}</p>
-                    <p>Price: {{ product.price }} &#8363;</p>
+                    <p>Price: {{ product.price|formatCurrency }} &#8363;</p>
                     {% if product.discount %}
                         <p>Discount: {{ product.discount }}%</p>
                         <p>Discounted Price: {{ product.price * (100 - product.discount) / 100 }} &#8363;</p>

@@ -1,4 +1,4 @@
-{% set page = 'dashboard/products' %}
+{% set page = 'dashboard' %}
 {% extends './layout.twig' %}
 {% block content %}
     <div class="container">
@@ -37,7 +37,7 @@
             <ul class="list-group" id="productList">
                 {% set totalRevenue = 0 %}
                 {% for product in totalSoldByType %}
-                    {% set revenue = product.price * product.total_sold * 1000 %}
+                    {% set revenue = product.price * product.total_sold %}
                     {% set totalRevenue = totalRevenue + revenue %}
                     <li class="list-group-item">
                         {{ product.name }} - Số lượng bán: {{ product.total_sold }} - Doanh

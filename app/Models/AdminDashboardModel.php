@@ -33,7 +33,7 @@ class AdminDashboardModel
         $types = '';
 
         if ($startDate && $endDate) {
-            $conditions[] = "i.created_at BETWEEN ? AND ?";
+            $conditions[] = "o.created_at BETWEEN ? AND ?";
             $params[] = $startDate;
             $params[] = $endDate;
             $types .= 'ss';

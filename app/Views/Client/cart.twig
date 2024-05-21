@@ -54,7 +54,7 @@
                                                         </button>
                                                     </div>
                                                     <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                                        <h6 class="mb-0">{{ item.price }}</h6>
+                                                        <h6 class="mb-0">{{ item.price|number_format }} &#8363;</h6>
                                                     </div>
                                                     <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                         <a href="#!" class="text-muted"><i class="fas fa-times"></i></a>
@@ -82,7 +82,7 @@
                                         <div class="d-flex justify-content-between mb-4">
                                             {% for product in cart %}
                                                 <h5 class="text-uppercase">{{ product.name }}</h5>
-                                                <h5>{{ product.price }}</h5>
+                                                <h5>{{ product.price | number_format }}</h5>
                                             {% endfor %}
                                         </div>
 
@@ -91,9 +91,9 @@
                                             <h5 class="text-uppercase">Total price</h5>
                                             {% set total = 0 %}
                                             {% for item in carts %}
-                                                {% set total = total + (item.quantity * item.price * 1000) %}
+                                                {% set total = total + (item.quantity * item.price) %}
                                             {% endfor %}
-                                            <h5>{{ total | number_format}}VNĐ</h5>
+                                            <h5>{{ total | number_format}} &#8363;</h5>
                                         </div>
 
                                         <a href="/checkout/{cartId} + {{ cart.id }}" type="button" data-mdb-button-init
