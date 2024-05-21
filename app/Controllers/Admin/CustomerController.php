@@ -2,54 +2,17 @@
 
 namespace App\Controllers\Admin;
 
+use App\Models\OrderModel;
 use App\Models\UserModel;
 use Core\Controller;
 use App\Models\AdminCustomerModel;
 
-class CustomerController extends Controller
+class CustomerController extends AdminController
 {
     public function __construct()
     {
-        parent::__construct('Admin');
+        parent::__construct();
         $this->userModel = new UserModel();
-    }
-
-    public function getById($Id): void
-    {
-        if (is_array($Id) && isset($Id['customerId'])) {
-            $Id = $Id['customerId'];
-        }
-
-        $model = new AdminCustomerModel();
-        $customer = $model->getById($Id);
-        if ($customer) {
-            parent::render('customers/customer_view', ['customer' => $customer]);
-        } else {
-            echo "Không tìm thấy khách hàng!";
-        }
-    }
-
-    public function update(): void
-    {
-
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-            $customerId = $_POST["customerId"];
-            $customerName = $_POST["customerName"];
-            $customerEmail = $_POST["customerEmail"];
-            $customerPhone = $_POST["CustomerPhone"];
-            $customerAddress = $_POST["customerAddress"];
-            $customerPassword = $_POST["customerPassword"];
-            $customerCreateAt = $_POST["customerCreateAt"];
-            $model = new AdminCustomerModel();
-            $success = $model->update($customerId, $customerName, $customerEmail, $customerPhone, $customerAddress, $customerPassword, $customerCreateAt);
-            if ($success) {
-                header("Location: " . $_SERVER['REQUEST_URI']);
-                exit;
-            } else {
-                echo "Cập nhật khách hàng thất bại!";
-            }
-        }
     }
 
 //    public function index(): void
@@ -70,7 +33,21 @@ class CustomerController extends Controller
         $data = [
             'customers' => $customers
         ];
-        parent::render('Customers/index', $data);
+        parent::render('customers/index', $data);
+    }
+
+    public function show($vars) {
+        $id = $vars['id'];
+        $customer = $this->userModel->getCustomerSummary($id);
+        $orders = OrderModel::getAllOrdersByUserId($id);
+        $statuses = OrderModel::getAllStatusOrder();
+
+        $data = [
+            'customer' => $customer,
+            'orders' => $orders,
+            'statueses' => $statuses
+        ];
+        parent::render('customers/view', $data);
     }
 
     public function create(): void

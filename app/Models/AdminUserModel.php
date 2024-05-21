@@ -83,7 +83,7 @@ class AdminUserModel
     {
         $query = "SELECT a.id, a.username, a.name, a.email, a.sdt, a.address, a.dob, a.gender, p.name as 'permission_name', a.status FROM admin a LEFT JOIN permission p on p.id = a.id_per WHERE a.id = ?";
         $stmt = $this->db->conn->prepare($query);
-        $stmt->bind_param("s", $id);
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
         return $result->fetch_all(MYSQLI_ASSOC)[0];
@@ -191,5 +191,24 @@ class AdminUserModel
         $affected_rows = $stmt->affected_rows;
         $stmt->close();
         return $affected_rows > 0;
+    }
+
+    public function getPermissionByAdminId($admin_id)
+    {
+        $sql = "SELECT a.code, pa.f 
+                FROM per_act pa
+                JOIN action a ON pa.id_action = a.id
+                WHERE pa.id_per = ?";
+        $stmt = $this->db->conn->prepare($sql);
+        $stmt->bind_param("i", $admin_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $permissions = [];
+        while ($row = $result->fetch_assoc()) {
+            $permissions[$row['code']][] = $row['f'];
+        }
+
+        $stmt->close();
+        return $permissions;
     }
 }

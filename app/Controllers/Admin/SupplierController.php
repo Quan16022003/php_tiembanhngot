@@ -8,28 +8,23 @@ use Core\Database;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
-class SupplierController
+class SupplierController extends AdminController
 {
     private $db;
     private $loader;
     private $twig;
 
-    public function __construct()
-    {
-        $this->loader = new FilesystemLoader('../app/Views/Admin'); // Adjust path as needed
-        $this->twig = new Environment($this->loader);
-    }
 
     public function index()
     {
         $suppliers = SupplierModel::getAllSuppliers();
-        echo $this->twig->render('Suppliers/index.twig', ['suppliers' => $suppliers]);
+        parent::render('Suppliers/index', ['suppliers' => $suppliers]);
     }
 
     public function create()
     {
         // Render form for creating a new supplier
-        echo $this->twig->render('Suppliers/create.twig');
+        parent::render('Suppliers/create');
     }
 
     public function store()
@@ -55,7 +50,7 @@ class SupplierController
         $id = $vars['id'];
         // Retrieve supplier by ID and render edit form
         $supplier = SupplierModel::getSupplierById($id);
-        echo $this->twig->render('Suppliers/edit.twig', ['supplier' => $supplier]);
+        parent::render('Suppliers/edit', ['supplier' => $supplier]);
     }
 
     public function update($vars)

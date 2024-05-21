@@ -88,9 +88,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         // CUSTOMERS
         $r->addGroup('/customers', function (RouteCollector $r) {
             $r->addRoute('GET', '', ['App\Controllers\Admin\CustomerController', 'index']);
-            $r->addRoute('GET', '/create', ['App\Controllers\Admin\CustomerController', 'openCreate']);
-            $r->addRoute('POST', '/create', ['App\Controllers\Admin\CustomerController', 'create']);
-            $r->addRoute('GET', '/view/{customerId}', ['App\Controllers\Admin\CustomerController', 'getById']);
+            $r->addRoute('GET', '/{id}', ['App\Controllers\Admin\CustomerController', 'show']);
         });
 
         // USERS
@@ -164,6 +162,7 @@ $dispatcher = simpleDispatcher(function (RouteCollector $r) {
         $r->addRoute('GET', '/account', ['App\Controllers\Client\AccountController', 'index']);
         $r->addRoute('GET', '/account/update-info', ['App\Controllers\Client\AccountController', 'updateInfo']);
         $r->addRoute('GET', '/account/change-pass', ['App\Controllers\Client\AccountController', 'changePass']);
+        $r->addRoute('POST', '/account/update-password', ['App\Controllers\Client\AccountController', 'updatePassword']);
         $r->addRoute('GET', '/account/order-details', ['App\Controllers\Client\AccountController', 'orderDetails']);
     });
 

@@ -51,6 +51,7 @@ $(document).ready(function(){
     });
 
     $("#login").click(function(e){
+        e.preventDefault();
         if (document.getElementById('login-frm').checkVisibility()) {
             e.preventDefault();
             $("#loader").show();
@@ -60,7 +61,7 @@ $(document).ready(function(){
                 data: $("#login-frm").serialize() + '&action=login',
                 success: function(response) {
                     if (response == "ok") {
-                        window.location = 'profile.php';
+                        window.location = '/account';
                     } else {
                         $("#alert").show();
                         $("#result").html(response);

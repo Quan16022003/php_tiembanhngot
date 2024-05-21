@@ -26,7 +26,15 @@ class AccountController extends ClientController
     }
 
     public function changePass() {
+        parent::render('Account/change_pass');
+    }
 
+    public function updatePassword() {
+        $pass = $_POST['pass'];
+        $cpass = $_POST['cpass'];
+        $userId = $_SESSION['userId'];
+        (new UserModel())->updatePassword($userId, $pass);
+        echo 'OK';
     }
 
     public function orderDetails() {
@@ -38,7 +46,6 @@ class AccountController extends ClientController
             'order' => OrderModel::getOrderById($id),
             'products' => OrderDetailsModel::getAllOrderDetailByOrderId($id)
         ];
-        print_r($data);
         parent::render('Account/orderDetails', $data);
     }
 }

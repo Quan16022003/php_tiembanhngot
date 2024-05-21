@@ -34,6 +34,7 @@ class AuthController extends Controller
             // Login successful
             $_SESSION['admin_id'] = $row['id'];
             $_SESSION['admin_name'] = $row['name'];
+            $_SESSION['permissions'] = (new AdminUserModel())->getPermissionByAdminId($row['id']);
             echo "success";
         } else {
             echo "Tài khoản hoặc mật khẩu không đúng";

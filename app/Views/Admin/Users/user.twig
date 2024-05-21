@@ -55,12 +55,16 @@
                             </td>
                             <td>
                                 <div class="d-inline-block text-nowrap">
+                                    {% if admin.permissions['QLND'] is defined and 'edit' in admin.permissions['QLND'] %}
                                     <a class="btn btn-sm btn-primary" href="/admin/user/edit?id={{ user.id }}">
                                         <i class="fa-solid fa-pen-to-square"></i>
                                     </a>
+                                    {% endif %}
+                                    {% if admin.permissions['QLND'] is defined and 'delete' in admin.permissions['QLND'] %}
                                     <button class="btn btn-sm btn-primary delete-record">
                                         <i class="fa-solid fa-trash"></i>
                                     </button>
+                                    {% endif %}
                                     <button class="btn btn-sm btn-primary dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                                         <i class="fa-solid fa-ellipsis-vertical pe-1 ps-1"></i>
                                     </button>
@@ -150,8 +154,9 @@
                             text: '<i class="fa-solid fa-file-pdf"></i> PDF'
                         }
                     ]
-                },
-                top2End: {
+                }
+                {% if admin.permissions['QLND'] is defined and 'create' in admin.permissions['QLND'] %}
+                , top2End: {
                     buttons: [
                         {
                             text: '<i class="fa-solid fa-plus"></i> Thêm người dùng mới',
@@ -165,6 +170,7 @@
                         }
                     ]
                 }
+                {% endif %}
             },
             "language": {
                 "decimal"       : "",

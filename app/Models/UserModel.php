@@ -81,6 +81,13 @@ class UserModel
         return $result->fetch_assoc()['name'];
     }
 
+    public function updatePassword($userId, $newpass) {
+        $newpass = sha1($newpass);
+        $stmt = $this->conn->prepare("UPDATE users SET pass=? WHERE id=?");
+        $stmt->bind_param("si", $newpass, $userId);
+        return $stmt->execute();
+    }
+
     public function getCustomerPurchaseSummary()
     {
         $sql = "SELECT u.id, u.name AS name, u.email, \n"
@@ -102,5 +109,29 @@ class UserModel
             $customers[] = $row;
         }
         return $customers;
+    }
+
+    public function getCustomerSummary($userId) {
+        $sql = "SELECT u.id, u.name AS name, u.email,\n"
+
+            . "	COUNT(o.id) AS orders,\n"
+
+            . " COALESCE(SUM(od.price * od.quantity), 0) AS total_spent\n"
+
+            . "FROM users u\n"
+
+            . "LEFT JOIN `order` o ON o.user_id = u.id\n"
+
+            . "LEFT JOIN order_detail od ON od.order_id = o.id\n"
+
+            . "WHERE u.id = ?\n"
+
+            . "GROUP BY u.id, u.name, u.email;";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $userId);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $row = $result->fetch_assoc();
+        return $row;
     }
 }

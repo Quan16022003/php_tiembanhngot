@@ -14,9 +14,8 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">TÀI KHOẢN CỦA TÔI</h5>
-                        <p class="card-text">Tên tài khoản: <a href="/account">Nguyễn Hoàng Quân</a></p>
+                        <p class="card-text">Tên tài khoản: <a href="/account">{{ name }}</a></p>
                         <hr>
-                        <a href="/account/edit-information" class="btn btn-primary w-100 mb-2">THAY ĐỔI THÔNG TIN</a>
                         <a href="/account/change-password" class="btn btn-primary w-100">THAY ĐỔI MẬT KHẨU</a>
                     </div>
                 </div>
@@ -25,8 +24,17 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">Thay đổi mật khẩu</h5>
-
-
+                        <form id="changePasswordForm">
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="pass" name="pass" placeholder="Password" required>
+                                <label for="pass">Mật khẩu mới</label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="password" class="form-control" id="cpass" name="cpass" placeholder="Password" required>
+                                <label for="cpass">Nhập lại mật khẩu mới</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Thay đổi mật khẩu</button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -36,5 +44,36 @@
 {% endblock %}
 
 {% block scripts %}
+<script>
+    $(document).ready(function() {
+        $('#changePasswordForm').submit(function(event) {
+            event.preventDefault();
 
+            var newPass = $('#pass').val();
+            var confirmPass = $('#cpass').val();
+
+            // Kiểm tra trùng khớp mật khẩu
+            if (newPass !== confirmPass) {
+                alert('Mật khẩu mới và nhập lại không khớp.')
+                return; // Dừng lại nếu mật khẩu không khớp
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: '/account/update-password',
+                data: $(this).serialize(),
+                success: function(response) {
+                    console.log(response);
+                    if (response === "OK") {
+                        alert('Mật khẩu đã được thay đổi thành công!')
+                        location.reload();
+                    }
+                },
+                error: function() {
+                    alert('Lỗi khi xử lý yêu cầu.');
+                }
+            });
+        });
+    });
+</script>
 {% endblock %}

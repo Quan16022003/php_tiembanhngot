@@ -37,7 +37,7 @@
                     {% for product in products %}
                     <div class="col">
                         <div class="card h-100">
-                            <img src="/public/uploads/{{ product.image_link }}" class="card-img-top" alt="Bánh mì">
+                            <img src="{{ product.image_link }}" class="card-img-top" alt="Bánh mì">
                             <div class="card-body">
                                 <h5 class="card-title">{{ product.title }}</h5>
                                 <p class="card-subtitle">{{ product.category_name }}</p>

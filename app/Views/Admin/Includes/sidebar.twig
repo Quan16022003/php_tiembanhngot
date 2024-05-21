@@ -14,60 +14,74 @@
                 </a>
             </li>
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'dashboard' %}active{% endif %}" href="/admin/dashboard">
-                    <i class="fas fa-tachometer-alt"></i> <span>Thống kê</span>
-                </a>
-            </li>
+            {% if admin.permissions['TK'] is defined and 'view' in admin.permissions['TK'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'dashboard' %}active{% endif %}" href="/admin/dashboard">
+                        <i class="fas fa-tachometer-alt"></i> <span>Thống kê</span>
+                    </a>
+                </li>
+            {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'products' %}active{% endif %}" href="/admin/products">
-                    <i class="fa-solid fa-bread-slice"></i> <span>Danh sách sản phẩm</span>
-                </a>
-            </li>
+            {% if admin.permissions['QLSP'] is defined and 'view' in admin.permissions['QLSP'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'products' %}active{% endif %}" href="/admin/products">
+                        <i class="fa-solid fa-bread-slice"></i> <span>Danh sách sản phẩm</span>
+                    </a>
+                </li>
+            {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'categories' %}active{% endif %}" href="/admin/categories">
-                    <i class="fa-solid fa-layer-group"></i> <span>Danh sách thể loại</span>
-                </a>
-            </li>
-            
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'suppliers' %}active{% endif %}" href="/admin/suppliers">
-                    <i class="fa-solid fa-bread-slice"></i> <span>Nhà cung cấp</span>
-                </a>
-            </li>
+            {% if admin.permissions['QLLSP'] is defined and 'view' in admin.permissions['QLLSP'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'categories' %}active{% endif %}" href="/admin/categories">
+                        <i class="fa-solid fa-layer-group"></i> <span>Danh sách thể loại</span>
+                    </a>
+                </li>
+            {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'purchase_orders' %}active{% endif %}" href="/admin/purchase_orders">
-                    <i class="fa-solid fa-bread-slice"></i> <span>Purchase orders</span>
-                </a>
-            </li>
+            {% if admin.permissions['QLNCC'] is defined and 'view' in admin.permissions['QLNCC'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'suppliers' %}active{% endif %}" href="/admin/suppliers">
+                        <i class="fa-solid fa-bread-slice"></i> <span>Nhà cung cấp</span>
+                    </a>
+                </li>
+            {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'orders' %}active{% endif %}" href="/admin/orders">
-                    <i class="fa-solid fa-file-invoice"></i> <span>Hoá đơn</span>
-                </a>
-            </li>
+            {% if admin.permissions['QLPN'] is defined and 'view' in admin.permissions['QLPN'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'purchase_orders' %}active{% endif %}" href="/admin/purchase_orders">
+                        <i class="fa-solid fa-bread-slice"></i> <span>Purchase orders</span>
+                    </a>
+                </li>
+            {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'customers' %}active{% endif %}" href="/admin/customers">
-                    <i class="fa-solid fa-users"></i> <span>Khách hàng</span>
-                </a>
-            </li>
+            {% if admin.permissions['QLHD'] is defined and 'view' in admin.permissions['QLHD'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'orders' %}active{% endif %}" href="/admin/orders">
+                        <i class="fa-solid fa-file-invoice"></i> <span>Hoá đơn</span>
+                    </a>
+                </li>
+            {% endif %}
 
+            {% if admin.permissions['QLKH'] is defined and 'view' in admin.permissions['QLKH'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'customers' %}active{% endif %}" href="/admin/customers">
+                        <i class="fa-solid fa-users"></i> <span>Khách hàng</span>
+                    </a>
+                </li>
+            {% endif %}
 
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'user' %}active{% endif %}" href="/admin/user">
-                    <i class="fa-solid fa-user-tie"></i> <span>Người dùng</span>
-                </a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link {% if page == 'permissions' %}active{% endif %}" href="/admin/permissions">
-                    <i class="fa-solid fa-shield"></i> <span>Quyền</span>
-                </a>
-            </li>
+            {% if admin.permissions['QLND'] is defined and 'view' in admin.permissions['QLND'] %}
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'user' %}active{% endif %}" href="/admin/user">
+                        <i class="fa-solid fa-user-tie"></i> <span>Người dùng</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% if page == 'permissions' %}active{% endif %}" href="/admin/permissions">
+                        <i class="fa-solid fa-shield"></i> <span>Quyền</span>
+                    </a>
+                </li>
+            {% endif %}
 
         </ul>
         <div class="text-center d-none d-md-inline">

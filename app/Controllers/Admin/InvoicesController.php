@@ -5,7 +5,7 @@ namespace App\Controllers\Admin;
 use Core\Controller;
 use App\Models\AdminInvoicesModel;
 
-class InvoicesController extends Controller
+class InvoicesController extends AdminController
 {
     public function __construct()
     {
